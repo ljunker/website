@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+    <title>calltermine | Lars Junker</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <link rel="icon" href="/favicon.ico">
+
+    <link rel="stylesheet" href="/static/style.css?v=3">
+    <link rel="stylesheet" href="/static/ansi.css?v=2">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="container">
+    <div id="top-nav">
+        <ul>
+            <li><a href="/">home</a></li>
+            <li><a href="/schedule" class="active">calltermine</a></li>
+            <li class="right"><a href="mailto:caller@ljunker.de">contact</a></li>
+        </ul>
+    </div>
+
+    <h1 class="title">calltermine</h1>
+    <p class="content">
+				<span class="highlight">Hier stehen meine Calltermine
+                    für die nächsten 8 Wochen. Termine weiter in der Zukunft kann man
+                    <a href="webcal://p131-caldav.icloud.com/published/2/MTAzODAyMzk0NDkxMDM4MKx0EePtPDXePVZMEANU5wgvh8UiCQKBUo_2X7Xqg9Jh3NtXpIyVy5CqwdHizblJlRvhMBUjjWdRQ3aI_qnXqcw">hier</a>
+                    einsehen.
+                    Um einen neuen Termin mit mir abzusprechen, <a href="mailto:caller@ljunker.de">schick mir einfach eine Mail.</a></span>
+    </p>
+    <br>
+
+    <table id="episodes-table" class="shadow">
+        <thead>
+        <tr>
+            <th>DATUM</th>
+            <th>ANFANG</th>
+            <th>ENDE</th>
+            <th>CLUB</th>
+            <th>ORT</th>
+        </tr>
+        </thead>
+        <tbody id="schedule-tbody">
+        </tbody>
+    </table>
+
+    <pre class="footer"><code>
+&copy; Lars Junker - <script>document.write(new Date().getFullYear())</script>
+			</code></pre>
+</div>
+<script src="/static/schedule.js"></script>
+<script>
+
+    var tbody = document.getElementById('schedule-tbody');
+
+    SCHEDULE.schedule.forEach(function (evt) {
+        var tr = document.createElement('tr');
+
+        function tdWithText(txt, className) {
+            var td = document.createElement('td');
+            if (className) td.classList.add(className);
+            td.textContent = txt || '';
+            return td;
+        }
+
+        tr.appendChild(tdWithText(evt.date, 'date'));
+        tr.appendChild(tdWithText(evt.time, 'start'));
+        tr.appendChild(tdWithText(evt.end_time, 'end'));
+        tr.appendChild(tdWithText(evt.details, 'details'));
+        tr.appendChild(tdWithText(evt.location, 'location'));
+
+        tbody.appendChild(tr);
+    });
+</script>
+</body>
+</html>

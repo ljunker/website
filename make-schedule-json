@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+#
+# Convert the list of episodes into JSON format - pass an argument to make it
+# JSONP instead.
+#
+
+
+varname=$1
+
+baselink='https://ljunker.de'
+
+# this is an "episode" object in the final json
+read -d '' -r json <<-"EOF"
+{
+	"date": $date,
+	"time": $time,
+	"end_date": $end_date,
+	"end_time": $end_time,
+	"details": $details,
+	"location": $location
+}
+EOF
+
+# read data
+objects=()
+while IFS=$'\t' read -r date time end_date end_time details location; do
+	object=$(jq -nc \
+		--arg date "$date" \
+		--arg time "$time" \
+		--arg end_date "$end_date" \
+		--arg end_time "$end_time" \
+		--arg details "$details" \
+		--arg location "$location" \
+		"$json"
+	) || exit
+	objects+=("$object")
+done < <(./make-list)
+
+# generate output JSON
+printf -v now '%(%s)T' -1
+output=$(printf '%s\n' "${objects[@]}" | jq -n \
+    --argjson date "$now" \
+    --arg link "$baselink" \
+    '{
+        "name": "Lars Junker Calltermine",
+        "site": $link,
+        "generated": $date,
+        "schedule": [inputs]
+     }'
+)
+
+# print the data (optionally as jsonp if the first arg is set)
+if [[ -n $varname ]]; then
+	output="const $varname = $output;"
+fi
+echo "$output"

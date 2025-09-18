@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+#
+# Print the socials - indended to be passed to `tools/box`
+#
+
+
+
+. ./theme || exit
+
+readarray -t SOCIALS << "EOF"
+Instagram|https://ljunker.de/instagram
+YouTube|https://ljunker.de/youtube
+Patreon|https://ljunker.de/patreon
+Discord|https://ljunker.de/discord
+Twitch|https://ljunker.de/twitch
+EOF
+
+UNDERLINE=$'\x1b[3m'
+
+for line in "${SOCIALS[@]}"; do
+	IFS='|' read -r name url <<< "$line"
+
+	echo -n "$COLOR2$name$RST"
+	echo -n '|'
+	echo -n "$UNDERLINE$COLOR2$url$RST"
+	echo
+done

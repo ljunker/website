@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#
+# Print the YSAP logo - sorry this sucks lol
+#
+
+
+
+printf "\e[49m\e[38;5;223m█      ███  ████   ███ \e[m\n"
+printf "\e[49m\e[38;5;223m█     █   █ █   █ █   █\e[m\n"
+printf "\e[49m\e[38;5;223m█     █   █ ████  ███  \e[m\n"
+printf "\e[49m\e[38;5;223m█     █████ █  █    ███\e[m\n"
+printf "\e[49m\e[38;5;223m█     █   █ █   █ █   █\e[m\n"
+printf "\e[49m\e[38;5;223m█████ █   █ █   █  ███ \e[m\n"
+

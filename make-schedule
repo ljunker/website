@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+#
+# Generate the page as seen by `curl ljunker.de/schedule`
+#
+
+
+. ./theme || exit
+
+format() {
+	local date time end_date end_time details location
+
+	# Kopfzeile
+	printf '%s\t%s\t%s\t%s\t%s\n' \
+		"${COLOR4}Date${RST}" \
+		"${COLOR4}Start${RST}" \
+		"${COLOR4}End${RST}" \
+		"${COLOR4}Details${RST}" \
+		"${COLOR4}Location${RST}"
+
+	# Datenzeilen
+	while IFS=$'\t' read -r date time end_date end_time details location; do
+		# Schutz gegen leere Zeilen
+		[[ -z $date ]] && continue
+		printf '%s\t%s\t%s\t%s\t%s\n' \
+			"$date" \
+			"$time" \
+			"$end_time" \
+			"$details" \
+			"$location"
+	done
+}
+
+{
+# create the header
+./make-header -p 7 |
+    ./tools/box -hp 4 -T plain |
+    ./tools/rtrim-ansi-aware
+
+echo
+
+# create the table
+./make-list | \
+    format | \
+    ./tools/box -s $'\t' -hp 1 -tc "$COLOR5" -bc "$COLOR4" -t "Schedule" -vp 1
+
+./make-legend
+} | ./tools/lpad '  ' | ./tools/rtrim-ansi-aware

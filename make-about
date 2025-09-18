@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# Print the "about" message formatted how I like it - this output is intended to
+# be piped into `tools/box`
+#
+
+
+
+. ./theme || exit 1
+
+readarray -t ABOUT << "EOF"
+Ich bin von Beruf IT-Berater und aus Leidenschaft Square Dance-Caller.
+Tagsüber schreibe ich Code, um Probleme zu lösen und innovative Lösungen zu entwickeln;
+abends bringe ich Menschen mit Musik und Tanz zusammen. Egal, ob du hier bist,
+um mehr über meine Calltermine zu erfahren oder mich zu kontaktieren, ich freue mich,
+dass du vorbeigeschaut hast!
+EOF
+
+for line in "${ABOUT[@]}"; do
+	echo "$COLOR1$line$RST"
+done

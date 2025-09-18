@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# Generate the page as seen by `curl ljunker.de/help`
+#
+
+
+
+. ./theme || exit
+
+{
+
+# create the header
+./make-header -p 7 |
+    ./tools/box -hp 4 -T plain
+
+echo
+
+# create the legend
+./make-legend -f
+
+} | ./tools/lpad '  ' | ./tools/rtrim-ansi-aware

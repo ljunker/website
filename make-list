@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#
+# Loop each episode and generate a tab-separated list of all episodes seen to
+# stdout
+#
+
+
+
+source .venv/bin/activate
+python events_to_list.py

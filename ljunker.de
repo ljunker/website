@@ -1,0 +1,78 @@
+server {
+
+    root /var/www/ljunker.de/html;
+    index index.html index.htm index.nginx-debian.html;
+	add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+	add_header X-Frame-Options "DENY";
+	add_header X-Content-Type-Options nosniff;
+	sub_filter_once off;
+	sub_filter random_nonce_value $request_id;
+
+    server_name ljunker.de www.ljunker.de;
+
+    location / {
+            try_files $uri $uri/ /index.html =404;
+    }
+
+    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/ljunker.de/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/ljunker.de/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+server {
+
+    access_log /var/log/nginx/ljunker.de-access.log;
+    error_log /var/log/nginx/ljunker.de-error.log;
+
+    if ($http_x_forwarded_proto = 'http') {
+        set $opts "A";
+    }
+
+    if ($http_user_agent !~ "^curl") {
+        set $opts "${opts}B";
+    }
+
+    location = /ping {
+        default_type text/plain;
+        return 200 "pong\n";
+    }
+
+    location = /ip {
+        default_type text/plain;
+        return 200 "${http_cf_connecting_ip}\n";
+    }
+
+    location = /schedule {
+        if ($opts = "AB") {
+             return 301 "https://$server_name/$request_uri";
+        }
+        if ($http_user_agent ~ "^curl") {
+            rewrite ^(.*) /schedule/index.txt last;
+        }
+        rewrite ^(.*) /schedule/index.html last;
+    }
+
+    location = / {
+        if ($opts = "AB") {
+            return 301 https://$server_name$request_uri;
+        }
+        if ($http_user_agent ~ "^curl") {
+            rewrite ^(.*) /index.txt last;
+        }
+        rewrite ^(.*) /index.html last;
+    }
+
+    listen 80;
+    listen [::]:80;
+
+    root /var/www/ljunker.de/html;
+
+    server_name ljunker.de www.ljunker.de;
+	add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+	add_header X-Frame-Options "DENY";
+	add_header X-Content-Type-Options nosniff;
+
+}
