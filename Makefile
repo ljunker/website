@@ -1,4 +1,4 @@
-# Create, manage, and deploy the YSAP website
+# Create, manage, and deploy the website
 #
 
 
@@ -18,7 +18,7 @@ help:
 
 .PHONY: build
 build:
-	mkdir -p _site _site/static _site/schedule
+	mkdir -p _site _site/static _site/schedule _site/drei-fragezeichen
 	# disable indexing for certain dirs
 	echo -n > _site/static/index.html
 	# copy static files
@@ -42,6 +42,8 @@ build:
 	# make jsonp for our HTML files
 	./make-schedule-json SCHEDULE > _site/static/schedule.js
 	cat _site/json > _site/schedule.json
+	./make-drei-fragezeichen
+	./make-drei-fragezeichen-index > _site/drei-fragezeichen/index.txt
 
 .PHONY: all
 all: build deploy

@@ -19,5 +19,6 @@ check() {
 check command -v bash
 check command -v curl
 check command -v jq
+check command -v python3
 
 exit "$code"

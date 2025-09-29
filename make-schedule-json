@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Convert the list of episodes into JSON format - pass an argument to make it
+# Convert the list of events into JSON format - pass an argument to make it
 # JSONP instead.
 #
 
@@ -9,7 +9,7 @@ varname=$1
 
 baselink='https://ljunker.de'
 
-# this is an "episode" object in the final json
+# this is an "event" object in the final json
 read -d '' -r json <<-"EOF"
 {
 	"date": $date,

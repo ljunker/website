@@ -1,29 +1,5 @@
 [
   {
-    "date": "2025-09-22",
-    "time": "17:30",
-    "end_date": "2025-09-22",
-    "end_time": "19:30",
-    "details": "Ohmoor Squeezers",
-    "location": "Wagrierweg 18, 22455 Hamburg, Deutschland"
-  },
-  {
-    "date": "2025-09-25",
-    "time": "17:00",
-    "end_date": "2025-09-25",
-    "end_time": "19:00",
-    "details": "Glinder Kweerdancer",
-    "location": "Willinghusener Weg 78\nGlinde, Deutschland"
-  },
-  {
-    "date": "2025-09-29",
-    "time": "17:30",
-    "end_date": "2025-09-29",
-    "end_time": "19:30",
-    "details": "Ohmoor Squeezers",
-    "location": "Wagrierweg 18, 22455 Hamburg, Deutschland"
-  },
-  {
     "date": "2025-10-06",
     "time": "17:30",
     "end_date": "2025-10-06",
@@ -38,6 +14,14 @@
     "end_time": "19:30",
     "details": "A1-Team",
     "location": "Öjendorfer Damm 8\nHamburg, Deutschland"
+  },
+  {
+    "date": "2025-10-09",
+    "time": "17:30",
+    "end_date": "2025-10-09",
+    "end_time": "19:30",
+    "details": "Chase West",
+    "location": "Notkestraße 85\nHamburg, Deutschland"
   },
   {
     "date": "2025-10-13",
@@ -67,6 +51,14 @@
     "date": "2025-11-10",
     "time": "18:30",
     "end_date": "2025-11-10",
+    "end_time": "20:30",
+    "details": "Ohmoor Squeezers",
+    "location": "Wagrierweg 18, 22455 Hamburg, Deutschland"
+  },
+  {
+    "date": "2025-11-17",
+    "time": "18:30",
+    "end_date": "2025-11-17",
     "end_time": "20:30",
     "details": "Ohmoor Squeezers",
     "location": "Wagrierweg 18, 22455 Hamburg, Deutschland"

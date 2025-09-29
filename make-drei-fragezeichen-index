@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+#
+# Generate the page as seen by `curl ljunker.de/drei-fragezeichen`
+#
+
+
+. ./theme || exit
+
+format() {
+	local nummer titel gesammelt
+
+	# Kopfzeile
+	printf '%s\t%s\t%s\n' \
+		"${COLOR4}Nummer${RST}" \
+		"${COLOR4}Titel${RST}" \
+		"${COLOR4}Gesammelt${RST}"
+
+	# Datenzeilen
+	while IFS=$'\t' read -r nummer titel gesammelt; do
+		# Schutz gegen leere Zeilen
+		[[ -z $nummer ]] && continue
+		printf '%s\t%s\t%s\n' \
+			"$nummer" \
+			"$titel" \
+			"$gesammelt"
+	done
+}
+
+{
+# create the header
+./make-header -p 7 |
+    ./tools/box -hp 4 -T plain |
+    ./tools/rtrim-ansi-aware
+
+echo
+
+# create the table
+./make-drei-fragezeichen-list | \
+    format | \
+    ./tools/box -s $'\t' -hp 1 -tc "$COLOR5" -bc "$COLOR4" -t "Episoden" -vp 1
+
+./make-legend
+} | ./tools/lpad '  ' | ./tools/rtrim-ansi-aware
