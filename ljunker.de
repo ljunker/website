@@ -55,6 +55,16 @@ server {
         rewrite ^(.*) /schedule/index.html last;
     }
 
+    location = /drei-fragezeichen {
+        if ($opts = "AB") {
+             return 301 "https://$server_name/$request_uri";
+        }
+        if ($http_user_agent ~ "^curl") {
+            rewrite ^(.*) /drei-fragezeichen/index.txt last;
+        }
+        rewrite ^(.*) /drei-fragezeichen/index.html last;
+    }
+
     location = / {
         if ($opts = "AB") {
             return 301 https://$server_name$request_uri;
