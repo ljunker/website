@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Generate the page as seen by `curl ljunker.de/drei-fragezeichen`
+# Generate the page as seen by `curl kryptikk.de/drei-fragezeichen`
 #
 
 

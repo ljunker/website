@@ -8,11 +8,11 @@
 . ./theme || exit
 
 readarray -t SOCIALS << "EOF"
-Instagram|https://ljunker.de/instagram
-YouTube|https://ljunker.de/youtube
-Patreon|https://ljunker.de/patreon
-Discord|https://ljunker.de/discord
-Twitch|https://ljunker.de/twitch
+Instagram|https://kryptikk.de/instagram
+YouTube|https://kryptikk.de/youtube
+Patreon|https://kryptikk.de/patreon
+Discord|https://kryptikk.de/discord
+Twitch|https://kryptikk.de/twitch
 EOF
 
 UNDERLINE=$'\x1b[3m'

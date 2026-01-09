@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Generate the page as seen by `curl ljunker.de`
+# Generate the page as seen by `curl kryptikk.de`
 #
 
 

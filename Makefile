@@ -66,4 +66,4 @@ clean:
 
 .PHONY: deploy
 deploy:
-	sudo rsync -avh --delete ./_site/ /var/www/ljunker.de/html
+	sudo rsync -avh --delete ./_site/ /var/www/kryptikk.de/html

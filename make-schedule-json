@@ -7,7 +7,7 @@
 
 varname=$1
 
-baselink='https://ljunker.de'
+baselink='https://kryptikk.de'
 
 # this is an "event" object in the final json
 read -d '' -r json <<-"EOF"

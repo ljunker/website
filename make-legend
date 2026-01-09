@@ -48,14 +48,14 @@ while getopts 'f' opt; do
 done
 
 legend=(
-	'$ curl ljunker.de%Diese Seite'
-	'$ curl ljunker.de/schedule%Liste meiner Calltermine'
+	'$ curl kryptikk.de%Diese Seite'
+	'$ curl kryptikk.de/schedule%Liste meiner Calltermine'
 )
 
 if $full; then
 	legend+=(
-		'$ curl ljunker.de/ping%Get a 200 with the text pong'
-		'$ curl [-46] ljunker.de/ip%Get your current IP address as a string'
+		'$ curl kryptikk.de/ping%Get a 200 with the text pong'
+		'$ curl [-46] kryptikk.de/ip%Get your current IP address as a string'
 	)
 fi
 

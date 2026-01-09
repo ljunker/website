@@ -2,5 +2,5 @@
 
 source .venv/bin/activate
 python3 events.py
-#rm -f /var/www/ljunker.de/html/data/*
-#cp events.json /var/www/ljunker.de/html/data/
+#rm -f /var/www/kryptikk.de/html/data/*
+#cp events.json /var/www/kryptikk.de/html/data/

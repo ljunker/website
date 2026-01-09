@@ -1,10 +1,10 @@
 Website
 ============
 
-https://ljunker.de
+https://kryptikk.de
 
 ```
-curl ljunker.de
+curl kryptikk.de
 ```
 
 Usage
