@@ -28,6 +28,7 @@ build:
 	cat static/ansi.css > _site/static/ansi.css
 	cat static/index.html > _site/index.html
 	cat static/schedule.html > _site/schedule/index.html
+	cat static/drei-fragezeichen.html > _site/drei-fragezeichen/index.html
 	# make /ping endpoint (nginx handles this for me, but just in case)
 	echo 'pong' > _site/ping
 	# create ASCII index page for curl users
@@ -44,6 +45,7 @@ build:
 	cat _site/json > _site/schedule.json
 	./make-drei-fragezeichen
 	./make-drei-fragezeichen-index > _site/drei-fragezeichen/index.txt
+	./make-drei-fragezeichen-json DREI > _site/static/drei.js
 
 .PHONY: all
 all: build deploy

@@ -19,12 +19,13 @@
     <div id="top-nav">
         <ul>
             <li><a href="/">home</a></li>
-            <li><a href="/schedule" class="active">drei ???</a></li>
+            <li><a href="/schedule">calltermine</a></li>
+            <li><a href="/drei-fragezeichen" class="active">drei ???</a></li>
             <li class="right"><a href="mailto:caller@kryptikk.de">contact</a></li>
         </ul>
     </div>
 
-    <h1 class="title">calltermine</h1>
+    <h1 class="title">drei ???</h1>
     <p class="content">
 				<span class="highlight">Ich sammele alle Folgen der Drei ??? auf Kassette.</span>
     </p>
@@ -33,14 +34,12 @@
     <table id="episodes-table" class="shadow">
         <thead>
         <tr>
-            <th>DATUM</th>
-            <th>ANFANG</th>
-            <th>ENDE</th>
-            <th>CLUB</th>
-            <th>ORT</th>
+            <th>NUMMER</th>
+            <th>NAME</th>
+            <th>GESAMMELT</th>
         </tr>
         </thead>
-        <tbody id="schedule-tbody">
+        <tbody id="episodes-tbody">
         </tbody>
     </table>
 
@@ -48,12 +47,12 @@
 &copy; Lars Junker - <script>document.write(new Date().getFullYear())</script>
 			</code></pre>
 </div>
-<script src="/static/schedule.js"></script>
+<script src="/static/drei.js"></script>
 <script>
 
-    var tbody = document.getElementById('schedule-tbody');
+    var tbody = document.getElementById('episodes-tbody');
 
-    SCHEDULE.schedule.forEach(function (evt) {
+    DREI.drei.forEach(function (evt) {
         var tr = document.createElement('tr');
 
         function tdWithText(txt, className) {
@@ -63,11 +62,9 @@
             return td;
         }
 
-        tr.appendChild(tdWithText(evt.date, 'date'));
-        tr.appendChild(tdWithText(evt.time, 'start'));
-        tr.appendChild(tdWithText(evt.end_time, 'end'));
-        tr.appendChild(tdWithText(evt.details, 'details'));
-        tr.appendChild(tdWithText(evt.location, 'location'));
+        tr.appendChild(tdWithText(evt.number, 'number'));
+        tr.appendChild(tdWithText(evt.name, 'name'));
+        tr.appendChild(tdWithText(evt.collected, 'collected'));
 
         tbody.appendChild(tr);
     });

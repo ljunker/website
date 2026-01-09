@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+#
+# Convert the list of events into JSON format - pass an argument to make it
+# JSONP instead.
+#
+
+
+varname=$1
+
+baselink='https://kryptikk.de'
+
+# this is an "event" object in the final json
+read -d '' -r json <<-"EOF"
+{
+	"number": $number,
+	"name": $name,
+	"collected": $collected
+}
+EOF
+
+# read data
+objects=()
+while IFS=$'\t' read -r number name collected; do
+	object=$(jq -nc \
+		--arg number "$number" \
+		--arg name "$name" \
+		--arg collected "$collected" \
+		"$json"
+	) || exit
+	objects+=("$object")
+done < <(./make-drei-fragezeichen-list)
+
+# generate output JSON
+printf -v now '%(%s)T' -1
+output=$(printf '%s\n' "${objects[@]}" | jq -n \
+    --argjson date "$now" \
+    --arg link "$baselink" \
+    '{
+        "name": "Lars Junker Calltermine",
+        "site": $link,
+        "generated": $date,
+        "drei": [inputs]
+     }'
+)
+
+# print the data (optionally as jsonp if the first arg is set)
+if [[ -n $varname ]]; then
+	output="const $varname = $output;"
+fi
+echo "$output"
