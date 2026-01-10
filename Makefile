@@ -29,6 +29,7 @@ build:
 	cat static/index.html > _site/index.html
 	cat static/schedule.html > _site/schedule/index.html
 	cat static/drei-fragezeichen.html > _site/drei-fragezeichen/index.html
+	cat static/nav.html > _site/nav.html
 	# make /ping endpoint (nginx handles this for me, but just in case)
 	echo 'pong' > _site/ping
 	# create ASCII index page for curl users
