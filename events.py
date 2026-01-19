@@ -4,7 +4,7 @@ import json
 import pytz
 
 four_weeks = datetime.timedelta(weeks=8)
-dt = datetime.datetime.today()
+dt = datetime.datetime.today() - datetime.timedelta(days=1)
 in_four_weeks = dt + four_weeks
 es = events("webcal://p131-caldav.icloud.com/published/2/MTAzODAyMzk0NDkxMDM4MKx0EePtPDXePVZMEANU5wgvh8UiCQKBUo_2X7Xqg9Jh3NtXpIyVy5CqwdHizblJlRvhMBUjjWdRQ3aI_qnXqcw", start=dt, end=in_four_weeks, sort=True, fix_apple=True)
 

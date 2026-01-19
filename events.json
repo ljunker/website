@@ -1,13 +1,5 @@
 [
   {
-    "date": "2026-01-12",
-    "time": "18:30",
-    "end_date": "2026-01-12",
-    "end_time": "20:30",
-    "details": "Ohmoor Squeezers",
-    "location": "Wagrierweg 18, 22455 Hamburg, Deutschland"
-  },
-  {
     "date": "2026-01-19",
     "time": "18:30",
     "end_date": "2026-01-19",
@@ -78,5 +70,13 @@
     "end_time": "20:30",
     "details": "Ohmoor Squeezers",
     "location": "Wagrierweg 18, 22455 Hamburg, Deutschland"
+  },
+  {
+    "date": "2026-03-12",
+    "time": "18:00",
+    "end_date": "2026-03-12",
+    "end_time": "20:00",
+    "details": "Glinder Kweerdancer",
+    "location": "Willinghusener Weg 78\nGlinde, Deutschland"
   }
 ]
