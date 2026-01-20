@@ -200,6 +200,13 @@ table {
 	font-size: 13px;
 }
 
+table caption {
+	text-align: left;
+	padding: 10px 12px 6px;
+	color: var(--color4);
+	font-weight: bold;
+}
+
 td {
 	padding: 1px 12px;
 }

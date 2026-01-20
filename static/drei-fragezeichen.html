@@ -26,12 +26,12 @@
     <br>
 
     <table id="episodes-table" class="shadow">
+        <caption>Gesammelte Folgen</caption>
         <thead>
         <tr>
             <th>COVER</th>
             <th>NUMMER</th>
             <th>NAME</th>
-            <th>GESAMMELT</th>
         </tr>
         </thead>
         <tbody id="episodes-tbody">
@@ -110,7 +110,6 @@
         tr.appendChild(tdWithCover(evt.cover));
         tr.appendChild(tdWithText(evt.number, 'number'));
         tr.appendChild(tdWithText(evt.name, 'name'));
-        tr.appendChild(tdWithText(evt.collected, 'collected'));
 
         tbody.appendChild(tr);
     });

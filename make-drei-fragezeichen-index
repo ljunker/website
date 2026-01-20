@@ -10,20 +10,46 @@ format() {
 	local nummer titel gesammelt
 
 	# Kopfzeile
-	printf '%s\t%s\t%s\n' \
+	printf '%s\t%s\n' \
 		"${COLOR4}Nummer${RST}" \
-		"${COLOR4}Titel${RST}" \
-		"${COLOR4}Gesammelt${RST}"
+		"${COLOR4}Titel${RST}"
 
 	# Datenzeilen
 	while IFS=$'\t' read -r nummer titel gesammelt; do
 		# Schutz gegen leere Zeilen
 		[[ -z $nummer ]] && continue
-		printf '%s\t%s\t%s\n' \
+		printf '%s\t%s\n' \
 			"$nummer" \
-			"$titel" \
-			"$gesammelt"
+			"$titel"
 	done
+}
+
+missing_ranges() {
+	./make-drei-fragezeichen-list | awk -F '\t' '
+		$1 ~ /^[0-9]+$/ && $3 == "nicht gesammelt" { print $1 }
+	' | sort -n | awk '
+		NR == 1 { start = $1; prev = $1; next }
+		{
+			curr = $1
+			if (curr == prev + 1) { prev = curr; next }
+			if (start == prev) {
+				out = out (out ? ", " : "") start
+			} else {
+				out = out (out ? ", " : "") start "-" prev
+			}
+			start = curr
+			prev = curr
+		}
+		END {
+			if (NR == 0) { print "keine"; exit }
+			if (start == prev) {
+				out = out (out ? ", " : "") start
+			} else {
+				out = out (out ? ", " : "") start "-" prev
+			}
+			print out
+		}
+	'
 }
 
 {
@@ -33,11 +59,14 @@ format() {
     ./tools/rtrim-ansi-aware
 
 echo
+printf '%s\t%s\n' "${COLOR4}Es fehlen mir:${RST}" "$(missing_ranges)"
+echo
 
 # create the table
 ./make-drei-fragezeichen-list | \
+	awk -F '\t' '$3 == "gesammelt"' | \
     format | \
-    ./tools/box -s $'\t' -hp 1 -tc "$COLOR5" -bc "$COLOR4" -t "Episoden" -vp 1
+    ./tools/box -s $'\t' -hp 1 -tc "$COLOR5" -bc "$COLOR4" -t "Gesammelte Folgen" -vp 1
 
 ./make-legend
 } | ./tools/lpad '  ' | ./tools/rtrim-ansi-aware
