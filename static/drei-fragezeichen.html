@@ -22,11 +22,13 @@
     <p class="content">
 				<span class="highlight">Ich sammele alle Folgen der Drei ??? auf Kassette.</span>
     </p>
+    <p class="content" id="missing-ranges"></p>
     <br>
 
     <table id="episodes-table" class="shadow">
         <thead>
         <tr>
+            <th>COVER</th>
             <th>NUMMER</th>
             <th>NAME</th>
             <th>GESAMMELT</th>
@@ -45,7 +47,43 @@
 
     var tbody = document.getElementById('episodes-tbody');
 
-    DREI.drei.forEach(function (evt) {
+    function buildMissingRanges(items) {
+        var missing = items
+            .filter(function (evt) { return evt.collected !== 'gesammelt'; })
+            .map(function (evt) { return parseInt(evt.number, 10); })
+            .filter(function (n) { return !isNaN(n); })
+            .sort(function (a, b) { return a - b; });
+
+        if (!missing.length) return '';
+
+        var ranges = [];
+        var start = missing[0];
+        var prev = missing[0];
+
+        for (var i = 1; i < missing.length; i++) {
+            var current = missing[i];
+            if (current === prev + 1) {
+                prev = current;
+                continue;
+            }
+            ranges.push(start === prev ? String(start) : (start + '-' + prev));
+            start = current;
+            prev = current;
+        }
+        ranges.push(start === prev ? String(start) : (start + '-' + prev));
+
+        return ranges.join(', ');
+    }
+
+    var missingText = buildMissingRanges(DREI.drei);
+    var missingEl = document.getElementById('missing-ranges');
+    if (missingEl) {
+        missingEl.textContent = missingText ? ('Es fehlen mir: ' + missingText) : 'Es fehlen mir: keine';
+    }
+
+    DREI.drei.filter(function (evt) {
+        return evt.collected === 'gesammelt';
+    }).forEach(function (evt) {
         var tr = document.createElement('tr');
 
         function tdWithText(txt, className) {
@@ -55,6 +93,21 @@
             return td;
         }
 
+        function tdWithCover(url) {
+            var td = document.createElement('td');
+            td.classList.add('cover');
+            if (url) {
+                var img = document.createElement('img');
+                img.src = url;
+                img.alt = 'Cover ' + (evt.number || '');
+                img.loading = 'lazy';
+                img.decoding = 'async';
+                td.appendChild(img);
+            }
+            return td;
+        }
+
+        tr.appendChild(tdWithCover(evt.cover));
         tr.appendChild(tdWithText(evt.number, 'number'));
         tr.appendChild(tdWithText(evt.name, 'name'));
         tr.appendChild(tdWithText(evt.collected, 'collected'));

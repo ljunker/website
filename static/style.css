@@ -204,9 +204,22 @@ td {
 	padding: 1px 12px;
 }
 
+td.cover {
+	width: 112px;
+}
+
+td.cover img {
+	display: block;
+	width: 100px;
+	height: 100px;
+	object-fit: cover;
+	border-radius: 3px;
+}
+
 th {
 	font-weight: bold;
 	padding: 10px 12px;
+	text-align: left;
 }
 
 tr:nth-child(odd) {

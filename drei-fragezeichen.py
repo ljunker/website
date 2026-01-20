@@ -23,10 +23,12 @@ def main():
 
     reduced = []
     for ep in metadata.get("serie", []):
+        links = ep.get("links") or {}
         reduced.append({
             "nummer": ep.get("nummer"),
             "titel": ep.get("titel"),
-            "collected": ep.get("nummer") in collected
+            "collected": ep.get("nummer") in collected,
+            "cover": links.get("cover")
         })
 
     OUTPUT_FILE.write_text(json.dumps(reduced, indent=2, ensure_ascii=False), encoding="utf-8")
