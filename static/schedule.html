@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="de">
 <head>
     <title>calltermine | Lars Junker</title>
     <meta charset="UTF-8">
@@ -16,35 +16,41 @@
 </head>
 <body>
 <div id="container">
-    <div w3-include-html="/nav.html"></div>
+    <header>
+        <div w3-include-html="/nav.html"></div>
+    </header>
 
-    <h1 class="title">calltermine</h1>
-    <p class="content">
+    <main>
+        <h1 class="title">calltermine</h1>
+        <p class="content">
 				<span class="highlight">Hier stehen meine Calltermine
                     für die nächsten 8 Wochen. Termine weiter in der Zukunft kann man
                     <a href="webcal://p131-caldav.icloud.com/published/2/MTAzODAyMzk0NDkxMDM4MKx0EePtPDXePVZMEANU5wgvh8UiCQKBUo_2X7Xqg9Jh3NtXpIyVy5CqwdHizblJlRvhMBUjjWdRQ3aI_qnXqcw">hier</a>
                     einsehen.
                     Um einen neuen Termin mit mir abzusprechen, <a href="mailto:caller@kryptikk.de">schick mir einfach eine Mail.</a></span>
-    </p>
-    <br>
+        </p>
+        <br>
 
-    <table id="episodes-table" class="shadow">
-        <thead>
-        <tr>
-            <th>DATUM</th>
-            <th>ANFANG</th>
-            <th>ENDE</th>
-            <th>CLUB</th>
-            <th>ORT</th>
-        </tr>
-        </thead>
-        <tbody id="schedule-tbody">
-        </tbody>
-    </table>
+        <table id="episodes-table" class="shadow">
+            <thead>
+            <tr>
+                <th>DATUM</th>
+                <th>ANFANG</th>
+                <th>ENDE</th>
+                <th>CLUB</th>
+                <th>ORT</th>
+            </tr>
+            </thead>
+            <tbody id="schedule-tbody">
+            </tbody>
+        </table>
+    </main>
 
-    <pre class="footer"><code>
+    <footer>
+        <pre class="footer"><code>
 &copy; Lars Junker - <script>document.write(new Date().getFullYear())</script>
-			</code></pre>
+        </code></pre>
+    </footer>
 </div>
 <script src="/static/schedule.js"></script>
 <script>
