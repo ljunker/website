@@ -238,6 +238,15 @@ p.content {
 	max-width: 620px;
 }
 
+ul.content-list {
+	max-width: 620px;
+	padding-left: 22px;
+}
+
+ul.content-list li {
+	margin-bottom: 6px;
+}
+
 #socials {
 	text-align: center;
 	margin-top: 30px;

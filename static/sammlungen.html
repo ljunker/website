@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+    <title>Sammlungen | Lars Junker</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <link rel="icon" href="/favicon.ico">
+
+    <link rel="stylesheet" href="/static/style.css?v=3">
+    <link rel="stylesheet" href="/static/ansi.css?v=2">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="container">
+    <div w3-include-html="/nav.html"></div>
+
+    <h1 class="title">sammlungen</h1>
+    <p class="content">
+        Ein paar Dinge, die ich sammle.
+    </p>
+    <ul class="content-list">
+        <li><a href="/drei-fragezeichen">drei ???</a> (Kassetten)</li>
+        <li><a href="/one-piece">One Piece</a> (Baende)</li>
+    </ul>
+
+    <pre class="footer"><code>
+&copy; Lars Junker - <script>document.write(new Date().getFullYear())</script>
+    </code></pre>
+</div>
+<script>
+    function includeHTML() {
+        var z, i, elmnt, file, xhttp;
+        /* Loop through a collection of all HTML elements: */
+        z = document.getElementsByTagName("*");
+        for (i = 0; i < z.length; i++) {
+            elmnt = z[i];
+            /*search for elements with a certain atrribute:*/
+            file = elmnt.getAttribute("w3-include-html");
+            if (file) {
+                /* Make an HTTP request using the attribute value as the file name: */
+                xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4) {
+                        if (this.status == 200) {elmnt.innerHTML = this.responseText;}
+                        if (this.status == 404) {elmnt.innerHTML = "Page not found.";}
+                        /* Remove the attribute, and call this function once more: */
+                        elmnt.removeAttribute("w3-include-html");
+                        includeHTML();
+                    }
+                }
+                xhttp.open("GET", file, true);
+                xhttp.send();
+                /* Exit the function: */
+                return;
+            }
+        }
+    }
+</script>
+<script>
+    includeHTML();
+</script>
+</body>
+</html>

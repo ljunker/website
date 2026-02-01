@@ -1,0 +1,1418 @@
+[
+  {
+    "nummer": 1,
+    "titel": "und der Super-Papagei",
+    "collected": true,
+    "cover": "http://dreimetadaten.de/data/Serie/001/cover.png"
+  },
+  {
+    "nummer": 2,
+    "titel": "und der Phantomsee",
+    "collected": true,
+    "cover": "http://dreimetadaten.de/data/Serie/002/cover.png"
+  },
+  {
+    "nummer": 3,
+    "titel": "und der Karpatenhund",
+    "collected": true,
+    "cover": "http://dreimetadaten.de/data/Serie/003/cover.png"
+  },
+  {
+    "nummer": 4,
+    "titel": "und die schwarze Katze",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/004/cover.png"
+  },
+  {
+    "nummer": 5,
+    "titel": "und der Fluch des Rubins",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/005/cover.png"
+  },
+  {
+    "nummer": 6,
+    "titel": "und der sprechende Totenkopf",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/006/cover.png"
+  },
+  {
+    "nummer": 7,
+    "titel": "und der unheimliche Drache",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/007/cover.png"
+  },
+  {
+    "nummer": 8,
+    "titel": "und der grüne Geist",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/008/cover.png"
+  },
+  {
+    "nummer": 9,
+    "titel": "und die rätselhaften Bilder",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/009/cover.png"
+  },
+  {
+    "nummer": 10,
+    "titel": "und die flüsternde Mumie",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/010/cover.png"
+  },
+  {
+    "nummer": 11,
+    "titel": "und das Gespensterschloss",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/011/cover.png"
+  },
+  {
+    "nummer": 12,
+    "titel": "und der seltsame Wecker",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/012/cover.png"
+  },
+  {
+    "nummer": 13,
+    "titel": "und der lachende Schatten",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/013/cover.png"
+  },
+  {
+    "nummer": 14,
+    "titel": "und das Bergmonster",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/014/cover.png"
+  },
+  {
+    "nummer": 15,
+    "titel": "und der rasende Löwe",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/015/cover.png"
+  },
+  {
+    "nummer": 16,
+    "titel": "und der Zauberspiegel",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/016/cover.png"
+  },
+  {
+    "nummer": 17,
+    "titel": "und die gefährliche Erbschaft",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/017/cover.png"
+  },
+  {
+    "nummer": 18,
+    "titel": "und die Geisterinsel",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/018/cover.png"
+  },
+  {
+    "nummer": 19,
+    "titel": "und der Teufelsberg",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/019/cover.png"
+  },
+  {
+    "nummer": 20,
+    "titel": "und die flammende Spur",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/020/cover.png"
+  },
+  {
+    "nummer": 21,
+    "titel": "und der tanzende Teufel",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/021/cover.png"
+  },
+  {
+    "nummer": 22,
+    "titel": "und der verschwundene Schatz",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/022/cover.png"
+  },
+  {
+    "nummer": 23,
+    "titel": "und das Aztekenschwert",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/023/cover.png"
+  },
+  {
+    "nummer": 24,
+    "titel": "und die silberne Spinne",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/024/cover.png"
+  },
+  {
+    "nummer": 25,
+    "titel": "und die singende Schlange",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/025/cover.png"
+  },
+  {
+    "nummer": 26,
+    "titel": "und die Silbermine",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/026/cover.png"
+  },
+  {
+    "nummer": 27,
+    "titel": "und der magische Kreis",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/027/cover.png"
+  },
+  {
+    "nummer": 28,
+    "titel": "und der Doppelgänger",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/028/cover.png"
+  },
+  {
+    "nummer": 29,
+    "titel": "Die Originalmusik",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/029/cover.png"
+  },
+  {
+    "nummer": 30,
+    "titel": "und das Riff der Haie",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/030/cover.png"
+  },
+  {
+    "nummer": 31,
+    "titel": "und das Narbengesicht",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/031/cover.png"
+  },
+  {
+    "nummer": 32,
+    "titel": "und der Ameisenmensch",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/032/cover.png"
+  },
+  {
+    "nummer": 33,
+    "titel": "und die bedrohte Ranch",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/033/cover.png"
+  },
+  {
+    "nummer": 34,
+    "titel": "und der rote Pirat",
+    "collected": true,
+    "cover": "http://dreimetadaten.de/data/Serie/034/cover.png"
+  },
+  {
+    "nummer": 35,
+    "titel": "und der Höhlenmensch",
+    "collected": true,
+    "cover": "http://dreimetadaten.de/data/Serie/035/cover.png"
+  },
+  {
+    "nummer": 36,
+    "titel": "und der Super-Wal",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/036/cover.png"
+  },
+  {
+    "nummer": 37,
+    "titel": "und der heimliche Hehler",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/037/cover.png"
+  },
+  {
+    "nummer": 38,
+    "titel": "und der unsichtbare Gegner",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/038/cover.png"
+  },
+  {
+    "nummer": 39,
+    "titel": "und die Perlenvögel",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/039/cover.png"
+  },
+  {
+    "nummer": 40,
+    "titel": "und der Automarder",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/040/cover.png"
+  },
+  {
+    "nummer": 41,
+    "titel": "und das Volk der Winde",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/041/cover.png"
+  },
+  {
+    "nummer": 42,
+    "titel": "und der weinende Sarg",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/042/cover.png"
+  },
+  {
+    "nummer": 43,
+    "titel": "und der höllische Werwolf",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/043/cover.png"
+  },
+  {
+    "nummer": 44,
+    "titel": "und der gestohlene Preis",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/044/cover.png"
+  },
+  {
+    "nummer": 45,
+    "titel": "und das Gold der Wikinger",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/045/cover.png"
+  },
+  {
+    "nummer": 46,
+    "titel": "und der schrullige Millionär",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/046/cover.png"
+  },
+  {
+    "nummer": 47,
+    "titel": "und der giftige Gockel",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/047/cover.png"
+  },
+  {
+    "nummer": 48,
+    "titel": "und die gefährlichen Fässer",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/048/cover.png"
+  },
+  {
+    "nummer": 49,
+    "titel": "und die Comic-Diebe",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/049/cover.png"
+  },
+  {
+    "nummer": 50,
+    "titel": "und der verschwundene Filmstar",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/050/cover.png"
+  },
+  {
+    "nummer": 51,
+    "titel": "und der riskante Ritt",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/051/cover.png"
+  },
+  {
+    "nummer": 52,
+    "titel": "und die Musikpiraten",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/052/cover.png"
+  },
+  {
+    "nummer": 53,
+    "titel": "und die Automafia",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/053/cover.png"
+  },
+  {
+    "nummer": 54,
+    "titel": "Gefahr im Verzug",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/054/cover.png"
+  },
+  {
+    "nummer": 55,
+    "titel": "Gekaufte Spieler",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/055/cover.png"
+  },
+  {
+    "nummer": 56,
+    "titel": "Angriff der Computer-Viren",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/056/cover.png"
+  },
+  {
+    "nummer": 57,
+    "titel": "Tatort Zirkus",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/057/cover.png"
+  },
+  {
+    "nummer": 58,
+    "titel": "und der verrückte Maler",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/058/cover.png"
+  },
+  {
+    "nummer": 59,
+    "titel": "Giftiges Wasser",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/059/cover.png"
+  },
+  {
+    "nummer": 60,
+    "titel": "Dopingmixer",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/060/cover.png"
+  },
+  {
+    "nummer": 61,
+    "titel": "und die Rache des Tigers",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/061/cover.png"
+  },
+  {
+    "nummer": 62,
+    "titel": "Spuk im Hotel",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/062/cover.png"
+  },
+  {
+    "nummer": 63,
+    "titel": "Fußball-Gangster",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/063/cover.png"
+  },
+  {
+    "nummer": 64,
+    "titel": "Geisterstadt",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/064/cover.png"
+  },
+  {
+    "nummer": 65,
+    "titel": "Diamantenschmuggel",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/065/cover.png"
+  },
+  {
+    "nummer": 66,
+    "titel": "und die Schattenmänner",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/066/cover.png"
+  },
+  {
+    "nummer": 67,
+    "titel": "und das Geheimnis der Särge",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/067/cover.png"
+  },
+  {
+    "nummer": 68,
+    "titel": "und der Schatz im Bergsee",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/068/cover.png"
+  },
+  {
+    "nummer": 69,
+    "titel": "Späte Rache",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/069/cover.png"
+  },
+  {
+    "nummer": 70,
+    "titel": "Schüsse aus dem Dunkel",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/070/cover.png"
+  },
+  {
+    "nummer": 71,
+    "titel": "Die verschwundene Seglerin",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/071/cover.png"
+  },
+  {
+    "nummer": 72,
+    "titel": "Dreckiger Deal",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/072/cover.png"
+  },
+  {
+    "nummer": 73,
+    "titel": "Poltergeist",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/073/cover.png"
+  },
+  {
+    "nummer": 74,
+    "titel": "und das brennende Schwert",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/074/cover.png"
+  },
+  {
+    "nummer": 75,
+    "titel": "Die Spur des Raben",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/075/cover.png"
+  },
+  {
+    "nummer": 76,
+    "titel": "Stimmen aus dem Nichts",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/076/cover.png"
+  },
+  {
+    "nummer": 77,
+    "titel": "Pistenteufel",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/077/cover.png"
+  },
+  {
+    "nummer": 78,
+    "titel": "Das leere Grab",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/078/cover.png"
+  },
+  {
+    "nummer": 79,
+    "titel": "Im Bann des Voodoo",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/079/cover.png"
+  },
+  {
+    "nummer": 80,
+    "titel": "Geheimakte Ufo",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/080/cover.png"
+  },
+  {
+    "nummer": 81,
+    "titel": "Verdeckte Fouls",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/081/cover.png"
+  },
+  {
+    "nummer": 82,
+    "titel": "Die Karten des Bösen",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/082/cover.png"
+  },
+  {
+    "nummer": 83,
+    "titel": "Meuterei auf hoher See",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/083/cover.png"
+  },
+  {
+    "nummer": 84,
+    "titel": "Musik des Teufels",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/084/cover.png"
+  },
+  {
+    "nummer": 85,
+    "titel": "Feuerturm",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/085/cover.png"
+  },
+  {
+    "nummer": 86,
+    "titel": "Nacht in Angst",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/086/cover.png"
+  },
+  {
+    "nummer": 87,
+    "titel": "Wolfsgesicht",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/087/cover.png"
+  },
+  {
+    "nummer": 88,
+    "titel": "Vampir im Internet",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/088/cover.png"
+  },
+  {
+    "nummer": 89,
+    "titel": "Tödliche Spur",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/089/cover.png"
+  },
+  {
+    "nummer": 90,
+    "titel": "Der Feuerteufel",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/090/cover.png"
+  },
+  {
+    "nummer": 91,
+    "titel": "Labyrinth der Götter",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/091/cover.png"
+  },
+  {
+    "nummer": 92,
+    "titel": "Todesflug",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/092/cover.png"
+  },
+  {
+    "nummer": 93,
+    "titel": "und das Geisterschiff",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/093/cover.png"
+  },
+  {
+    "nummer": 94,
+    "titel": "Das schwarze Monster",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/094/cover.png"
+  },
+  {
+    "nummer": 95,
+    "titel": "Botschaft von Geisterhand",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/095/cover.png"
+  },
+  {
+    "nummer": 96,
+    "titel": "und der rote Rächer",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/096/cover.png"
+  },
+  {
+    "nummer": 97,
+    "titel": "Insektenstachel",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/097/cover.png"
+  },
+  {
+    "nummer": 98,
+    "titel": "Tal des Schreckens",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/098/cover.png"
+  },
+  {
+    "nummer": 99,
+    "titel": "Rufmord",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/099/cover.png"
+  },
+  {
+    "nummer": 100,
+    "titel": "Toteninsel",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/100/cover.png"
+  },
+  {
+    "nummer": 101,
+    "titel": "und das Hexen-Handy",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/101/cover.png"
+  },
+  {
+    "nummer": 102,
+    "titel": "Doppelte Täuschung",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/102/cover.png"
+  },
+  {
+    "nummer": 103,
+    "titel": "Das Erbe des Meisterdiebes",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/103/cover.png"
+  },
+  {
+    "nummer": 104,
+    "titel": "Gift per E-Mail",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/104/cover.png"
+  },
+  {
+    "nummer": 105,
+    "titel": "Der Nebelberg",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/105/cover.png"
+  },
+  {
+    "nummer": 106,
+    "titel": "Der Mann ohne Kopf",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/106/cover.png"
+  },
+  {
+    "nummer": 107,
+    "titel": "und der Schatz der Mönche",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/107/cover.png"
+  },
+  {
+    "nummer": 108,
+    "titel": "Die sieben Tore",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/108/cover.png"
+  },
+  {
+    "nummer": 109,
+    "titel": "Gefährliches Quiz",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/109/cover.png"
+  },
+  {
+    "nummer": 110,
+    "titel": "Panik im Park",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/110/cover.png"
+  },
+  {
+    "nummer": 111,
+    "titel": "Die Höhle des Grauens",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/111/cover.png"
+  },
+  {
+    "nummer": 112,
+    "titel": "Schlucht der Dämonen",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/112/cover.png"
+  },
+  {
+    "nummer": 113,
+    "titel": "Das Auge des Drachen",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/113/cover.png"
+  },
+  {
+    "nummer": 114,
+    "titel": "Die Villa der Toten",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/114/cover.png"
+  },
+  {
+    "nummer": 115,
+    "titel": "Auf tödlichem Kurs",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/115/cover.png"
+  },
+  {
+    "nummer": 116,
+    "titel": "Codename: Cobra",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/116/cover.png"
+  },
+  {
+    "nummer": 117,
+    "titel": "Der finstere Rivale",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/117/cover.png"
+  },
+  {
+    "nummer": 118,
+    "titel": "Das düstere Vermächtnis",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/118/cover.png"
+  },
+  {
+    "nummer": 119,
+    "titel": "Der geheime Schlüssel",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/119/cover.png"
+  },
+  {
+    "nummer": 120,
+    "titel": "Der schwarze Skorpion",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/120/cover.png"
+  },
+  {
+    "nummer": 121,
+    "titel": "Spur ins Nichts",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/121/cover.png"
+  },
+  {
+    "nummer": 122,
+    "titel": "und der Geisterzug",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/122/cover.png"
+  },
+  {
+    "nummer": 123,
+    "titel": "Fußballfieber",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/123/cover.png"
+  },
+  {
+    "nummer": 124,
+    "titel": "Geister-Canyon",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/124/cover.png"
+  },
+  {
+    "nummer": 125,
+    "titel": "Feuermond",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/125/cover.png"
+  },
+  {
+    "nummer": 126,
+    "titel": "Schrecken aus dem Moor",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/126/cover.png"
+  },
+  {
+    "nummer": 127,
+    "titel": "Schwarze Madonna",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/127/cover.png"
+  },
+  {
+    "nummer": 128,
+    "titel": "Schatten über Hollywood",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/128/cover.png"
+  },
+  {
+    "nummer": 129,
+    "titel": "SMS aus dem Grab",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/129/cover.png"
+  },
+  {
+    "nummer": 130,
+    "titel": "Der Fluch des Drachen",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/130/cover.png"
+  },
+  {
+    "nummer": 131,
+    "titel": "Haus des Schreckens",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/131/cover.png"
+  },
+  {
+    "nummer": 132,
+    "titel": "Spuk im Netz",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/132/cover.png"
+  },
+  {
+    "nummer": 133,
+    "titel": "Fels der Dämonen",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/133/cover.png"
+  },
+  {
+    "nummer": 134,
+    "titel": "Der tote Mönch",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/134/cover.png"
+  },
+  {
+    "nummer": 135,
+    "titel": "Fluch des Piraten",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/135/cover.png"
+  },
+  {
+    "nummer": 136,
+    "titel": "und das versunkene Dorf",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/136/cover.png"
+  },
+  {
+    "nummer": 137,
+    "titel": "Pfad der Angst",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/137/cover.png"
+  },
+  {
+    "nummer": 138,
+    "titel": "Die geheime Treppe",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/138/cover.png"
+  },
+  {
+    "nummer": 139,
+    "titel": "Das Geheimnis der Diva",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/139/cover.png"
+  },
+  {
+    "nummer": 140,
+    "titel": "Stadt der Vampire",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/140/cover.png"
+  },
+  {
+    "nummer": 141,
+    "titel": "und die Fußball-Falle",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/141/cover.png"
+  },
+  {
+    "nummer": 142,
+    "titel": "Tödliches Eis",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/142/cover.png"
+  },
+  {
+    "nummer": 143,
+    "titel": "und die Poker-Hölle",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/143/cover.png"
+  },
+  {
+    "nummer": 144,
+    "titel": "Zwillinge der Finsternis",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/144/cover.png"
+  },
+  {
+    "nummer": 145,
+    "titel": "und die Rache der Samurai",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/145/cover.png"
+  },
+  {
+    "nummer": 146,
+    "titel": "Der Biss der Bestie",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/146/cover.png"
+  },
+  {
+    "nummer": 147,
+    "titel": "Grusel auf Campbell Castle",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/147/cover.png"
+  },
+  {
+    "nummer": 148,
+    "titel": "und die feurige Flut",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/148/cover.png"
+  },
+  {
+    "nummer": 149,
+    "titel": "Der namenlose Gegner",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/149/cover.png"
+  },
+  {
+    "nummer": 150,
+    "titel": "Geisterbucht",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/150/cover.png"
+  },
+  {
+    "nummer": 151,
+    "titel": "Schwarze Sonne",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/151/cover.png"
+  },
+  {
+    "nummer": 152,
+    "titel": "Skateboardfieber",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/152/cover.png"
+  },
+  {
+    "nummer": 153,
+    "titel": "und das Fußballphantom",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/153/cover.png"
+  },
+  {
+    "nummer": 154,
+    "titel": "Botschaft aus der Unterwelt",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/154/cover.png"
+  },
+  {
+    "nummer": 155,
+    "titel": "und der Meister des Todes",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/155/cover.png"
+  },
+  {
+    "nummer": 156,
+    "titel": "Im Netz des Drachen",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/156/cover.png"
+  },
+  {
+    "nummer": 157,
+    "titel": "Im Zeichen der Schlangen",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/157/cover.png"
+  },
+  {
+    "nummer": 158,
+    "titel": "und der Feuergeist",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/158/cover.png"
+  },
+  {
+    "nummer": 159,
+    "titel": "Nacht der Tiger",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/159/cover.png"
+  },
+  {
+    "nummer": 160,
+    "titel": "Geheimnisvolle Botschaften",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/160/cover.png"
+  },
+  {
+    "nummer": 161,
+    "titel": "Die blutenden Bilder",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/161/cover.png"
+  },
+  {
+    "nummer": 162,
+    "titel": "und der schreiende Nebel",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/162/cover.png"
+  },
+  {
+    "nummer": 163,
+    "titel": "und der verschollene Pilot",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/163/cover.png"
+  },
+  {
+    "nummer": 164,
+    "titel": "Fußball-Teufel",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/164/cover.png"
+  },
+  {
+    "nummer": 165,
+    "titel": "Im Schatten des Giganten",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/165/cover.png"
+  },
+  {
+    "nummer": 166,
+    "titel": "und die brennende Stadt",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/166/cover.png"
+  },
+  {
+    "nummer": 167,
+    "titel": "und das blaue Biest",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/167/cover.png"
+  },
+  {
+    "nummer": 168,
+    "titel": "GPS-Gangster",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/168/cover.png"
+  },
+  {
+    "nummer": 169,
+    "titel": "Die Spur des Spielers",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/169/cover.png"
+  },
+  {
+    "nummer": 170,
+    "titel": "Straße des Grauens",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/170/cover.png"
+  },
+  {
+    "nummer": 171,
+    "titel": "und das Phantom aus dem Meer",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/171/cover.png"
+  },
+  {
+    "nummer": 172,
+    "titel": "und der Eisenmann",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/172/cover.png"
+  },
+  {
+    "nummer": 173,
+    "titel": "Dämon der Rache",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/173/cover.png"
+  },
+  {
+    "nummer": 174,
+    "titel": "und das Tuch der Toten",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/174/cover.png"
+  },
+  {
+    "nummer": 175,
+    "titel": "Schattenwelt",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/175/cover.png"
+  },
+  {
+    "nummer": 176,
+    "titel": "und der gestohlene Sieg",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/176/cover.png"
+  },
+  {
+    "nummer": 177,
+    "titel": "Der Geist des Goldgräbers",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/177/cover.png"
+  },
+  {
+    "nummer": 178,
+    "titel": "Der gefiederte Schrecken",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/178/cover.png"
+  },
+  {
+    "nummer": 179,
+    "titel": "Die Rache des Untoten",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/179/cover.png"
+  },
+  {
+    "nummer": 180,
+    "titel": "und die flüsternden Puppen",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/180/cover.png"
+  },
+  {
+    "nummer": 181,
+    "titel": "Das Kabinett des Zauberers",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/181/cover.png"
+  },
+  {
+    "nummer": 182,
+    "titel": "Im Haus des Henkers",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/182/cover.png"
+  },
+  {
+    "nummer": 183,
+    "titel": "und der letzte Song",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/183/cover.png"
+  },
+  {
+    "nummer": 184,
+    "titel": "und der Hexengarten",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/184/cover.png"
+  },
+  {
+    "nummer": 185,
+    "titel": "und der Mann ohne Augen",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/185/cover.png"
+  },
+  {
+    "nummer": 186,
+    "titel": "Insel des Vergessens",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/186/cover.png"
+  },
+  {
+    "nummer": 187,
+    "titel": "und das silberne Amulett",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/187/cover.png"
+  },
+  {
+    "nummer": 188,
+    "titel": "Signale aus dem Jenseits",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/188/cover.png"
+  },
+  {
+    "nummer": 189,
+    "titel": "und der unsichtbare Passagier",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/189/cover.png"
+  },
+  {
+    "nummer": 190,
+    "titel": "und die Kammer der Rätsel",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/190/cover.png"
+  },
+  {
+    "nummer": 191,
+    "titel": "Verbrechen im Nichts",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/191/cover.png"
+  },
+  {
+    "nummer": 192,
+    "titel": "Im Bann des Drachen",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/192/cover.png"
+  },
+  {
+    "nummer": 193,
+    "titel": "Schrecken aus der Tiefe",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/193/cover.png"
+  },
+  {
+    "nummer": 194,
+    "titel": "und die Zeitreisende",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/194/cover.png"
+  },
+  {
+    "nummer": 195,
+    "titel": "Im Reich der Ungeheuer",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/195/cover.png"
+  },
+  {
+    "nummer": 196,
+    "titel": "Geheimnis des Bauchredners",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/196/cover.png"
+  },
+  {
+    "nummer": 197,
+    "titel": "Im Auge des Sturms",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/197/cover.png"
+  },
+  {
+    "nummer": 198,
+    "titel": "Die Legende der Gaukler",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/198/cover.png"
+  },
+  {
+    "nummer": 199,
+    "titel": "und der grüne Kobold",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/199/cover.png"
+  },
+  {
+    "nummer": 200,
+    "titel": "Feuriges Auge",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/200/cover.png"
+  },
+  {
+    "nummer": 201,
+    "titel": "Höhenangst",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/201/cover.png"
+  },
+  {
+    "nummer": 202,
+    "titel": "Das weiße Grab",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/202/cover.png"
+  },
+  {
+    "nummer": 203,
+    "titel": "Tauchgang ins Ungewisse",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/203/cover.png"
+  },
+  {
+    "nummer": 204,
+    "titel": "Der dunkle Wächter",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/204/cover.png"
+  },
+  {
+    "nummer": 205,
+    "titel": "Das rätselhafte Erbe",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/205/cover.png"
+  },
+  {
+    "nummer": 206,
+    "titel": "und der Mottenmann",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/206/cover.png"
+  },
+  {
+    "nummer": 207,
+    "titel": "Die falschen Detektive",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/207/cover.png"
+  },
+  {
+    "nummer": 208,
+    "titel": "Kelch des Schicksals",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/208/cover.png"
+  },
+  {
+    "nummer": 209,
+    "titel": "Kreaturen der Nacht",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/209/cover.png"
+  },
+  {
+    "nummer": 210,
+    "titel": "und die schweigende Grotte",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/210/cover.png"
+  },
+  {
+    "nummer": 211,
+    "titel": "und der Jadekönig",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/211/cover.png"
+  },
+  {
+    "nummer": 212,
+    "titel": "und der weiße Leopard",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/212/cover.png"
+  },
+  {
+    "nummer": 213,
+    "titel": "Der Fluch der Medusa",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/213/cover.png"
+  },
+  {
+    "nummer": 214,
+    "titel": "und der Geisterbunker",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/214/cover.png"
+  },
+  {
+    "nummer": 215,
+    "titel": "und die verlorene Zeit",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/215/cover.png"
+  },
+  {
+    "nummer": 216,
+    "titel": "Die Schwingen des Unheils",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/216/cover.png"
+  },
+  {
+    "nummer": 217,
+    "titel": "und der Kristallschädel",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/217/cover.png"
+  },
+  {
+    "nummer": 218,
+    "titel": "Im Netz der Lügen",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/218/cover.png"
+  },
+  {
+    "nummer": 219,
+    "titel": "und die Teufelsklippe",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/219/cover.png"
+  },
+  {
+    "nummer": 220,
+    "titel": "Im Wald der Gefahren",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/220/cover.png"
+  },
+  {
+    "nummer": 221,
+    "titel": "Manuskript des Satans",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/221/cover.png"
+  },
+  {
+    "nummer": 222,
+    "titel": "und die Gesetzlosen",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/222/cover.png"
+  },
+  {
+    "nummer": 223,
+    "titel": "und der Knochenmann",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/223/cover.png"
+  },
+  {
+    "nummer": 224,
+    "titel": "Die Yacht des Verrats",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/224/cover.png"
+  },
+  {
+    "nummer": 225,
+    "titel": "und der Puppenmacher",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/225/cover.png"
+  },
+  {
+    "nummer": 226,
+    "titel": "Die Spur der Toten",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/226/cover.png"
+  },
+  {
+    "nummer": 227,
+    "titel": "Melodie der Rache",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/227/cover.png"
+  },
+  {
+    "nummer": 228,
+    "titel": "Der Ruf der Krähen",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/228/cover.png"
+  },
+  {
+    "nummer": 229,
+    "titel": "Drehbuch der Täuschung",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/229/cover.png"
+  },
+  {
+    "nummer": 230,
+    "titel": "Der Tag der Toten",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/230/cover.png"
+  },
+  {
+    "nummer": 231,
+    "titel": "und der Dreiäugige Schakal",
+    "collected": true,
+    "cover": "http://dreimetadaten.de/data/Serie/231/cover.png"
+  },
+  {
+    "nummer": 232,
+    "titel": "Die Stadt aus Gold",
+    "collected": true,
+    "cover": "http://dreimetadaten.de/data/Serie/232/cover.png"
+  },
+  {
+    "nummer": 233,
+    "titel": "Die Nacht der Gewitter",
+    "collected": true,
+    "cover": "http://dreimetadaten.de/data/Serie/233/cover.png"
+  },
+  {
+    "nummer": 234,
+    "titel": "und der lebende Tresor",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/234/cover.png"
+  },
+  {
+    "nummer": 235,
+    "titel": "und das Fantasmofon",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/235/cover.png"
+  },
+  {
+    "nummer": 236,
+    "titel": "Im Bann des Barrakudas",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/236/cover.png"
+  }
+]
