@@ -52,6 +52,11 @@ legend=(
 	'$ curl kryptikk.de/schedule%Liste meiner Calltermine'
 )
 
+sammlungen=(
+	'$ curl kryptikk.de/drei-fragezeichen%Drei ??? Kassetten'
+	'$ curl kryptikk.de/one-piece%One Piece Baende'
+)
+
 if $full; then
 	legend+=(
 		'$ curl kryptikk.de/ping%Get a 200 with the text pong'
@@ -59,4 +64,5 @@ if $full; then
 	)
 fi
 
-format-box Legend "${legend[@]}"
+format-box Legende "${legend[@]}"
+format-box Sammlungen "${sammlungen[@]}"
