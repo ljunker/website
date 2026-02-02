@@ -85,7 +85,8 @@ update-nginx:
 		fi; \
 		sudo cp kryptikk.de /etc/nginx/sites-available/kryptikk.de; \
 		if sudo nginx -t; then \
-			echo "nginx -t ok"; \
+			echo "nginx -t ok, reloading nginx"; \
+			sudo systemctl reload nginx \
 		else \
 			echo "nginx -t failed, restoring backup"; \
 			if sudo test -e "$$backup"; then \
