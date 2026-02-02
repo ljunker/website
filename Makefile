@@ -49,6 +49,7 @@ build:
 	./make-drei-fragezeichen
 	./make-drei-fragezeichen-index > _site/drei-fragezeichen/index.txt
 	./make-drei-fragezeichen-json DREI > _site/static/drei.js
+	./make-one-piece-index > _site/one-piece/index.txt
 
 .PHONY: all
 all: build deploy

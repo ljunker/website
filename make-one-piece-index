@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+#
+# Generate the page as seen by `curl kryptikk.de/one-piece`
+#
+
+. ./theme || exit
+
+format() {
+	local nummer status
+
+	# Kopfzeile
+	printf '%s\t%s\n' \
+		"${COLOR4}Nummer${RST}" \
+		"${COLOR4}Status${RST}"
+
+	# Datenzeilen
+	while IFS=$'\t' read -r nummer status; do
+		[[ -z $nummer && -z $status ]] && continue
+		printf '%s\t%s\n' \
+			"$nummer" \
+			"$status"
+	done
+}
+
+rows_from_csv() {
+	python3 ./one_piece_sheet_debug.py
+}
+
+{
+# create the header
+./make-header -p 7 | \
+    ./tools/box -hp 4 -T plain | \
+    ./tools/rtrim-ansi-aware
+
+echo
+
+# create the table
+rows_from_csv | \
+	format | \
+	./tools/box -s $'\t' -hp 1 -tc "$COLOR5" -bc "$COLOR4" -t "One Piece" -vp 1
+
+./make-legend
+} | ./tools/lpad '  ' | ./tools/rtrim-ansi-aware

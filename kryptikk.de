@@ -85,6 +85,16 @@ server {
         rewrite ^(.*) /drei-fragezeichen/index.html last;
     }
 
+    location = /one-piece {
+        if ($opts = "AB") {
+             return 301 "https://$server_name/$request_uri";
+        }
+        if ($http_user_agent ~ "^curl") {
+            rewrite ^(.*) /one-piece/index.txt last;
+        }
+        rewrite ^(.*) /one-piece/index.html last;
+    }
+
     location = / {
         if ($opts = "AB") {
             return 301 https://$server_name$request_uri;
