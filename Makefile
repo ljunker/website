@@ -78,8 +78,21 @@ deploy:
 .PHONY: update-nginx
 update-nginx:
 	@if ! sudo test -e /etc/nginx/sites-available/kryptikk.de || ! sudo cmp -s kryptikk.de /etc/nginx/sites-available/kryptikk.de; then \
-		echo "Updating /etc/nginx/sites-available/kryptikk.de"; \
+		backup="/tmp/kryptikk.de.$$(date +%Y%m%d%H%M%S).bak"; \
+		echo "Updating /etc/nginx/sites-available/kryptikk.de (backup: $$backup)"; \
+		if sudo test -e /etc/nginx/sites-available/kryptikk.de; then \
+			sudo cp /etc/nginx/sites-available/kryptikk.de "$$backup"; \
+		fi; \
 		sudo cp kryptikk.de /etc/nginx/sites-available/kryptikk.de; \
+		if sudo nginx -t; then \
+			echo "nginx -t ok"; \
+		else \
+			echo "nginx -t failed, restoring backup"; \
+			if sudo test -e "$$backup"; then \
+				sudo cp "$$backup" /etc/nginx/sites-available/kryptikk.de; \
+			fi; \
+			sudo nginx -t; \
+		fi; \
 	else \
 		echo "nginx config unchanged"; \
 	fi
