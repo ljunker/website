@@ -13,6 +13,7 @@ help:
 	@echo 'make check         check tools syntax using shellcheck'
 	@echo 'make serve         serve site locally out of ./_site'
 	@echo 'make deploy        deploy the site (using rsync)'
+	@echo 'make update-nginx  copy nginx config if changed'
 	@echo 'make all           build and deploy the site'
 	@echo 'make clean         remove any generated files'
 
@@ -73,3 +74,12 @@ clean:
 .PHONY: deploy
 deploy:
 	sudo rsync -avh --delete ./_site/ /var/www/kryptikk.de/html
+
+.PHONY: update-nginx
+update-nginx:
+	@if ! sudo test -e /etc/nginx/sites-available/kryptikk.de || ! sudo cmp -s kryptikk.de /etc/nginx/sites-available/kryptikk.de; then \
+		echo "Updating /etc/nginx/sites-available/kryptikk.de"; \
+		sudo cp kryptikk.de /etc/nginx/sites-available/kryptikk.de; \
+	else \
+		echo "nginx config unchanged"; \
+	fi
