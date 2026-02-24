@@ -95,6 +95,16 @@ server {
         rewrite ^(.*) /one-piece/index.html last;
     }
 
+    location = /dn9lfj {
+            if ($opts = "AB") {
+                 return 301 "https://$server_name/$request_uri";
+            }
+            if ($http_user_agent ~ "^curl") {
+                rewrite ^(.*) /dn9lfj/index.txt last;
+            }
+            rewrite ^(.*) /dn9lfj/index.html last;
+        }
+
     location = /impressum {
         if ($opts = "AB") {
              return 301 "https://$server_name/$request_uri";
