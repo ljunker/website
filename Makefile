@@ -19,7 +19,7 @@ help:
 
 .PHONY: build
 build:
-	mkdir -p _site _site/static _site/schedule _site/drei-fragezeichen _site/sammlungen _site/one-piece _site/impressum
+	mkdir -p _site _site/static _site/schedule _site/drei-fragezeichen _site/sammlungen _site/one-piece _site/dn9lfj _site/impressum
 	# disable indexing for certain dirs
 	echo -n > _site/static/index.html
 	# copy static files
@@ -32,6 +32,7 @@ build:
 	cat static/drei-fragezeichen.html > _site/drei-fragezeichen/index.html
 	cat static/sammlungen.html > _site/sammlungen/index.html
 	cat static/one-piece.html > _site/one-piece/index.html
+	cat static/dn9lfj.html > _site/dn9lfj/index.html
 	cat static/impressum.html > _site/impressum/index.html
 	cat static/nav.html > _site/nav.html
 	# make /ping endpoint (nginx handles this for me, but just in case)
@@ -52,6 +53,7 @@ build:
 	./make-drei-fragezeichen-index > _site/drei-fragezeichen/index.txt
 	./make-drei-fragezeichen-json DREI > _site/static/drei.js
 	./make-one-piece-index > _site/one-piece/index.txt
+	./make-dn9lfj-index > _site/dn9lfj/index.txt
 
 .PHONY: all
 all: build deploy

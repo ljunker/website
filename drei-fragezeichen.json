@@ -1414,5 +1414,11 @@
     "titel": "Im Bann des Barrakudas",
     "collected": false,
     "cover": "http://dreimetadaten.de/data/Serie/236/cover.png"
+  },
+  {
+    "nummer": 237,
+    "titel": "und der rote Büffel",
+    "collected": false,
+    "cover": "http://dreimetadaten.de/data/Serie/237/cover.png"
   }
 ]

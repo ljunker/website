@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+#
+# Generate the page as seen by `curl kryptikk.de/dn9lfj`
+#
+
+. ./theme || exit
+
+make_text() {
+	cat << "EOF"
+Unter dem Rufzeichen DN9LFJ bin ich im Amateurfunk aktiv.
+
+Diese Seite wird nach und nach um Inhalte aus meinem Funkalltag ergänzt.
+
+Was dich hier erwartet:
+- Stationsaufbau und Technik
+- Bevorzugte Betriebsarten und Aktivitäten
+- Projekte, an denen ich gerade arbeite
+- QSL- und Logbuch-Infos
+EOF
+}
+
+{
+# create the header
+./make-header -p 7 | \
+	./tools/box -hp 4 -T plain | \
+	./tools/rtrim-ansi-aware
+
+echo
+
+# create the content
+mapfile -t CONTENT < <(make_text)
+for line in "${CONTENT[@]}"; do
+	echo "$COLOR1$line$RST"
+done | ./tools/box -t "DN9LFJ" -hp 1 -vp 1 -bc "$COLOR4" -tc "$COLOR5" -s '|'
+
+./make-legend
+} | ./tools/lpad '  ' | ./tools/rtrim-ansi-aware
