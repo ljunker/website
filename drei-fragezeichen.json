@@ -1420,5 +1420,35 @@
     "titel": "und der rote Büffel",
     "collected": false,
     "cover": "http://dreimetadaten.de/data/Serie/237/cover.png"
+  },
+  {
+    "nummer": 238,
+    "titel": "Falsche Schuld",
+    "collected": false,
+    "cover": null
+  },
+  {
+    "nummer": 239,
+    "titel": "Das Geheimnis der sieben Palmen",
+    "collected": false,
+    "cover": null
+  },
+  {
+    "nummer": 240,
+    "titel": "und die schwarze Rose",
+    "collected": false,
+    "cover": null
+  },
+  {
+    "nummer": 241,
+    "titel": "Meister des Lichts",
+    "collected": false,
+    "cover": null
+  },
+  {
+    "nummer": 242,
+    "titel": "und das weiße Auge",
+    "collected": false,
+    "cover": null
   }
 ]
