@@ -332,31 +332,31 @@
   {
     "nummer": 56,
     "titel": "Angriff der Computer-Viren",
-    "collected": false,
+    "collected": true,
     "cover": "http://dreimetadaten.de/data/Serie/056/cover.png"
   },
   {
     "nummer": 57,
     "titel": "Tatort Zirkus",
-    "collected": false,
+    "collected": true,
     "cover": "http://dreimetadaten.de/data/Serie/057/cover.png"
   },
   {
     "nummer": 58,
     "titel": "und der verrückte Maler",
-    "collected": false,
+    "collected": true,
     "cover": "http://dreimetadaten.de/data/Serie/058/cover.png"
   },
   {
     "nummer": 59,
     "titel": "Giftiges Wasser",
-    "collected": false,
+    "collected": true,
     "cover": "http://dreimetadaten.de/data/Serie/059/cover.png"
   },
   {
     "nummer": 60,
     "titel": "Dopingmixer",
-    "collected": false,
+    "collected": true,
     "cover": "http://dreimetadaten.de/data/Serie/060/cover.png"
   },
   {

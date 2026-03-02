@@ -238,6 +238,16 @@ p.content {
 	max-width: 620px;
 }
 
+.solar-widget {
+	display: inline-block;
+	max-width: 100%;
+	height: auto;
+	margin-top: 10px;
+	border: 1px solid #87ff8755; /* color3 */
+	box-shadow: 0 0 24px #87ff871f;
+	background-color: #111;
+}
+
 ul.content-list {
 	max-width: 620px;
 	padding-left: 22px;
