@@ -40,8 +40,9 @@ def delete_backup():
         print(f"ERROR: Failed to delete backup: {e}")
         raise
 
-def insert_to_file(new_numbers: list):
+def insert_to_file(new_numbers: list) -> int|None:
     numbers = []
+    changes = 0
     # check if the file exists, if not create it
     try:
         open(NUMBER_FILE, "r").close()
@@ -57,6 +58,7 @@ def insert_to_file(new_numbers: list):
                 print(f"INFO: Number {new_number} already exists in the file.")
             else:
                 numbers.append(new_number)
+                changes += 1
         # sort lines in the file
         numbers.sort()
     with open(NUMBER_FILE, "w") as file:
@@ -69,6 +71,7 @@ def insert_to_file(new_numbers: list):
             raise
 
     delete_backup()
+    return changes
 
 def git_commit_and_push():
     import subprocess
@@ -83,8 +86,9 @@ def git_commit_and_push():
 
 def main(args) -> int:
     try:
-        insert_to_file(parse_numbers(args))
-        git_commit_and_push()
+        changes = insert_to_file(parse_numbers(args))
+        if changes is not None and changes > 0:
+            git_commit_and_push()
     except ValueError:
         print(f"ERROR: '{args}' contains invalid number(s).")
         return 1
