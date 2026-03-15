@@ -52,6 +52,7 @@ build:
 	./make-drei-fragezeichen
 	./make-drei-fragezeichen-index > _site/drei-fragezeichen/index.txt
 	./make-drei-fragezeichen-json DREI > _site/static/drei.js
+	cp -r static/images _site
 	./make-one-piece-index > _site/one-piece/index.txt
 	./make-dn9lfj-index > _site/dn9lfj/index.txt
 

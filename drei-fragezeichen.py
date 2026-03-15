@@ -14,6 +14,20 @@ def load_collected(path: Path) -> set[int]:
             numbers.add(int(part.strip()))
     return numbers
 
+def ensure_cached_image(url: str) -> str:
+    if url == None:
+        return ""
+    parts = url.split("/")
+    filename = parts[-2] + "_" + parts[-1]
+    cache_path = Path("static/images/three") / filename
+    if not cache_path.exists():
+        print(f"Caching image from {url} to {cache_path}")
+        response = requests.get(url)
+        response.raise_for_status()
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        cache_path.write_bytes(response.content)
+    return str(cache_path).replace("static/", "/")
+
 def main():
     response = requests.get(METADATA_URL)
     response.raise_for_status()
@@ -28,7 +42,7 @@ def main():
             "nummer": ep.get("nummer"),
             "titel": ep.get("titel"),
             "collected": ep.get("nummer") in collected,
-            "cover": links.get("cover")
+            "cover": ensure_cached_image(links.get("cover"))
         })
 
     OUTPUT_FILE.write_text(json.dumps(reduced, indent=2, ensure_ascii=False), encoding="utf-8")
