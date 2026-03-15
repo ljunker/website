@@ -14,7 +14,7 @@ output=$(jq \
 	--argjson date "$now" \
 	--arg link "$baselink" \
 	'{
-		"name": "Lars Junker Calltermine",
+		"name": "Lars Junker Drei ??? Sammlung",
 		"site": $link,
 		"generated": $date,
 		"drei": [
