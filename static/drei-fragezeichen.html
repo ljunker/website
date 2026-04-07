@@ -25,6 +25,7 @@
         <h1 class="title">drei ???</h1>
         <p class="content">
 				<span class="highlight">Ich sammele alle Folgen der Drei ??? auf Kassette.</span>
+                <span id="collection-progress"></span>
         </p>
         <p class="content" id="missing-ranges"></p>
         <br>
@@ -85,6 +86,20 @@
 
     var missingText = buildMissingRanges(DREI.drei);
     var missingEl = document.getElementById('missing-ranges');
+    var progressEl = document.getElementById('collection-progress');
+    var collectedCount = DREI.drei.filter(function (evt) {
+        return evt.collected === 'gesammelt';
+    }).length;
+    var totalCount = DREI.drei.length;
+    var collectedPercent = totalCount ? ((collectedCount / totalCount) * 100) : 0;
+
+    if (progressEl) {
+        progressEl.textContent = ' Aktuell: ' + collectedCount + ' von ' + totalCount + ' Folgen (' + collectedPercent.toLocaleString('de-DE', {
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1
+        }) + ' %).';
+    }
+
     if (missingEl) {
         missingEl.textContent = missingText ? ('Es fehlen mir: ' + missingText) : 'Es fehlen mir: keine';
     }

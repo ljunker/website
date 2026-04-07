@@ -52,12 +52,32 @@ missing_ranges() {
 	'
 }
 
+collection_progress() {
+	./make-drei-fragezeichen-list | awk -F '\t' '
+		$1 ~ /^[0-9]+$/ {
+			total++
+			if ($3 == "gesammelt") {
+				collected++
+			}
+		}
+		END {
+			if (total == 0) {
+				printf "0 von 0 Folgen (0.0 %)"
+				exit
+			}
+			printf "%d von %d Folgen (%.1f %%)", collected, total, (collected / total) * 100
+		}
+	'
+}
+
 {
 # create the header
 ./make-header -p 7 |
     ./tools/box -hp 4 -T plain |
     ./tools/rtrim-ansi-aware
 
+echo
+printf '%s\t%s\n' "${COLOR4}Gesammelt:${RST}" "$(collection_progress)"
 echo
 printf '%s\t%s\n' "${COLOR4}Es fehlen mir:${RST}" "$(missing_ranges)"
 echo
