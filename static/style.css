@@ -326,15 +326,15 @@ td {
 }
 
 .schedule-table td {
-	padding-top: 7px;
-	padding-bottom: 7px;
+	padding-top: 13px;
+	padding-bottom: 13px;
 	vertical-align: top;
 }
 
 .schedule-table .location a {
 	display: block;
-	margin: -7px 0;
-	padding: 7px 0;
+	margin: -13px 0;
+	padding: 13px 0;
 }
 
 td.cover {
