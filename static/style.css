@@ -238,6 +238,37 @@ p.content {
 	max-width: 620px;
 }
 
+.support-page {
+	max-width: 680px;
+}
+
+.support-page h1.title {
+	margin-bottom: 18px;
+}
+
+.support-intro {
+	color: var(--color4);
+	line-height: 1.55;
+}
+
+.support-section {
+	margin-top: 28px;
+}
+
+.support-section h2 {
+	margin-bottom: 12px;
+}
+
+.support-faq h3 {
+	color: var(--color2);
+	margin-top: 20px;
+	margin-bottom: 6px;
+}
+
+.support-page p {
+	line-height: 1.55;
+}
+
 .solar-widget {
 	display: inline-block;
 	max-width: 100%;
