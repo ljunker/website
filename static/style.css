@@ -269,6 +269,16 @@ p.content {
 	line-height: 1.55;
 }
 
+.support-steps {
+	max-width: 620px;
+	padding-left: 28px;
+	line-height: 1.55;
+}
+
+.support-steps li {
+	margin-bottom: 6px;
+}
+
 .solar-widget {
 	display: inline-block;
 	max-width: 100%;

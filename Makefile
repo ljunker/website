@@ -19,7 +19,7 @@ help:
 
 .PHONY: build
 build:
-	mkdir -p _site _site/static _site/schedule _site/drei-fragezeichen _site/sammlungen _site/one-piece _site/dn9lfj _site/impressum _site/schrittjagd-support _site/schrittjagd-datenschutz
+	mkdir -p _site _site/static _site/schedule _site/drei-fragezeichen _site/sammlungen _site/one-piece _site/dn9lfj _site/impressum _site/schrittjagd-support _site/schrittjagd-datenschutz _site/schrittjagd-delete
 	# disable indexing for certain dirs
 	echo -n > _site/static/index.html
 	# copy static files
@@ -36,6 +36,7 @@ build:
 	cat static/impressum.html > _site/impressum/index.html
 	cat static/schrittjagd-support.html > _site/schrittjagd-support/index.html
 	cat static/schrittjagd-datenschutz.html > _site/schrittjagd-datenschutz/index.html
+	cat static/schrittjagd-delete.html > _site/schrittjagd-delete/index.html
 	cat static/nav.html > _site/nav.html
 	# make /ping endpoint (nginx handles this for me, but just in case)
 	echo 'pong' > _site/ping

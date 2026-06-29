@@ -164,6 +164,13 @@ server {
         rewrite ^(.*) /schrittjagd-datenschutz/index.html last;
     }
 
+    location = /schrittjagd-delete {
+        if ($opts = "AB") {
+             return 301 "https://$server_name/$request_uri";
+        }
+        rewrite ^(.*) /schrittjagd-delete/index.html last;
+    }
+
     location = / {
         if ($opts = "AB") {
             return 301 https://$server_name$request_uri;
