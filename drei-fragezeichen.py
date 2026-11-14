@@ -1,10 +1,13 @@
 import json
 import requests
+from io import BytesIO
 from pathlib import Path
+from PIL import Image
 
 METADATA_URL = "https://dreimetadaten.de/data/Serie.json"
 COLLECTED_FILE = Path("drei-fragezeichen-collected.txt")
 OUTPUT_FILE = Path("drei-fragezeichen.json")
+MAX_COVER_SIZE = 200  # angezeigt werden 100x100 px, 200 px = 2x fuer Retina
 
 def load_collected(path: Path) -> set[int]:
     text = path.read_text(encoding="utf-8").strip()
@@ -18,14 +21,17 @@ def ensure_cached_image(url: str) -> str:
     if url == None:
         return ""
     parts = url.split("/")
-    filename = parts[-2] + "_" + parts[-1]
+    filename = parts[-2] + "_" + Path(parts[-1]).stem + ".webp"
     cache_path = Path("static/images/three") / filename
     if not cache_path.exists():
         print(f"Caching image from {url} to {cache_path}")
         response = requests.get(url)
         response.raise_for_status()
         cache_path.parent.mkdir(parents=True, exist_ok=True)
-        cache_path.write_bytes(response.content)
+        with Image.open(BytesIO(response.content)) as img:
+            img = img.convert("RGB")
+            img.thumbnail((MAX_COVER_SIZE, MAX_COVER_SIZE), Image.LANCZOS)
+            img.save(cache_path, "WEBP", quality=80)
     return str(cache_path).replace("static/", "/")
 
 def main():
