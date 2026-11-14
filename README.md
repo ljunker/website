@@ -7,6 +7,14 @@ https://kryptikk.de
 curl kryptikk.de
 ```
 
+Setup
+-----
+
+```
+pip install -r requirements.txt
+make check-deps
+```
+
 Usage
 -----
 
