@@ -28,6 +28,8 @@ build:
 	cat static/robots.txt > _site/robots.txt
 	cat static/style.css > _site/static/style.css
 	cat static/ansi.css > _site/static/ansi.css
+	mkdir -p _site/static/fonts
+	cp static/fonts/* _site/static/fonts/
 	cat static/index.html > _site/index.html
 	cat static/schedule.html > _site/schedule/index.html
 	cat static/drei-fragezeichen.html > _site/drei-fragezeichen/index.html
