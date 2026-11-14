@@ -1,4 +1,5 @@
 import json
+import sys
 import requests
 from io import BytesIO
 from pathlib import Path
@@ -34,12 +35,28 @@ def ensure_cached_image(url: str) -> str:
             img.save(cache_path, "WEBP", quality=80)
     return str(cache_path).replace("static/", "/")
 
-def main():
-    response = requests.get(METADATA_URL)
-    response.raise_for_status()
-    metadata = response.json()
+def update_existing_output(collected: set[int]) -> None:
+    """Fallback ohne Netz: vorhandene JSON behalten, nur collected-Flags aktualisieren."""
+    episodes = json.loads(OUTPUT_FILE.read_text(encoding="utf-8"))
+    for ep in episodes:
+        ep["collected"] = ep.get("nummer") in collected
+    OUTPUT_FILE.write_text(json.dumps(episodes, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"Output written to {OUTPUT_FILE} (from existing data)")
 
+def main():
     collected = load_collected(COLLECTED_FILE)
+
+    try:
+        response = requests.get(METADATA_URL, timeout=30)
+        response.raise_for_status()
+        metadata = response.json()
+    except (requests.RequestException, ValueError) as e:
+        if not OUTPUT_FILE.exists():
+            raise
+        print(f"WARNUNG: {METADATA_URL} nicht abrufbar ({e}), "
+              f"verwende vorhandene {OUTPUT_FILE}", file=sys.stderr)
+        update_existing_output(collected)
+        return
 
     reduced = []
     for ep in metadata.get("serie", []):
