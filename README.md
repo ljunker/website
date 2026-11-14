@@ -28,3 +28,12 @@ make deploy        deploy the site (using rsync)
 make all           build and deploy the site
 make clean         remove any generated files
 ```
+
+Upgrade
+-------
+
+Pull the latest changes, rebuild and deploy in one step:
+
+```
+./upgrade
+```
