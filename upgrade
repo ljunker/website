@@ -4,16 +4,82 @@
 #
 # Usage: ./upgrade
 #
+# Shows a progress bar instead of the command output. The full output is
+# written to a log file, which is printed (tail) and kept if a step fails.
+#
 
 set -euo pipefail
+
+STEPS=6
+BAR_WIDTH=30
+step=0
+log=
+pid=
+
+# draw <label> [spinner char]
+draw() {
+	local label=$1 spin=${2:-}
+	local filled=$((step * BAR_WIDTH / STEPS))
+	local bar
+	printf -v bar '%*s' "$filled" ''
+	bar=${bar// /#}
+	printf -v bar '%-*s' "$BAR_WIDTH" "$bar"
+	bar=${bar// /-}
+	if [[ -t 1 ]]; then
+		printf '\r\033[K[%s] %3d%% %s %s' "$bar" $((step * 100 / STEPS)) "$spin" "$label"
+	fi
+}
+
+# run_step <label> <command...>
+run_step() {
+	local label=$1
+	shift
+	[[ -t 1 ]] || echo "==> $label"
+	printf '\n==> %s\n' "$label" >>"$log"
+
+	"$@" >>"$log" 2>&1 &
+	pid=$!
+
+	local frames='|/-\' i=0
+	while kill -0 "$pid" 2>/dev/null; do
+		draw "$label" "${frames:i++%4:1}"
+		sleep 0.1
+	done
+
+	if ! wait "$pid"; then
+		pid=
+		[[ -t 1 ]] && echo
+		echo "FEHLER bei: $label" >&2
+		echo "--- letzte Zeilen aus $log ---" >&2
+		tail -n 30 "$log" >&2
+		echo "--- vollständiges Log: $log ---" >&2
+		exit 1
+	fi
+	pid=
+
+	step=$((step + 1))
+	draw "$label"
+}
+
+cleanup() {
+	if [[ -n $pid ]]; then
+		kill "$pid" 2>/dev/null || true
+	fi
+}
 
 # Wrapped in a function so bash parses the whole script before running it.
 # Otherwise a `git pull` that changes this very file could break the run.
 main() {
 	cd "$(dirname "${BASH_SOURCE[0]}")"
 
-	echo '==> git pull'
-	git pull --ff-only
+	log=$(mktemp "${TMPDIR:-/tmp}/upgrade.XXXXXX.log")
+	trap cleanup EXIT
+	trap 'echo; echo "Abgebrochen. Log: $log" >&2; exit 130' INT TERM
+
+	# ask for the sudo password up front, the prompt would be hidden later
+	sudo -v
+
+	run_step 'git pull' git pull --ff-only
 
 	# use the project venv if there is one, so build scripts see its modules
 	if [[ -f .venv/bin/activate ]]; then
@@ -21,22 +87,16 @@ main() {
 		. .venv/bin/activate
 	fi
 
-	echo '==> pip install'
-	python3 -m pip install -r requirements.txt
+	run_step 'pip install' python3 -m pip install -r requirements.txt
+	run_step 'check dependencies' make check-deps
+	run_step 'build' make clean build
+	run_step 'nginx config' make update-nginx
+	run_step 'deploy' make deploy
 
-	echo '==> check dependencies'
-	make check-deps
-
-	echo '==> build'
-	make clean build
-
-	echo '==> nginx config'
-	make update-nginx
-
-	echo '==> deploy'
-	make deploy
-
+	draw 'fertig'
+	[[ -t 1 ]] && echo
 	echo '==> done'
+	rm -f "$log"
 }
 
 main "$@"
