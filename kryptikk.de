@@ -1,3 +1,11 @@
+# Welche Index-Datei ausgeliefert wird: curl bekommt die Textversion (index.txt),
+# alle anderen die HTML-Version. Wird im HTTPS-Block fuer die curl-Weiche genutzt
+# (Cloudflare liefert im SSL-Modus "Full" alles ueber 443 an).
+map $http_user_agent $kryptikk_index {
+    ~^curl  index.txt;
+    default index.html;
+}
+
 server {
     listen 80;
     listen [::]:80;
@@ -59,6 +67,36 @@ server {
         }
 
 
+
+    location = /ping {
+        default_type text/plain;
+        return 200 "pong\n";
+    }
+
+    location = /ip {
+        default_type text/plain;
+        return 200 "${http_cf_connecting_ip}\n";
+    }
+
+    location = /schedule {
+        rewrite ^ /schedule/$kryptikk_index last;
+    }
+
+    location = /drei-fragezeichen {
+        rewrite ^ /drei-fragezeichen/$kryptikk_index last;
+    }
+
+    location = /one-piece {
+        rewrite ^ /one-piece/$kryptikk_index last;
+    }
+
+    location = /dn9lfj {
+        rewrite ^ /dn9lfj/$kryptikk_index last;
+    }
+
+    location = / {
+        rewrite ^ /$kryptikk_index last;
+    }
 
     location / {
             try_files $uri $uri/ /index.html =404;
