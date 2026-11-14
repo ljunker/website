@@ -3,6 +3,8 @@
 # Generate the Legend (help message) - intended to be passed to `tools/box`
 #
 
+set -eo pipefail
+
 
 
 . ./theme || exit

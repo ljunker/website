@@ -4,13 +4,17 @@
 # JSONP instead.
 #
 
+set -eo pipefail
+
 
 varname=$1
 
 baselink='https://kryptikk.de'
 
 # this is an "event" object in the final json
-read -d '' -r json <<-"EOF"
+# (`read -d ''` hits EOF before the delimiter and always returns 1, which would
+# abort the script under `set -e`, hence the `|| true`)
+read -d '' -r json <<-"EOF" || true
 {
 	"date": $date,
 	"time": $time,
@@ -21,9 +25,13 @@ read -d '' -r json <<-"EOF"
 }
 EOF
 
-# read data
+# read data - fetch the list first so a failing ./make-list is noticed (errors
+# inside a process substitution `< <(...)` would be swallowed)
+list=$(./make-list)
 objects=()
 while IFS=$'\t' read -r date time end_date end_time details location; do
+	# `<<<` of an empty list yields one empty line, skip it
+	[[ -z $date ]] && continue
 	object=$(jq -nc \
 		--arg date "$date" \
 		--arg time "$time" \
@@ -34,7 +42,7 @@ while IFS=$'\t' read -r date time end_date end_time details location; do
 		"$json"
 	) || exit
 	objects+=("$object")
-done < <(./make-list)
+done <<< "$list"
 
 # generate output JSON
 printf -v now '%(%s)T' -1

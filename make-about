@@ -4,6 +4,8 @@
 # be piped into `tools/box`
 #
 
+set -eo pipefail
+
 
 
 . ./theme || exit 1

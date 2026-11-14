@@ -4,5 +4,7 @@
 # stdout
 #
 
+set -eo pipefail
+
 source .venv/bin/activate
 python events_to_list.py

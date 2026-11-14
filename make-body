@@ -3,12 +3,17 @@
 # Make the body of the index page for kryptikk.de
 #
 
+set -eo pipefail
+
 
 
 . ./theme || exit 1
 
-mapfile -t ABOUT < <(./make-about |
+# fetch the box first so a failure is noticed (errors inside a process
+# substitution `< <(...)` would be swallowed)
+about=$(./make-about |
     ./tools/box -t About -hp 1 -vp 1 -bc "$COLOR4" -tc "$COLOR5" -s '|')
+mapfile -t ABOUT <<< "$about"
 
 # mapfile -t SOCIALS < <(./make-socials |
 #    ./tools/box -t Socials -hp 1 -vp 1 -bc "$COLOR4" -tc "$COLOR5" -s '|')

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eo pipefail
+
 source .venv/bin/activate
 python3 events.py
 #rm -f /var/www/kryptikk.de/html/data/*

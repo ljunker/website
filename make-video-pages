@@ -6,6 +6,8 @@
 # files.
 #
 
+set -eo pipefail
+
 
 
 num_re='^[0-9]+$'

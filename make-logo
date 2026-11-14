@@ -3,6 +3,8 @@
 # Print the YSAP logo - sorry this sucks lol
 #
 
+set -eo pipefail
+
 
 
 printf "\e[49m\e[38;5;223m█      ███  ████   ███ \e[m\n"
