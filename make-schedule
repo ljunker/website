@@ -3,6 +3,8 @@
 # Generate the page as seen by `curl kryptikk.de/schedule`
 #
 
+set -eo pipefail
+
 
 . ./theme || exit
 

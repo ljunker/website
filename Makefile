@@ -5,6 +5,7 @@
 
 # duh
 SHELL := bash
+.SHELLFLAGS := -eu -o pipefail -c
 
 .PHONY: help
 help:

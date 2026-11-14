@@ -3,6 +3,8 @@
 # Ensure the required dep programs are available
 #
 
+set -eo pipefail
+
 # Date: March 25, 2024
 # License: MIT
 

@@ -1,4 +1,6 @@
 #!/bin/bash
 
+set -eo pipefail
+
 source .venv/bin/activate
 python3 drei-fragezeichen.py

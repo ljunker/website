@@ -3,6 +3,8 @@
 # Print the socials - indended to be passed to `tools/box`
 #
 
+set -eo pipefail
+
 
 
 . ./theme || exit

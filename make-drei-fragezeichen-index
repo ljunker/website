@@ -3,6 +3,8 @@
 # Generate the page as seen by `curl kryptikk.de/drei-fragezeichen`
 #
 
+set -eo pipefail
+
 
 . ./theme || exit
 
@@ -76,10 +78,15 @@ collection_progress() {
     ./tools/box -hp 4 -T plain |
     ./tools/rtrim-ansi-aware
 
+# fetch the values first: a failing command substitution inside the arguments
+# of printf would not trigger `set -e`
+progress=$(collection_progress)
+missing=$(missing_ranges)
+
 echo
-printf '%s\t%s\n' "${COLOR4}Gesammelt:${RST}" "$(collection_progress)"
+printf '%s\t%s\n' "${COLOR4}Gesammelt:${RST}" "$progress"
 echo
-printf '%s\t%s\n' "${COLOR4}Es fehlen mir:${RST}" "$(missing_ranges)"
+printf '%s\t%s\n' "${COLOR4}Es fehlen mir:${RST}" "$missing"
 echo
 
 # create the table

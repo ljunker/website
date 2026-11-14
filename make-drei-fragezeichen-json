@@ -4,6 +4,8 @@
 # JSONP instead.
 #
 
+set -eo pipefail
+
 
 varname=$1
 

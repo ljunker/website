@@ -4,6 +4,8 @@
 # you can request via `curl`
 #
 
+set -eo pipefail
+
 
 . ./theme || exit
 . ./tools/repeat-char || exit

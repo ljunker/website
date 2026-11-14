@@ -3,6 +3,8 @@
 # Generate the page as seen by `curl kryptikk.de/dn9lfj`
 #
 
+set -eo pipefail
+
 . ./theme || exit
 
 make_text() {
