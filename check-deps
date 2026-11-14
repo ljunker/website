@@ -16,9 +16,24 @@ check() {
 	fi
 }
 
+check_py() {
+	echo -n "python3 module $1... "
+	if python3 -c "import $1" 2>/dev/null; then
+		echo 'ok'
+	else
+		echo 'error (pip install -r requirements.txt)'
+		code=1
+	fi
+}
+
 check command -v bash
 check command -v curl
 check command -v jq
 check command -v python3
+
+# Python modules (install with: pip install -r requirements.txt)
+check_py PIL
+check_py requests
+check_py icalevents
 
 exit "$code"
