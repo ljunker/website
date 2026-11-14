@@ -15,6 +15,15 @@ main() {
 	echo '==> git pull'
 	git pull --ff-only
 
+	# use the project venv if there is one, so build scripts see its modules
+	if [[ -f .venv/bin/activate ]]; then
+		# shellcheck disable=SC1091
+		. .venv/bin/activate
+	fi
+
+	echo '==> pip install'
+	python3 -m pip install -r requirements.txt
+
 	echo '==> check dependencies'
 	make check-deps
 
