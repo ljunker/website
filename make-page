@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+#
+# Render a page from static/ to stdout, expanding include markers.
+#
+# Usage: ./make-page static/<page>.html
+#
+# A line consisting only of one of these markers (leading whitespace allowed)
+# is replaced by the content of the matching partial in static/partials/:
+#
+#   <!-- include:head -->    static/partials/head.html
+#   <!-- include:nav -->     static/partials/nav.html
+#   <!-- include:footer -->  static/partials/footer.html ({{YEAR}} -> current year)
+#
+# Unknown markers or missing files abort with a non-zero exit code.
+#
+# Basiert auf ysap von Dave Eddy (MIT), siehe NOTICE
+#
+
+set -eo pipefail
+
+if [[ $# -ne 1 ]]; then
+	echo "usage: $0 <page.html>" >&2
+	exit 2
+fi
+
+page=$1
+dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+partials=$dir/static/partials
+
+if [[ ! -r $page ]]; then
+	echo "$0: cannot read $page" >&2
+	exit 1
+fi
+
+year=$(date +%Y)
+marker_re='^[[:space:]]*<!--[[:space:]]*include:([^[:space:]>-]*)[[:space:]]*-->[[:space:]]*$'
+
+# read all partials up front so a missing file fails before any output
+declare -A content
+for name in head nav footer; do
+	file=$partials/$name.html
+	if [[ ! -r $file ]]; then
+		echo "$0: missing partial $file" >&2
+		exit 1
+	fi
+	content[$name]=$(cat "$file"; echo x)
+	content[$name]=${content[$name]%x}
+done
+content[footer]=${content[footer]//'{{YEAR}}'/$year}
+
+out=
+lineno=0
+while IFS= read -r line || [[ -n $line ]]; do
+	lineno=$((lineno + 1))
+	if [[ $line =~ $marker_re ]]; then
+		name=${BASH_REMATCH[1]}
+		if [[ -z $name || -z ${content[$name]+x} ]]; then
+			echo "$0: $page:$lineno: unknown include marker '$name'" >&2
+			exit 1
+		fi
+		out+=${content[$name]}
+	elif [[ $line == *'<!-- include:'* ]]; then
+		echo "$0: $page:$lineno: malformed include marker" >&2
+		exit 1
+	else
+		out+=$line$'\n'
+	fi
+done < "$page"
+
+printf '%s' "$out"
