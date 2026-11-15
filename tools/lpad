@@ -2,7 +2,6 @@
 #
 # Pad input text on the left-side with a given string
 #
-
 # Author: Dave Eddy <dave@daveeddy.com>
 # Date: March 28, 2025
 # License: MIT

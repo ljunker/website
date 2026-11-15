@@ -8,7 +8,6 @@
 # characters are there - so I wrote this tool to clean it up.  This only works
 # for lines that end in a reset sequence.
 #
-
 # Author: Dave Eddy <dave@daveeddy.com>
 # Date: August 14, 2025
 # License: MIT
