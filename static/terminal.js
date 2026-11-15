@@ -2,7 +2,6 @@
  * Terminal Emulator display to look like commands are being typed and output is
  * being generated.
  *
-
  * Author: Dave Eddy <dave@daveeddy.com>
  * Date: April 05, 2025
  * License: MIT
