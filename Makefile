@@ -72,8 +72,8 @@ all:
 
 .PHONY: venv
 venv:
-	python3 -m venv .venv
-	.venv/bin/pip install -r requirements.txt
+	if [[ ! -x .venv/bin/python3 ]]; then python3 -m venv .venv; fi
+	.venv/bin/python3 -m pip install -r requirements.txt
 
 .PHONY: serve
 serve:
