@@ -462,7 +462,8 @@ td {
 	text-align: center;
 }
 
-.schedule-table .location a {
+.schedule-table .location a,
+.schedule-table td.details a {
 	display: block;
 	margin: -13px 0;
 	padding: 13px 0;

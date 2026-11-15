@@ -8,7 +8,7 @@
 
     <link rel="icon" href="/favicon.ico">
 
-    <link rel="stylesheet" href="/static/style.css?v=6">
+    <link rel="stylesheet" href="/static/style.css?v=7">
     <link rel="stylesheet" href="/static/ansi.css?v=2">
 </head>
 <body>
@@ -124,6 +124,28 @@
         return td;
     }
 
+    function getUrl(ev) {
+        var raw = ev && ev.component && ev.component.getFirstPropertyValue('url');
+        raw = (raw || '').toString().trim();
+        return /^https?:\/\//i.test(raw) ? raw : '';
+    }
+
+    function tdWithLink(txt, url, className) {
+        if (!url) return tdWithText(txt, className);
+        var td = document.createElement('td');
+        if (className) td.classList.add(className);
+
+        var a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.textContent = txt || '';
+        a.setAttribute('aria-label', 'Homepage von ' + (txt || '') + ' oeffnen (neuer Tab)');
+
+        td.appendChild(a);
+        return td;
+    }
+
     function statusRow(content) {
         var tr = document.createElement('tr');
         var td = document.createElement('td');
@@ -162,7 +184,7 @@
         var lo = windowStart.getTime(), hi = windowEnd.getTime();
         var out = [];
 
-        function add(startDate, endDate, ev) {
+        function add(startDate, endDate, ev, fallbackUrl) {
             var t = startMillis(startDate);
             if (t < lo || t >= hi) return;
             var s = format(startDate);
@@ -170,6 +192,7 @@
             out.push({
                 t: t, date: s.date, time: s.time, end_time: e.time,
                 details: ev.summary || '',
+                url: getUrl(ev) || fallbackUrl || '',
                 location: (ev.location || '').replace(/\s*[\r\n]+\s*/g, ', ')
             });
         }
@@ -191,7 +214,7 @@
                     // urspruengliche Datum ausserhalb des Fensters liegt
                     Object.keys(ev.exceptions).forEach(function (key) {
                         var ex = ev.exceptions[key];
-                        add(ex.startDate, ex.endDate, ex);
+                        add(ex.startDate, ex.endDate, ex, getUrl(ev));
                     });
                 } else {
                     add(ev.startDate, ev.endDate, ev);
@@ -250,7 +273,7 @@
             tr.appendChild(tdWithText(evt.date, 'date'));
             tr.appendChild(tdWithText(evt.time, 'start'));
             tr.appendChild(tdWithText(evt.end_time, 'end'));
-            tr.appendChild(tdWithText(evt.details, 'details'));
+            tr.appendChild(tdWithLink(evt.details, evt.url, 'details'));
             tr.appendChild(tdWithMapsLink(evt.location));
             tbody.appendChild(tr);
         });
