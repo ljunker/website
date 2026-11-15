@@ -49,6 +49,25 @@ server {
             proxy_set_header X-Forwarded-Proto $scheme;
         }
 
+        # Kalender-Feed (iCloud) fuer /schedule: der Browser kann ihn wegen fehlender
+        # CORS-Header nicht direkt laden, daher ueber diesen Proxy, immer ohne Cache.
+        # add_header im location deaktiviert die Vererbung, daher Header erneut setzen.
+        location = /schedule/calendar.ics {
+            proxy_pass https://p131-caldav.icloud.com/published/2/MTAzODAyMzk0NDkxMDM4MKx0EePtPDXePVZMEANU5wgvh8UiCQKBUo_2X7Xqg9Jh3NtXpIyVy5CqwdHizblJlRvhMBUjjWdRQ3aI_qnXqcw;
+            proxy_set_header Host p131-caldav.icloud.com;
+            proxy_ssl_server_name on;
+            proxy_hide_header Set-Cookie;
+            proxy_hide_header Strict-Transport-Security;
+            proxy_hide_header Cache-Control;
+            proxy_hide_header Expires;
+            proxy_hide_header Pragma;
+            add_header Cache-Control "no-store, no-cache, must-revalidate" always;
+            add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+            add_header X-Frame-Options "DENY";
+            add_header X-Content-Type-Options nosniff;
+            expires off;
+        }
+
         location = /log {
             return 301 /log/$is_args$args;
         }
