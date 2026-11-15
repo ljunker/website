@@ -8,7 +8,7 @@
 
     <link rel="icon" href="/favicon.ico">
 
-    <link rel="stylesheet" href="/static/style.css?v=7">
+    <link rel="stylesheet" href="/static/style.css?v=8">
     <link rel="stylesheet" href="/static/ansi.css?v=2">
 </head>
 <body>
@@ -32,7 +32,10 @@
 
         <div class="schedule-nav">
             <button type="button" id="nav-prev">&laquo; früher</button>
-            <span class="range" id="nav-range"></span>
+            <div class="center">
+                <span class="range" id="nav-range"></span>
+                <button type="button" id="nav-today">heute</button>
+            </div>
             <button type="button" id="nav-next">später &raquo;</button>
         </div>
 
@@ -69,6 +72,7 @@
     var tbody = document.getElementById('schedule-tbody');
     var prevBtn = document.getElementById('nav-prev');
     var nextBtn = document.getElementById('nav-next');
+    var todayBtn = document.getElementById('nav-today');
     var rangeLabel = document.getElementById('nav-range');
 
     var items = null; // alle (nicht expandierten) Termine, nur einmal geparst
@@ -244,6 +248,7 @@
 
         rangeLabel.textContent = fmtDay(windowStart) + ' – ' + fmtDay(lastDay);
         prevBtn.disabled = page === 0;
+        todayBtn.disabled = page === 0;
         nextBtn.disabled = failed;
         tbody.textContent = '';
 
@@ -289,6 +294,7 @@
 
     prevBtn.addEventListener('click', function () { go(Math.max(0, getPage() - 1)); });
     nextBtn.addEventListener('click', function () { go(getPage() + 1); });
+    todayBtn.addEventListener('click', function () { go(0); });
     window.addEventListener('hashchange', render);
 
     render();
