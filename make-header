@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 #
-# Print the colorized YSAP logo and metadata used as the header for all pages
-# you can request via `curl`
+# Print the colorized logo next to my name, role, website and e-mail address,
+# used as the header for all pages you can request via `curl`
+#
+# Basiert auf ysap von Dave Eddy (MIT), siehe NOTICE
 #
 
 set -eo pipefail

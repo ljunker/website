@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 #
-# Print the YSAP logo - sorry this sucks lol
+# Print the logo: the letters "LARS" in ANSI-colored block characters - sorry
+# this sucks lol
+#
+# Basiert auf ysap von Dave Eddy (MIT), siehe NOTICE
 #
 
 set -eo pipefail

@@ -2,6 +2,8 @@
 #
 # Print the socials - indended to be passed to `tools/box`
 #
+# Basiert auf ysap von Dave Eddy (MIT), siehe NOTICE
+#
 
 set -eo pipefail
 

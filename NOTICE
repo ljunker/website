@@ -1,0 +1,71 @@
+NOTICE
+======
+
+Dieses Projekt (kryptikk.de) basiert teilweise auf der ysap-Website von
+Dave Eddy:
+
+  https://github.com/bahamas10/ysap  (Ordner `website/`)
+
+Für `tools/bansi-to-html` ist zusätzlich die Quelle
+https://github.com/bahamas10/bansi-to-html zu nennen.
+
+Aus ysap übernommene bzw. davon abgeleitete Dateien:
+
+  .gitignore
+  Makefile
+  README.md
+  check-deps
+  make-about
+  make-body
+  make-header
+  make-help
+  make-index
+  make-legend
+  make-list
+  make-logo
+  make-socials
+  make-video-pages
+  static/ansi.css
+  static/index.html
+  static/style.css
+  static/terminal.js
+  static/video.html
+  theme              (vermutlich ebenfalls aus ysap, nicht verifiziert)
+  tools/bansi-to-html
+  tools/box
+  tools/lpad
+  tools/repeat-char
+  tools/rtrim-ansi-aware
+  tools/strip-ansi
+
+Für diese Dateien gilt die folgende Lizenz (MIT), im Wortlaut unverändert:
+
+--------------------------------------------------------------------------
+
+MIT License
+
+Copyright (c) 2024-2025 Dave Eddy <dave@daveeddy.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+--------------------------------------------------------------------------
+
+Die übrigen, eigenen Inhalte dieses Repositorys (z. B. Texte, Daten und
+Skripte zu Events, Drei Fragezeichen, One Piece und DN9LFJ) fallen nicht unter
+diese Notiz. Für sie wird hiermit keine Lizenz erteilt.

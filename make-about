@@ -3,6 +3,8 @@
 # Print the "about" message formatted how I like it - this output is intended to
 # be piped into `tools/box`
 #
+# Basiert auf ysap von Dave Eddy (MIT), siehe NOTICE
+#
 
 set -eo pipefail
 

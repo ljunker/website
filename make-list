@@ -3,6 +3,8 @@
 # Loop each event and generate a tab-separated list of all events to
 # stdout
 #
+# Basiert auf ysap von Dave Eddy (MIT), siehe NOTICE
+#
 
 set -eo pipefail
 

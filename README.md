@@ -37,3 +37,10 @@ Pull the latest changes, rebuild and deploy in one step:
 ```
 ./upgrade
 ```
+
+Lizenz / Herkunft
+-----------------
+
+Teile dieses Projekts basieren auf der ysap-Website von Dave Eddy
+(https://github.com/bahamas10/ysap, MIT). Details, Dateiliste und Lizenztext
+stehen in [NOTICE](NOTICE).

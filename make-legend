@@ -2,6 +2,8 @@
 #
 # Generate the Legend (help message) - intended to be passed to `tools/box`
 #
+# Basiert auf ysap von Dave Eddy (MIT), siehe NOTICE
+#
 
 set -eo pipefail
 

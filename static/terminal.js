@@ -3,6 +3,7 @@
  * being generated.
  *
 
+ * Author: Dave Eddy <dave@daveeddy.com>
  * Date: April 05, 2025
  * License: MIT
  */
