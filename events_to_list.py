@@ -1,15 +1,26 @@
 import json
+import re
+
+
+def clean(value, newline=" "):
+    """Make a value safe for tab-separated output.
+
+    Line breaks are replaced by `newline`, tabs by a single space.
+    """
+    value = re.sub(r"\r\n|\n|\r", newline, value or "")
+    return value.replace("\t", " ")
+
 
 with open("events.json", "r", encoding="utf-8") as f:
     events = json.load(f)
 
 for event in events:
-    date = event.get("date") or ""
-    time = event.get("time") or ""
-    end_date = event.get("end_date") or ""
-    end_time = event.get("end_time") or ""
-    details = event.get("details") or ""
-    location = (event.get("location") or "").replace("\n", ", ")
+    date = clean(event.get("date"))
+    time = clean(event.get("time"))
+    end_date = clean(event.get("end_date"))
+    end_time = clean(event.get("end_time"))
+    details = clean(event.get("details"))
+    location = clean(event.get("location"), ", ")
 
     print(
         date + "\t"

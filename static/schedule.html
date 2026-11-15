@@ -3,7 +3,7 @@
 <head>
     <title>calltermine | Lars Junker</title>
     <!-- include:head -->
-    <meta name="description" content="Calltermine von Lars Junker fuer die naechsten Wochen."/>
+    <meta name="description" content="Calltermine von Lars Junker für die nächsten Wochen."/>
 </head>
 <body>
 <div id="container">
@@ -20,7 +20,7 @@
                     <a href="webcal://p131-caldav.icloud.com/published/2/MTAzODAyMzk0NDkxMDM4MKx0EePtPDXePVZMEANU5wgvh8UiCQKBUo_2X7Xqg9Jh3NtXpIyVy5CqwdHizblJlRvhMBUjjWdRQ3aI_qnXqcw">abonnieren</a>.
                     Um einen neuen Termin mit mir abzusprechen, <a href="mailto:caller@kryptikk.de">schick mir einfach eine Mail.</a></span>
             <br />
-            <span><a href="https://www.ceder.net/callerdb/" target="_top">Callers and Cuers</a></span>
+            <span><a href="https://www.ceder.net/callerdb/" target="_blank" rel="noopener noreferrer">Callers and Cuers</a></span>
         </p>
         <br>
 
@@ -111,7 +111,7 @@
         a.target = '_blank';
         a.rel = 'noopener noreferrer';
         a.textContent = txt;
-        a.setAttribute('aria-label', 'Adresse in Google Maps oeffnen: ' + txt);
+        a.setAttribute('aria-label', 'Adresse in Google Maps öffnen: ' + txt);
 
         td.appendChild(a);
         return td;
@@ -133,7 +133,7 @@
         a.target = '_blank';
         a.rel = 'noopener noreferrer';
         a.textContent = txt || '';
-        a.setAttribute('aria-label', 'Homepage von ' + (txt || '') + ' oeffnen (neuer Tab)');
+        a.setAttribute('aria-label', 'Homepage von ' + (txt || '') + ' öffnen (neuer Tab)');
 
         td.appendChild(a);
         return td;
@@ -213,7 +213,7 @@
                     add(ev.startDate, ev.endDate, ev);
                 }
             } catch (err) {
-                if (window.console) console.error('Termin uebersprungen:', err);
+                if (window.console) console.error('Termin übersprungen:', err);
             }
         });
 
