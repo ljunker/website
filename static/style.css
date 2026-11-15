@@ -510,26 +510,3 @@ tr:last-child td {
 tr:hover {
 	background-color: #222;
 }
-
-#episodes-table .title > .number {
-	color: var(--color4);
-}
-
-#episodes-table .title > .name {
-	color: var(--color3);
-}
-
-#episodes-table .description {
-	color: var(--color5);
-}
-
-#episodes-table .description > .code {
-	color: var(--color2);
-}
-
-#episodes-table .link {
-	/*
-	font-weight: italic;
-	color: var(--color5) !important;
-	*/
-}

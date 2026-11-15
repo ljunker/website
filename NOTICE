@@ -6,9 +6,6 @@ Dave Eddy:
 
   https://github.com/bahamas10/ysap  (Ordner `website/`)
 
-Für `tools/bansi-to-html` ist zusätzlich die Quelle
-https://github.com/bahamas10/bansi-to-html zu nennen.
-
 Aus ysap übernommene bzw. davon abgeleitete Dateien:
 
   .gitignore
@@ -23,15 +20,9 @@ Aus ysap übernommene bzw. davon abgeleitete Dateien:
   make-legend
   make-list
   make-logo
-  make-socials
-  make-video-pages
-  static/ansi.css
   static/index.html
   static/style.css
-  static/terminal.js
-  static/video.html
   theme              (vermutlich ebenfalls aus ysap, nicht verifiziert)
-  tools/bansi-to-html
   tools/box
   tools/lpad
   tools/repeat-char

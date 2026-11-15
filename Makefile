@@ -29,7 +29,6 @@ build:
 	cat static/favicon.ico > _site/favicon.ico
 	cat static/robots.txt > _site/robots.txt
 	cat static/style.css > _site/static/style.css
-	cat static/ansi.css > _site/static/ansi.css
 	cp static/ical.min.js _site/static/ical.min.js
 	mkdir -p _site/static/fonts
 	cp static/fonts/* _site/static/fonts/

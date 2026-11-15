@@ -33,8 +33,6 @@ server {
         add_header X-Frame-Options "DENY";
         add_header X-Content-Type-Options nosniff;
         add_header Referrer-Policy "strict-origin-when-cross-origin" always;
-        sub_filter_once off;
-        sub_filter random_nonce_value $request_id;
 
     server_name kryptikk.de;
 
