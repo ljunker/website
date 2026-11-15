@@ -8,7 +8,7 @@
 
     <link rel="icon" href="/favicon.ico">
 
-    <link rel="stylesheet" href="/static/style.css?v=5">
+    <link rel="stylesheet" href="/static/style.css?v=6">
     <link rel="stylesheet" href="/static/ansi.css?v=2">
 </head>
 <body>
@@ -20,15 +20,21 @@
     <main>
         <h1 class="title">calltermine</h1>
         <p class="content">
-				<span class="highlight">Hier stehen meine Calltermine
-                    für die nächsten 8 Wochen. Termine weiter in der Zukunft kann man
-                    <a href="webcal://p131-caldav.icloud.com/published/2/MTAzODAyMzk0NDkxMDM4MKx0EePtPDXePVZMEANU5wgvh8UiCQKBUo_2X7Xqg9Jh3NtXpIyVy5CqwdHizblJlRvhMBUjjWdRQ3aI_qnXqcw">hier</a>
-                    einsehen.
+				<span class="highlight">Hier stehen meine Calltermine,
+                    jeweils für einen Zeitraum von 8 Wochen. Mit den Buttons über der Tabelle
+                    kann man beliebig weit in die Zukunft blättern. Den Kalender kann man auch
+                    <a href="webcal://p131-caldav.icloud.com/published/2/MTAzODAyMzk0NDkxMDM4MKx0EePtPDXePVZMEANU5wgvh8UiCQKBUo_2X7Xqg9Jh3NtXpIyVy5CqwdHizblJlRvhMBUjjWdRQ3aI_qnXqcw">abonnieren</a>.
                     Um einen neuen Termin mit mir abzusprechen, <a href="mailto:caller@kryptikk.de">schick mir einfach eine Mail.</a></span>
             <br />
             <span><a href="https://www.ceder.net/callerdb/" target="_top">Callers and Cuers</a></span>
         </p>
         <br>
+
+        <div class="schedule-nav">
+            <button type="button" id="nav-prev">&laquo; früher</button>
+            <span class="range" id="nav-range"></span>
+            <button type="button" id="nav-next">später &raquo;</button>
+        </div>
 
         <table id="episodes-table" class="shadow schedule-table">
             <thead>
@@ -52,46 +58,224 @@
         </code></pre>
     </footer>
 </div>
-<script src="/static/schedule.js"></script>
+<script src="/static/ical.min.js?v=1"></script>
 <script>
+(function () {
+    var FEED_URL = '/schedule/calendar.ics';
+    var WEBCAL_URL = 'webcal://p131-caldav.icloud.com/published/2/MTAzODAyMzk0NDkxMDM4MKx0EePtPDXePVZMEANU5wgvh8UiCQKBUo_2X7Xqg9Jh3NtXpIyVy5CqwdHizblJlRvhMBUjjWdRQ3aI_qnXqcw';
+    var WEEKS = 8;
+    var MAX_OCCURRENCES = 20000;
 
     var tbody = document.getElementById('schedule-tbody');
+    var prevBtn = document.getElementById('nav-prev');
+    var nextBtn = document.getElementById('nav-next');
+    var rangeLabel = document.getElementById('nav-range');
 
-    SCHEDULE.schedule.forEach(function (evt) {
-        var tr = document.createElement('tr');
+    var items = null; // alle (nicht expandierten) Termine, nur einmal geparst
+    var failed = false;
 
-        function tdWithText(txt, className) {
-            var td = document.createElement('td');
-            if (className) td.classList.add(className);
-            td.textContent = txt || '';
-            return td;
-        }
-
-        function tdWithMapsLink(txt) {
-            var td = document.createElement('td');
-            td.classList.add('location');
-
-            if (!txt) return td;
-
-            var a = document.createElement('a');
-            a.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(txt);
-            a.target = '_blank';
-            a.rel = 'noopener noreferrer';
-            a.textContent = txt;
-            a.setAttribute('aria-label', 'Adresse in Google Maps oeffnen: ' + txt);
-
-            td.appendChild(a);
-            return td;
-        }
-
-        tr.appendChild(tdWithText(evt.date, 'date'));
-        tr.appendChild(tdWithText(evt.time, 'start'));
-        tr.appendChild(tdWithText(evt.end_time, 'end'));
-        tr.appendChild(tdWithText(evt.details, 'details'));
-        tr.appendChild(tdWithMapsLink(evt.location));
-
-        tbody.appendChild(tr);
+    var berlin = new Intl.DateTimeFormat('de-DE', {
+        timeZone: 'Europe/Berlin', year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
     });
+
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+    function berlinParts(d) {
+        var o = {};
+        berlin.formatToParts(d).forEach(function (p) { o[p.type] = p.value; });
+        return { date: o.year + '-' + o.month + '-' + o.day, time: o.hour + ':' + o.minute };
+    }
+
+    function format(icalTime) {
+        if (icalTime.isDate) {
+            return { date: icalTime.year + '-' + pad(icalTime.month) + '-' + pad(icalTime.day), time: '00:00' };
+        }
+        return berlinParts(icalTime.toJSDate());
+    }
+
+    // Beginn eines Termins als lokales Date (Ganztags: lokaler Mitternacht)
+    function startMillis(icalTime) {
+        if (icalTime.isDate) return new Date(icalTime.year, icalTime.month - 1, icalTime.day).getTime();
+        return icalTime.toJSDate().getTime();
+    }
+
+    function tdWithText(txt, className) {
+        var td = document.createElement('td');
+        if (className) td.classList.add(className);
+        td.textContent = txt || '';
+        return td;
+    }
+
+    function tdWithMapsLink(txt) {
+        var td = document.createElement('td');
+        td.classList.add('location');
+
+        if (!txt) return td;
+
+        var a = document.createElement('a');
+        a.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(txt);
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.textContent = txt;
+        a.setAttribute('aria-label', 'Adresse in Google Maps oeffnen: ' + txt);
+
+        td.appendChild(a);
+        return td;
+    }
+
+    function statusRow(content) {
+        var tr = document.createElement('tr');
+        var td = document.createElement('td');
+        td.colSpan = 5;
+        td.classList.add('status');
+        if (typeof content === 'string') {
+            td.textContent = content;
+        } else {
+            td.appendChild(content);
+        }
+        tr.appendChild(td);
+        return tr;
+    }
+
+    function parseFeed(text) {
+        var root = new ICAL.Component(ICAL.parse(text));
+        root.getAllSubcomponents('vtimezone').forEach(function (vtz) {
+            try { ICAL.TimezoneService.register(vtz); } catch (e) { /* ignorieren */ }
+        });
+        var vevents = root.getAllSubcomponents('vevent');
+        var exceptions = [];
+        var masters = [];
+        vevents.forEach(function (ve) {
+            if (ve.hasProperty('recurrence-id')) exceptions.push(ve); else masters.push(ve);
+        });
+        return masters.map(function (ve) {
+            var ev = new ICAL.Event(ve);
+            exceptions.forEach(function (ex) {
+                if (ex.getFirstPropertyValue('uid') === ev.uid) ev.relateException(new ICAL.Event(ex));
+            });
+            return ev;
+        });
+    }
+
+    function collect(windowStart, windowEnd) {
+        var lo = windowStart.getTime(), hi = windowEnd.getTime();
+        var out = [];
+
+        function add(startDate, endDate, ev) {
+            var t = startMillis(startDate);
+            if (t < lo || t >= hi) return;
+            var s = format(startDate);
+            var e = endDate ? format(endDate) : s;
+            out.push({
+                t: t, date: s.date, time: s.time, end_time: e.time,
+                details: ev.summary || '',
+                location: (ev.location || '').replace(/\s*[\r\n]+\s*/g, ', ')
+            });
+        }
+
+        items.forEach(function (ev) {
+            try {
+                if (ev.isRecurring()) {
+                    var it = ev.iterator();
+                    var next, n = 0;
+                    while ((next = it.next()) && n++ < MAX_OCCURRENCES) {
+                        var occ = ev.getOccurrenceDetails(next);
+                        if (startMillis(occ.startDate) >= hi && startMillis(next) >= hi) break;
+                        add(occ.startDate, occ.endDate, occ.item);
+                    }
+                } else {
+                    add(ev.startDate, ev.endDate, ev);
+                }
+            } catch (err) {
+                if (window.console) console.error('Termin uebersprungen:', err);
+            }
+        });
+
+        out.sort(function (a, b) { return a.t - b.t; });
+        return out;
+    }
+
+    function getPage() {
+        var m = /^#seite=(\d+)$/.exec(location.hash);
+        return m ? Math.max(0, parseInt(m[1], 10)) : 0;
+    }
+
+    function fmtDay(d) { return pad(d.getDate()) + '.' + pad(d.getMonth() + 1) + '.' + d.getFullYear(); }
+
+    function render() {
+        var page = getPage();
+        var today = new Date();
+        var windowStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() + page * WEEKS * 7);
+        var windowEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (page + 1) * WEEKS * 7);
+        var lastDay = new Date(windowEnd.getFullYear(), windowEnd.getMonth(), windowEnd.getDate() - 1);
+
+        rangeLabel.textContent = fmtDay(windowStart) + ' – ' + fmtDay(lastDay);
+        prevBtn.disabled = page === 0;
+        nextBtn.disabled = failed;
+        tbody.textContent = '';
+
+        if (failed) {
+            var span = document.createElement('span');
+            span.appendChild(document.createTextNode('Die Termine konnten nicht geladen werden. Der Kalender lässt sich '));
+            var a = document.createElement('a');
+            a.href = WEBCAL_URL;
+            a.textContent = 'hier abonnieren';
+            span.appendChild(a);
+            span.appendChild(document.createTextNode('.'));
+            tbody.appendChild(statusRow(span));
+            return;
+        }
+        if (!items) {
+            tbody.appendChild(statusRow('Lade Termine…'));
+            return;
+        }
+
+        var events = collect(windowStart, windowEnd);
+        if (!events.length) {
+            tbody.appendChild(statusRow('Keine Termine in diesem Zeitraum'));
+            return;
+        }
+        events.forEach(function (evt) {
+            var tr = document.createElement('tr');
+            tr.appendChild(tdWithText(evt.date, 'date'));
+            tr.appendChild(tdWithText(evt.time, 'start'));
+            tr.appendChild(tdWithText(evt.end_time, 'end'));
+            tr.appendChild(tdWithText(evt.details, 'details'));
+            tr.appendChild(tdWithMapsLink(evt.location));
+            tbody.appendChild(tr);
+        });
+    }
+
+    function go(page) {
+        location.hash = page > 0 ? '#seite=' + page : '';
+        if (page <= 0 && location.hash === '') {
+            // hashchange feuert bei leerem Hash ggf. nicht zuverlaessig
+            render();
+        }
+    }
+
+    prevBtn.addEventListener('click', function () { go(Math.max(0, getPage() - 1)); });
+    nextBtn.addEventListener('click', function () { go(getPage() + 1); });
+    window.addEventListener('hashchange', render);
+
+    render();
+
+    fetch(FEED_URL, {cache: 'no-store'})
+        .then(function (r) {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.text();
+        })
+        .then(function (text) {
+            items = parseFeed(text);
+            render();
+        })
+        .catch(function (err) {
+            if (window.console) console.error(err);
+            failed = true;
+            render();
+        });
+})();
 </script>
 <script>
     function includeHTML() {

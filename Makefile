@@ -28,6 +28,7 @@ build:
 	cat static/robots.txt > _site/robots.txt
 	cat static/style.css > _site/static/style.css
 	cat static/ansi.css > _site/static/ansi.css
+	cp static/ical.min.js _site/static/ical.min.js
 	mkdir -p _site/static/fonts
 	cp static/fonts/* _site/static/fonts/
 	cat static/index.html > _site/index.html
@@ -52,8 +53,6 @@ build:
 	./make-schedule > _site/schedule/index.txt
 	# make episodes JSON file for curl
 	./make-schedule-json > _site/json
-	# make jsonp for our HTML files
-	./make-schedule-json SCHEDULE > _site/static/schedule.js
 	cat _site/json > _site/schedule.json
 	./make-drei-fragezeichen
 	./make-drei-fragezeichen-index > _site/drei-fragezeichen/index.txt
