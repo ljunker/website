@@ -19,6 +19,15 @@ check() {
 	fi
 }
 
+# optional dependency: only warn, never fail
+check_optional() {
+	local cmd=$1 hint=$2
+	echo -n "command -v $cmd... "
+	if ! command -v "$cmd"; then
+		echo "warning ($hint)"
+	fi
+}
+
 check_py() {
 	echo -n "python3 module $1... "
 	if .venv/bin/python3 -c "import $1" 2>/dev/null; then
@@ -33,7 +42,7 @@ check command -v bash
 check command -v curl
 check command -v jq
 check command -v python3
-check command -v shellcheck
+check_optional shellcheck 'nur für make check nötig: apt install shellcheck'
 
 echo -n 'venv .venv/bin/python3... '
 if [[ -x .venv/bin/python3 ]]; then
