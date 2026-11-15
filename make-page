@@ -13,8 +13,6 @@
 #
 # Unknown markers or missing files abort with a non-zero exit code.
 #
-# Basiert auf ysap von Dave Eddy (MIT), siehe NOTICE
-#
 
 set -eo pipefail
 
