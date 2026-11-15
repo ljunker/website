@@ -179,7 +179,7 @@ server {
 
     location = /schedule {
         if ($opts = "AB") {
-             return 301 "https://$server_name/$request_uri";
+             return 301 "https://$server_name$request_uri";
         }
         if ($http_user_agent ~ "^curl") {
             rewrite ^(.*) /schedule/index.txt last;
@@ -189,7 +189,7 @@ server {
 
     location = /drei-fragezeichen {
         if ($opts = "AB") {
-             return 301 "https://$server_name/$request_uri";
+             return 301 "https://$server_name$request_uri";
         }
         if ($http_user_agent ~ "^curl") {
             rewrite ^(.*) /drei-fragezeichen/index.txt last;
@@ -199,7 +199,7 @@ server {
 
     location = /one-piece {
         if ($opts = "AB") {
-             return 301 "https://$server_name/$request_uri";
+             return 301 "https://$server_name$request_uri";
         }
         if ($http_user_agent ~ "^curl") {
             rewrite ^(.*) /one-piece/index.txt last;
@@ -209,7 +209,7 @@ server {
 
     location = /dn9lfj {
             if ($opts = "AB") {
-                 return 301 "https://$server_name/$request_uri";
+                 return 301 "https://$server_name$request_uri";
             }
             if ($http_user_agent ~ "^curl") {
                 rewrite ^(.*) /dn9lfj/index.txt last;
@@ -219,28 +219,28 @@ server {
 
     location = /impressum {
         if ($opts = "AB") {
-             return 301 "https://$server_name/$request_uri";
+             return 301 "https://$server_name$request_uri";
         }
         rewrite ^(.*) /impressum/index.html last;
     }
 
     location = /schrittjagd-support {
         if ($opts = "AB") {
-             return 301 "https://$server_name/$request_uri";
+             return 301 "https://$server_name$request_uri";
         }
         rewrite ^(.*) /schrittjagd-support/index.html last;
     }
 
     location = /schrittjagd-datenschutz {
         if ($opts = "AB") {
-             return 301 "https://$server_name/$request_uri";
+             return 301 "https://$server_name$request_uri";
         }
         rewrite ^(.*) /schrittjagd-datenschutz/index.html last;
     }
 
     location = /schrittjagd-delete {
         if ($opts = "AB") {
-             return 301 "https://$server_name/$request_uri";
+             return 301 "https://$server_name$request_uri";
         }
         rewrite ^(.*) /schrittjagd-delete/index.html last;
     }
