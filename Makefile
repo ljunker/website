@@ -59,6 +59,7 @@ build:
 	./make-drei-fragezeichen-json DREI > _site/static/drei.js
 	cp -r static/images _site
 	./make-one-piece-index > _site/one-piece/index.txt
+	python3 ./one_piece_sheet.py --js ONEPIECE > _site/static/one-piece.js
 	./make-dn9lfj-index > _site/dn9lfj/index.txt
 
 .PHONY: all

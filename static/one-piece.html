@@ -4,7 +4,7 @@
     <title>One Piece | Lars Junker</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content="One Piece Baende: Status aus Google Sheets."/>
+    <meta name="description" content="Status meiner One-Piece-Bände, beim Build aus meiner Tabelle übernommen."/>
 
     <link rel="icon" href="/favicon.ico">
 
@@ -20,7 +20,7 @@
     <main>
         <h1 class="title">one piece</h1>
         <p class="content">
-            Status aus Google Sheets (Tab: "One Piece").
+            Status meiner One-Piece-Bände, beim Build aus meiner Tabelle übernommen.
         </p>
         <p class="content" id="one-piece-status"></p>
         <br>
@@ -45,116 +45,33 @@
         </code></pre>
     </footer>
 </div>
+<script src="/static/one-piece.js"></script>
 <script>
-    var SHEET_ID = '1PZFS6bBs_187W75srTyNw0Bc5ZRJGBWUEuitlc1pdXs';
-    var SHEET_NAME = 'One Piece';
-    var CSV_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
-        '/gviz/tq?sheet=' + encodeURIComponent(SHEET_NAME) + '&tqx=out:csv';
-
-    function parseCSV(text) {
-        var rows = [];
-        var row = [];
-        var cell = '';
-        var inQuotes = false;
-
-        for (var i = 0; i < text.length; i++) {
-            var ch = text[i];
-            var next = text[i + 1];
-
-            if (ch === '"') {
-                if (inQuotes && next === '"') {
-                    cell += '"';
-                    i++;
-                } else {
-                    inQuotes = !inQuotes;
-                }
-                continue;
-            }
-
-            if (!inQuotes && ch === ',') {
-                row.push(cell);
-                cell = '';
-                continue;
-            }
-
-            if (!inQuotes && (ch === '\n' || ch === '\r')) {
-                if (ch === '\r' && next === '\n') i++;
-                row.push(cell);
-                rows.push(row);
-                row = [];
-                cell = '';
-                continue;
-            }
-
-            cell += ch;
-        }
-
-        if (cell.length || row.length) {
-            row.push(cell);
-            rows.push(row);
-        }
-
-        return rows;
-    }
-
-    function renderRows(rows) {
+    (function () {
         var tbody = document.getElementById('one-piece-tbody');
         var statusEl = document.getElementById('one-piece-status');
-        if (!tbody) return;
+        if (!tbody || !statusEl) return;
 
-        tbody.innerHTML = '';
-
-        var filtered = rows.filter(function (r) {
-            return r && (r[0] || r[1]);
-        });
-
-        if (filtered.length === 0) {
-            if (statusEl) statusEl.textContent = 'Keine Daten gefunden.';
+        if (typeof ONEPIECE === 'undefined' || !ONEPIECE.baende || ONEPIECE.baende.length === 0) {
+            statusEl.textContent = 'Keine Daten verfügbar.';
             return;
         }
 
-        if (filtered.length >= 3) {
-            filtered = filtered.slice(2);
-        }
-
-        filtered.forEach(function (r) {
+        ONEPIECE.baende.forEach(function (b) {
             var tr = document.createElement('tr');
-
-            function tdWithText(txt) {
+            [b.nummer, b.status].forEach(function (txt) {
                 var td = document.createElement('td');
-                td.textContent = (txt || '').trim();
-                return td;
-            }
-
-            tr.appendChild(tdWithText(r[0] || ''));
-            tr.appendChild(tdWithText(r[1] || ''));
+                td.textContent = txt || '';
+                tr.appendChild(td);
+            });
             tbody.appendChild(tr);
         });
 
-        if (statusEl) statusEl.textContent = 'Letztes Update: live aus dem Sheet.';
-    }
-
-    function loadSheet() {
-        var statusEl = document.getElementById('one-piece-status');
-        if (statusEl) statusEl.textContent = 'Lade Daten...';
-
-        fetch(CSV_URL)
-            .then(function (res) {
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                return res.text();
-            })
-            .then(function (text) {
-                var rows = parseCSV(text);
-                renderRows(rows);
-            })
-            .catch(function () {
-                if (statusEl) {
-                    statusEl.textContent = 'Konnte das Sheet nicht laden. Ist es veroeffentlicht oder oeffentlich?';
-                }
-            });
-    }
-
-    loadSheet();
+        statusEl.textContent = 'Stand: ' + new Date(ONEPIECE.generated * 1000).toLocaleString('de-DE', {
+            day: '2-digit', month: '2-digit', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        }) + ' Uhr';
+    })();
 </script>
 <script>
     function includeHTML() {
