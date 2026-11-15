@@ -32,18 +32,17 @@ build:
 	cp static/ical.min.js _site/static/ical.min.js
 	mkdir -p _site/static/fonts
 	cp static/fonts/* _site/static/fonts/
-	cat static/index.html > _site/index.html
-	cat static/404.html > _site/404.html
-	cat static/schedule.html > _site/schedule/index.html
-	cat static/drei-fragezeichen.html > _site/drei-fragezeichen/index.html
-	cat static/sammlungen.html > _site/sammlungen/index.html
-	cat static/one-piece.html > _site/one-piece/index.html
-	cat static/dn9lfj.html > _site/dn9lfj/index.html
-	cat static/impressum.html > _site/impressum/index.html
-	cat static/schrittjagd-support.html > _site/schrittjagd-support/index.html
-	cat static/schrittjagd-datenschutz.html > _site/schrittjagd-datenschutz/index.html
-	cat static/schrittjagd-delete.html > _site/schrittjagd-delete/index.html
-	cat static/nav.html > _site/nav.html
+	./make-page static/index.html > _site/index.html
+	./make-page static/404.html > _site/404.html
+	./make-page static/schedule.html > _site/schedule/index.html
+	./make-page static/drei-fragezeichen.html > _site/drei-fragezeichen/index.html
+	./make-page static/sammlungen.html > _site/sammlungen/index.html
+	./make-page static/one-piece.html > _site/one-piece/index.html
+	./make-page static/dn9lfj.html > _site/dn9lfj/index.html
+	./make-page static/impressum.html > _site/impressum/index.html
+	./make-page static/schrittjagd-support.html > _site/schrittjagd-support/index.html
+	./make-page static/schrittjagd-datenschutz.html > _site/schrittjagd-datenschutz/index.html
+	./make-page static/schrittjagd-delete.html > _site/schrittjagd-delete/index.html
 	# make /ping endpoint (nginx handles this for me, but just in case)
 	echo 'pong' > _site/ping
 	# create ASCII index page for curl users
