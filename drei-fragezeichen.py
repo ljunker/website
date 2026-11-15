@@ -19,14 +19,14 @@ def load_collected(path: Path) -> set[int]:
     return numbers
 
 def ensure_cached_image(url: str) -> str:
-    if url == None:
+    if url is None:
         return ""
     parts = url.split("/")
     filename = parts[-2] + "_" + Path(parts[-1]).stem + ".webp"
     cache_path = Path("static/images/three") / filename
     if not cache_path.exists():
         print(f"Caching image from {url} to {cache_path}")
-        response = requests.get(url)
+        response = requests.get(url, timeout=30)
         response.raise_for_status()
         cache_path.parent.mkdir(parents=True, exist_ok=True)
         with Image.open(BytesIO(response.content)) as img:
