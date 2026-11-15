@@ -180,10 +180,19 @@
                     var it = ev.iterator();
                     var next, n = 0;
                     while ((next = it.next()) && n++ < MAX_OCCURRENCES) {
+                        if (startMillis(next) >= hi) break;
                         var occ = ev.getOccurrenceDetails(next);
-                        if (startMillis(occ.startDate) >= hi && startMillis(next) >= hi) break;
-                        add(occ.startDate, occ.endDate, occ.item);
+                        // verschobene Einzeltermine werden unten separat behandelt
+                        if (occ.item !== ev) continue;
+                        add(occ.startDate, occ.endDate, ev);
                     }
+                    // verschobene Einzeltermine (RECURRENCE-ID) nach ihrem
+                    // tatsaechlichen Datum einsortieren, auch wenn das
+                    // urspruengliche Datum ausserhalb des Fensters liegt
+                    Object.keys(ev.exceptions).forEach(function (key) {
+                        var ex = ev.exceptions[key];
+                        add(ex.startDate, ex.endDate, ex);
+                    });
                 } else {
                     add(ev.startDate, ev.endDate, ev);
                 }
