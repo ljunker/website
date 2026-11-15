@@ -23,6 +23,7 @@ Stattdessen gilt folgende Schleife:
    - Er ändert selbst **keinen** Code, sondern liefert entweder
      - eine nummerierte Liste konkreter Anmerkungen, oder
      - exakt die Aussage **„Keine Anmerkungen“**.
+   - Dies ist das **einzige** Review – der Hauptchat prüft nicht zusätzlich.
 
 3. **Schleife**
    - Hat das Review Anmerkungen → zurück zu Schritt 1: neuer
@@ -40,7 +41,13 @@ Stattdessen gilt folgende Schleife:
      und legt dem Nutzer die strittigen Punkte zur Entscheidung vor.
 
 Der Hauptchat übernimmt in diesem Ablauf nur Planung, Koordination und die
-Weitergabe der Ergebnisse – er schreibt den Code nicht selbst.
+Weitergabe der Ergebnisse – er schreibt den Code nicht selbst. Er führt auch
+**kein eigenes Review** durch (kein eigenes Prüfen oder Gegenlesen des Diffs,
+keine eigenen zusätzlichen Anmerkungen, kein Nachprüfen des
+Subagent-Ergebnisses). Das Review findet ausschließlich im Review-Subagenten
+statt; der Hauptchat übernimmt dessen Ergebnis unverändert: „Keine
+Anmerkungen“ → fertig, Anmerkungen → nächste Runde (nach 5 Runden ohne
+Konvergenz Rückfrage beim Nutzer, siehe Schritt 4).
 
 ## Branch-Namen
 
