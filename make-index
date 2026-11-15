@@ -2,6 +2,8 @@
 #
 # Generate the page as seen by `curl kryptikk.de`
 #
+# Basiert auf ysap von Dave Eddy (MIT), siehe NOTICE
+#
 
 set -eo pipefail
 
