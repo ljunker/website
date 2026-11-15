@@ -32,12 +32,18 @@ server {
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
         add_header X-Frame-Options "DENY";
         add_header X-Content-Type-Options nosniff;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
         sub_filter_once off;
         sub_filter random_nonce_value $request_id;
 
     server_name kryptikk.de;
 
+    access_log /var/log/nginx/kryptikk.de-ssl-access.log;
+    error_log /var/log/nginx/kryptikk.de-ssl-error.log;
+
     client_max_body_size 100m;
+
+    error_page 404 /404.html;
 
     location /schrittjagd-api/ {
             proxy_pass http://127.0.0.1:18080/;
@@ -65,6 +71,7 @@ server {
             add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
             add_header X-Frame-Options "DENY";
             add_header X-Content-Type-Options nosniff;
+            add_header Referrer-Policy "strict-origin-when-cross-origin" always;
             expires off;
         }
 
@@ -116,8 +123,35 @@ server {
         rewrite ^ /$kryptikk_index last;
     }
 
+    location = /404.html {
+        internal;
+    }
+
+    # /help hat keine Dateiendung und enthaelt UTF-8-Zeichen
+    location = /help {
+        default_type text/plain;
+        charset utf-8;
+    }
+
+    # Cache-Header. /static/drei.js und /static/one-piece.js werden bei jedem Build
+    # neu erzeugt (ohne ?v=), daher fuer /static/ nur 1h.
+    location ^~ /static/fonts/ {
+        expires 1y;
+        try_files $uri =404;
+    }
+
+    location ^~ /static/ {
+        expires 1h;
+        try_files $uri =404;
+    }
+
+    location ^~ /images/ {
+        expires 30d;
+        try_files $uri =404;
+    }
+
     location / {
-            try_files $uri $uri/ /index.html =404;
+            try_files $uri $uri/ =404;
     }
 
     listen [::]:443 ssl; # managed by Certbot
@@ -132,6 +166,34 @@ server {
 
     access_log /var/log/nginx/kryptikk.de-access.log;
     error_log /var/log/nginx/kryptikk.de-error.log;
+
+    # Cloudflare-Real-IP: Quelle https://www.cloudflare.com/ips-v4 und
+    # https://www.cloudflare.com/ips-v6, Stand 2026-11-15. Die Liste muss
+    # gelegentlich aktualisiert werden. CF-Connecting-IP wird nur akzeptiert, wenn
+    # die Anfrage von einer dieser Adressen kommt (sonst bleibt $remote_addr).
+    set_real_ip_from 173.245.48.0/20;
+    set_real_ip_from 103.21.244.0/22;
+    set_real_ip_from 103.22.200.0/22;
+    set_real_ip_from 103.31.4.0/22;
+    set_real_ip_from 141.101.64.0/18;
+    set_real_ip_from 108.162.192.0/18;
+    set_real_ip_from 190.93.240.0/20;
+    set_real_ip_from 188.114.96.0/20;
+    set_real_ip_from 197.234.240.0/22;
+    set_real_ip_from 198.41.128.0/17;
+    set_real_ip_from 162.158.0.0/15;
+    set_real_ip_from 104.16.0.0/13;
+    set_real_ip_from 104.24.0.0/14;
+    set_real_ip_from 172.64.0.0/13;
+    set_real_ip_from 131.0.72.0/22;
+    set_real_ip_from 2400:cb00::/32;
+    set_real_ip_from 2606:4700::/32;
+    set_real_ip_from 2803:f800::/32;
+    set_real_ip_from 2405:b500::/32;
+    set_real_ip_from 2405:8100::/32;
+    set_real_ip_from 2a06:98c0::/29;
+    set_real_ip_from 2c0f:f248::/32;
+    real_ip_header CF-Connecting-IP;
 
     if ($http_x_forwarded_proto = 'http') {
         set $opts "A";
@@ -169,12 +231,14 @@ server {
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
         add_header X-Frame-Options "DENY";
         add_header X-Content-Type-Options nosniff;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
         expires off;
     }
 
+    # $remote_addr ist dank real_ip_header (siehe oben) die Client-IP hinter Cloudflare
     location = /ip {
         default_type text/plain;
-        return 200 "${http_cf_connecting_ip}\n";
+        return 200 "$remote_addr\n";
     }
 
     location = /schedule {
@@ -255,6 +319,54 @@ server {
         rewrite ^(.*) /index.html last;
     }
 
+    error_page 404 /404.html;
+
+    location = /404.html {
+        internal;
+    }
+
+    # /help hat keine Dateiendung und enthaelt UTF-8-Zeichen
+    location = /help {
+        if ($opts = "AB") {
+            return 301 https://$server_name$request_uri;
+        }
+        default_type text/plain;
+        charset utf-8;
+    }
+
+    # Cache-Header, siehe HTTPS-Block
+    location ^~ /static/fonts/ {
+        if ($opts = "AB") {
+            return 301 https://$server_name$request_uri;
+        }
+        expires 1y;
+        try_files $uri =404;
+    }
+
+    location ^~ /static/ {
+        if ($opts = "AB") {
+            return 301 https://$server_name$request_uri;
+        }
+        expires 1h;
+        try_files $uri =404;
+    }
+
+    location ^~ /images/ {
+        if ($opts = "AB") {
+            return 301 https://$server_name$request_uri;
+        }
+        expires 30d;
+        try_files $uri =404;
+    }
+
+    # alle uebrigen Pfade: Browser per HTTPS, curl weiter ueber HTTP
+    location / {
+        if ($opts = "AB") {
+            return 301 https://$server_name$request_uri;
+        }
+        try_files $uri $uri/ =404;
+    }
+
     listen 80;
     listen [::]:80;
 
@@ -264,5 +376,6 @@ server {
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
         add_header X-Frame-Options "DENY";
         add_header X-Content-Type-Options nosniff;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 
 }

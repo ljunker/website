@@ -32,6 +32,7 @@ build:
 	mkdir -p _site/static/fonts
 	cp static/fonts/* _site/static/fonts/
 	cat static/index.html > _site/index.html
+	cat static/404.html > _site/404.html
 	cat static/schedule.html > _site/schedule/index.html
 	cat static/drei-fragezeichen.html > _site/drei-fragezeichen/index.html
 	cat static/sammlungen.html > _site/sammlungen/index.html
