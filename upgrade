@@ -81,13 +81,7 @@ main() {
 
 	run_step 'git pull' git pull --ff-only
 
-	# use the project venv if there is one, so build scripts see its modules
-	if [[ -f .venv/bin/activate ]]; then
-		# shellcheck disable=SC1091
-		. .venv/bin/activate
-	fi
-
-	run_step 'pip install' python3 -m pip install -r requirements.txt
+	run_step 'venv / pip install' make venv
 	run_step 'check dependencies' make check-deps
 	run_step 'build' make clean build
 	run_step 'nginx config' make update-nginx

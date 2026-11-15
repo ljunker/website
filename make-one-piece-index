@@ -25,7 +25,7 @@ format() {
 }
 
 rows_from_csv() {
-	python3 ./one_piece_sheet.py
+	.venv/bin/python3 ./one_piece_sheet.py
 }
 
 {

@@ -11,12 +11,13 @@ SHELL := bash
 .PHONY: help
 help:
 	@echo 'make build         default target, builds the site into ./_site'
+	@echo 'make venv          create ./.venv and install pinned requirements'
 	@echo 'make check-deps    check to ensure needed dependencies are installed'
 	@echo 'make check         check tools syntax using shellcheck'
 	@echo 'make serve         serve site locally out of ./_site'
 	@echo 'make deploy        deploy the site (using rsync)'
 	@echo 'make update-nginx  copy nginx config if changed'
-	@echo 'make all           build and deploy the site'
+	@echo 'make all           clean, build and deploy the site'
 	@echo 'make clean         remove any generated files'
 
 .PHONY: build
@@ -60,11 +61,19 @@ build:
 	./make-drei-fragezeichen-json DREI > _site/static/drei.js
 	cp -r static/images _site
 	./make-one-piece-index > _site/one-piece/index.txt
-	python3 ./one_piece_sheet.py --js ONEPIECE > _site/static/one-piece.js
+	.venv/bin/python3 ./one_piece_sheet.py --js ONEPIECE > _site/static/one-piece.js
 	./make-dn9lfj-index > _site/dn9lfj/index.txt
 
 .PHONY: all
-all: build deploy
+all:
+	$(MAKE) clean
+	$(MAKE) build
+	$(MAKE) deploy
+
+.PHONY: venv
+venv:
+	python3 -m venv .venv
+	.venv/bin/pip install -r requirements.txt
 
 .PHONY: serve
 serve:
