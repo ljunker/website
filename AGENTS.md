@@ -41,3 +41,22 @@ Stattdessen gilt folgende Schleife:
 
 Der Hauptchat übernimmt in diesem Ablauf nur Planung, Koordination und die
 Weitergabe der Ergebnisse – er schreibt den Code nicht selbst.
+
+## Branch-Namen
+
+Branches bekommen **sprechende Namen** nach dem Schema `<typ>/<stichwort>`.
+Automatisch generierte Namen wie `claude/*` werden **nicht** verwendet.
+
+- **Typ** (Präfix):
+  - `feature/` – neue Funktionen (Standard, wenn nichts anderes passt)
+  - `fix/` – Bugfixes
+  - `docs/` – reine Doku-Änderungen
+  - `chore/` – Wartung, Refactoring, Konfiguration
+- **Stichwort**: kurz (1–4 Wörter), kleingeschrieben, kebab-case, nur
+  `a-z`, `0-9` und Bindestriche. Es beschreibt das Feature bzw. die
+  Änderung, z. B. `feature/dark-mode`, `feature/kontaktformular`,
+  `fix/navigation-mobile`.
+
+Das gilt auch, wenn eine Umgebung oder ein Tool einen Branch-Namen wie
+`claude/...` vorgibt: Dann wird stattdessen ein passender Name nach dem
+obigen Schema verwendet.
