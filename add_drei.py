@@ -6,6 +6,9 @@ def parse_numbers(num_str):
 
 NUMBER_FILE = "drei-fragezeichen-collected.txt"
 
+class NumberFileError(Exception):
+    """Ungueltiger Inhalt in NUMBER_FILE (nicht das Argument)."""
+
 def backup_file():
     try:
         with open(NUMBER_FILE, "r") as original_file:
@@ -40,7 +43,7 @@ def delete_backup():
         print(f"ERROR: Failed to delete backup: {e}")
         raise
 
-def insert_to_file(new_numbers: list) -> int|None:
+def insert_to_file(new_numbers: list) -> int:
     numbers = []
     changes = 0
     # check if the file exists, if not create it
@@ -49,18 +52,29 @@ def insert_to_file(new_numbers: list) -> int|None:
     except FileNotFoundError:
         open(NUMBER_FILE, "w").close()
 
+    # erst einlesen und parsen, damit ein Parse-Fehler keine .bak hinterlaesst
+    with open(NUMBER_FILE, "r") as file:
+        for line_no, line in enumerate(file, start=1):
+            stripped = line.strip()
+            if not stripped:
+                continue
+            try:
+                numbers.append(int(stripped))
+            except ValueError:
+                raise NumberFileError(
+                    f"{NUMBER_FILE}, Zeile {line_no}: {stripped!r} ist keine Zahl."
+                ) from None
+
     backup_file()
 
-    with open(NUMBER_FILE, "r") as file:
-        numbers = [int(line.strip()) for line in file]
-        for new_number in new_numbers:
-            if new_number in numbers:
-                print(f"INFO: Number {new_number} already exists in the file.")
-            else:
-                numbers.append(new_number)
-                changes += 1
-        # sort lines in the file
-        numbers.sort()
+    for new_number in new_numbers:
+        if new_number in numbers:
+            print(f"INFO: Number {new_number} already exists in the file.")
+        else:
+            numbers.append(new_number)
+            changes += 1
+    # sort lines in the file
+    numbers.sort()
     with open(NUMBER_FILE, "w") as file:
         try:
             for num in numbers:
@@ -87,8 +101,11 @@ def git_commit_and_push():
 def main(args) -> int:
     try:
         changes = insert_to_file(parse_numbers(args))
-        if changes is not None and changes > 0:
+        if changes > 0:
             git_commit_and_push()
+    except NumberFileError as e:
+        print(f"ERROR: {e}")
+        return 1
     except ValueError:
         print(f"ERROR: '{args}' contains invalid number(s).")
         return 1
@@ -101,4 +118,7 @@ def main(args) -> int:
     return 0
 
 if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("usage: python3 add_drei.py NUMMER[,NUMMER...]", file=sys.stderr)
+        sys.exit(2)
     sys.exit(main(sys.argv[1]))
