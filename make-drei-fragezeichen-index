@@ -9,7 +9,7 @@ set -eo pipefail
 . ./theme || exit
 
 format() {
-	local nummer titel gesammelt
+	local nummer titel
 
 	# Kopfzeile
 	printf '%s\t%s\n' \
@@ -17,7 +17,7 @@ format() {
 		"${COLOR4}Titel${RST}"
 
 	# Datenzeilen
-	while IFS=$'\t' read -r nummer titel gesammelt; do
+	while IFS=$'\t' read -r nummer titel _; do
 		# Schutz gegen leere Zeilen
 		[[ -z $nummer ]] && continue
 		printf '%s\t%s\n' \
@@ -27,7 +27,7 @@ format() {
 }
 
 missing_ranges() {
-	./make-drei-fragezeichen-list | awk -F '\t' '
+	awk -F '\t' '
 		$1 ~ /^[0-9]+$/ && $3 == "nicht gesammelt" { print $1 }
 	' | sort -n | awk '
 		NR == 1 { start = $1; prev = $1; next }
@@ -55,7 +55,7 @@ missing_ranges() {
 }
 
 collection_progress() {
-	./make-drei-fragezeichen-list | awk -F '\t' '
+	awk -F '\t' '
 		$1 ~ /^[0-9]+$/ {
 			total++
 			if ($3 == "gesammelt") {
@@ -64,7 +64,7 @@ collection_progress() {
 		}
 		END {
 			if (total == 0) {
-				printf "0 von 0 Folgen (0.0 %)"
+				printf "0 von 0 Folgen (0.0 %%)"
 				exit
 			}
 			printf "%d von %d Folgen (%.1f %%)", collected, total, (collected / total) * 100
@@ -78,10 +78,12 @@ collection_progress() {
     ./tools/box -hp 4 -T plain |
     ./tools/rtrim-ansi-aware
 
-# fetch the values first: a failing command substitution inside the arguments
-# of printf would not trigger `set -e`
-progress=$(collection_progress)
-missing=$(missing_ranges)
+# fetch the list once and the values first: a failing command substitution
+# inside the arguments of printf (or in a pipeline) would not trigger `set -e`,
+# a plain assignment does
+list=$(./make-drei-fragezeichen-list)
+progress=$(printf '%s\n' "$list" | collection_progress)
+missing=$(printf '%s\n' "$list" | missing_ranges)
 
 echo
 printf '%s\t%s\n' "${COLOR4}Gesammelt:${RST}" "$progress"
@@ -90,7 +92,7 @@ printf '%s\t%s\n' "${COLOR4}Es fehlen mir:${RST}" "$missing"
 echo
 
 # create the table
-./make-drei-fragezeichen-list | \
+printf '%s\n' "$list" | \
 	awk -F '\t' '$3 == "gesammelt"' | \
     format | \
     ./tools/box -s $'\t' -hp 1 -tc "$COLOR5" -bc "$COLOR4" -t "Gesammelte Folgen" -vp 1

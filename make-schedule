@@ -9,7 +9,7 @@ set -eo pipefail
 . ./theme || exit
 
 format() {
-	local date time end_date end_time details location
+	local date time end_time details location
 
 	# Kopfzeile
 	printf '%s\t%s\t%s\t%s\t%s\n' \
@@ -20,7 +20,7 @@ format() {
 		"${COLOR4}Location${RST}"
 
 	# Datenzeilen
-	while IFS=$'\t' read -r date time end_date end_time details location; do
+	while IFS=$'\t' read -r date time _ end_time details location; do
 		# Schutz gegen leere Zeilen
 		[[ -z $date ]] && continue
 		printf '%s\t%s\t%s\t%s\t%s\n' \

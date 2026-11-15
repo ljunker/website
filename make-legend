@@ -58,7 +58,7 @@ legend=(
 
 sammlungen=(
 	'$ curl kryptikk.de/drei-fragezeichen%Drei ??? Kassetten'
-	'$ curl kryptikk.de/one-piece%One Piece Baende'
+	'$ curl kryptikk.de/one-piece%One Piece Bände'
 )
 
 if $full; then
