@@ -2,7 +2,7 @@
 #
 # Render a page from static/ to stdout, expanding include markers.
 #
-# Usage: ./make-page static/<page>.html
+# Usage: ./make/make-page static/<page>.html
 #
 # A line consisting only of one of these markers (leading whitespace allowed)
 # is replaced by the content of the matching partial in static/partials/:
@@ -22,7 +22,7 @@ if [[ $# -ne 1 ]]; then
 fi
 
 page=$1
-dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+dir=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 partials=$dir/static/partials
 
 if [[ ! -r $page ]]; then

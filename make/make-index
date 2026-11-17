@@ -14,14 +14,14 @@ set -eo pipefail
 {
 
 # create the header
-./make-header -p 7 |
+./make/make-header -p 7 |
     ./tools/box -hp 4 -T plain
 
 # create the body
 echo
-./make-body
+./make/make-body
 
 # create the legend
-./make-legend
+./make/make-legend
 
 } | ./tools/lpad '  ' | ./tools/rtrim-ansi-aware

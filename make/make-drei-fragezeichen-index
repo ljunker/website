@@ -74,14 +74,14 @@ collection_progress() {
 
 {
 # create the header
-./make-header -p 7 |
+./make/make-header -p 7 |
     ./tools/box -hp 4 -T plain |
     ./tools/rtrim-ansi-aware
 
 # fetch the list once and the values first: a failing command substitution
 # inside the arguments of printf (or in a pipeline) would not trigger `set -e`,
 # a plain assignment does
-list=$(./make-drei-fragezeichen-list)
+list=$(./make/make-drei-fragezeichen-list)
 progress=$(printf '%s\n' "$list" | collection_progress)
 missing=$(printf '%s\n' "$list" | missing_ranges)
 
@@ -97,5 +97,5 @@ printf '%s\n' "$list" | \
     format | \
     ./tools/box -s $'\t' -hp 1 -tc "$COLOR5" -bc "$COLOR4" -t "Gesammelte Folgen" -vp 1
 
-./make-legend
+./make/make-legend
 } | ./tools/lpad '  ' | ./tools/rtrim-ansi-aware

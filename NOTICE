@@ -12,14 +12,14 @@ Aus ysap übernommene bzw. davon abgeleitete Dateien:
   Makefile
   README.md
   check-deps
-  make-about
-  make-body
-  make-header
-  make-help
-  make-index
-  make-legend
-  make-list
-  make-logo
+  make/make-about
+  make/make-body
+  make/make-header
+  make/make-help
+  make/make-index
+  make/make-legend
+  make/make-list
+  make/make-logo
   static/index.html
   static/style.css
   theme              (vermutlich ebenfalls aus ysap, nicht verifiziert)

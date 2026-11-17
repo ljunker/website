@@ -22,7 +22,7 @@ done
 
 padding=$(repeat-char ' ' "$padding")
 
-mapfile -t logo < <(./make-logo)
+mapfile -t logo < <(./make/make-logo)
 
 description=(
 	""

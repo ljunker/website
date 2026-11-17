@@ -32,36 +32,36 @@ build:
 	cp static/ical.min.js _site/static/ical.min.js
 	mkdir -p _site/static/fonts
 	cp static/fonts/* _site/static/fonts/
-	./make-page static/index.html > _site/index.html
-	./make-page static/404.html > _site/404.html
-	./make-page static/schedule.html > _site/schedule/index.html
-	./make-page static/drei-fragezeichen.html > _site/drei-fragezeichen/index.html
-	./make-page static/sammlungen.html > _site/sammlungen/index.html
-	./make-page static/one-piece.html > _site/one-piece/index.html
-	./make-page static/dn9lfj.html > _site/dn9lfj/index.html
-	./make-page static/impressum.html > _site/impressum/index.html
-	./make-page static/schrittjagd-support.html > _site/schrittjagd-support/index.html
-	./make-page static/schrittjagd-datenschutz.html > _site/schrittjagd-datenschutz/index.html
-	./make-page static/schrittjagd-delete.html > _site/schrittjagd-delete/index.html
+	./make/make-page static/index.html > _site/index.html
+	./make/make-page static/404.html > _site/404.html
+	./make/make-page static/schedule.html > _site/schedule/index.html
+	./make/make-page static/drei-fragezeichen.html > _site/drei-fragezeichen/index.html
+	./make/make-page static/sammlungen.html > _site/sammlungen/index.html
+	./make/make-page static/one-piece.html > _site/one-piece/index.html
+	./make/make-page static/dn9lfj.html > _site/dn9lfj/index.html
+	./make/make-page static/impressum.html > _site/impressum/index.html
+	./make/make-page static/schrittjagd-support.html > _site/schrittjagd-support/index.html
+	./make/make-page static/schrittjagd-datenschutz.html > _site/schrittjagd-datenschutz/index.html
+	./make/make-page static/schrittjagd-delete.html > _site/schrittjagd-delete/index.html
 	# make /ping endpoint (nginx handles this for me, but just in case)
 	echo 'pong' > _site/ping
 	# create ASCII index page for curl users
-	./make-index > _site/index.txt
+	./make/make-index > _site/index.txt
 	# create ASCII help page
-	./make-help > _site/help
-	./make-events
+	./make/make-help > _site/help
+	./make/make-events
 	# create episodes ASCII table
-	./make-schedule > _site/schedule/index.txt
+	./make/make-schedule > _site/schedule/index.txt
 	# make episodes JSON file for curl
-	./make-schedule-json > _site/json
+	./make/make-schedule-json > _site/json
 	cat _site/json > _site/schedule.json
-	./make-drei-fragezeichen
-	./make-drei-fragezeichen-index > _site/drei-fragezeichen/index.txt
-	./make-drei-fragezeichen-json DREI > _site/static/drei.js
+	./make/make-drei-fragezeichen
+	./make/make-drei-fragezeichen-index > _site/drei-fragezeichen/index.txt
+	./make/make-drei-fragezeichen-json DREI > _site/static/drei.js
 	cp -r static/images _site
-	./make-one-piece-index > _site/one-piece/index.txt
+	./make/make-one-piece-index > _site/one-piece/index.txt
 	.venv/bin/python3 ./one_piece_sheet.py --js ONEPIECE > _site/static/one-piece.js
-	./make-dn9lfj-index > _site/dn9lfj/index.txt
+	./make/make-dn9lfj-index > _site/dn9lfj/index.txt
 
 .PHONY: all
 all:
@@ -84,7 +84,7 @@ check-deps:
 
 .PHONY: check
 check:
-	shellcheck -x check-* make-* upgrade tools/*
+	shellcheck -x check-* make/make-* upgrade tools/*
 
 .PHONY: clean
 clean:
