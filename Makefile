@@ -92,15 +92,21 @@ clean:
 
 .PHONY: deploy
 deploy:
-	sudo rsync -avh --delete ./_site/ /var/www/kryptikk.de/html
+	@if [[ -w /var/www/kryptikk.de/html ]]; then \
+		rsync -avh --delete ./_site/ /var/www/kryptikk.de/html; \
+	else \
+		sudo rsync -avh --delete ./_site/ /var/www/kryptikk.de/html; \
+	fi
 
 .PHONY: update-nginx
 update-nginx:
 	@if ! sudo test -e /etc/nginx/sites-available/kryptikk.de || ! sudo cmp -s kryptikk.de /etc/nginx/sites-available/kryptikk.de; then \
-		backup="/tmp/kryptikk.de.$$(date +%Y%m%d%H%M%S).bak"; \
+		backup="/var/backups/kryptikk.de.nginx.bak"; \
 		echo "Updating /etc/nginx/sites-available/kryptikk.de (backup: $$backup)"; \
+		have_backup=; \
 		if sudo test -e /etc/nginx/sites-available/kryptikk.de; then \
 			sudo cp /etc/nginx/sites-available/kryptikk.de "$$backup"; \
+			have_backup=1; \
 		fi; \
 		sudo cp kryptikk.de /etc/nginx/sites-available/kryptikk.de; \
 		if sudo nginx -t; then \
@@ -108,10 +114,12 @@ update-nginx:
 			sudo systemctl reload nginx; \
 		else \
 			echo "nginx -t failed, restoring backup"; \
-			if sudo test -e "$$backup"; then \
+			if [[ -n $$have_backup ]]; then \
 				sudo cp "$$backup" /etc/nginx/sites-available/kryptikk.de; \
 			fi; \
 			sudo nginx -t; \
+			echo "nginx config rejected, backup restored (if any)"; \
+			exit 1; \
 		fi; \
 	else \
 		echo "nginx config unchanged"; \

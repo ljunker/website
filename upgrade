@@ -10,7 +10,9 @@
 
 set -euo pipefail
 
-STEPS=6
+# Schritte mit Fortschrittsbalken; main() setzt die Zahl je nach Modus
+STEPS=5
+interactive=0
 BAR_WIDTH=30
 step=0
 log=
@@ -76,15 +78,29 @@ main() {
 	trap cleanup EXIT
 	trap 'echo; echo "Abgebrochen. Log: $log" >&2; exit 130' INT TERM
 
+	# Interaktiv (Terminal an stdin) laufen sudo -v und die nginx-Aktualisierung.
+	# Ohne Terminal (z. B. SSH aus CI) läuft alles ohne sudo, die nginx-Config
+	# wird dann übersprungen; nginx-Änderungen spielt ein Admin aus seinem Clone ein.
+	if [[ -t 0 ]]; then
+		interactive=1
+		STEPS=6
+	fi
+
 	# ask for the sudo password up front, the prompt would be hidden later
-	sudo -v
+	if ((interactive)); then
+		sudo -v
+	fi
 
 	run_step 'git pull' git pull --ff-only
 
 	run_step 'venv / pip install' make venv
 	run_step 'check dependencies' make check-deps
 	run_step 'build' make clean build
-	run_step 'nginx config' make update-nginx
+	if ((interactive)); then
+		run_step 'nginx config' make update-nginx
+	else
+		echo '==> nginx config: übersprungen (kein Terminal; nginx-Änderungen manuell im Admin-Clone: make update-nginx)'
+	fi
 	run_step 'deploy' make deploy
 
 	draw 'fertig'
