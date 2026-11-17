@@ -650,3 +650,116 @@ tr:last-child td {
 tr:hover {
 	background-color: #222;
 }
+
+/* Terminanfrage-Formular */
+.termin-form {
+	max-width: 560px;
+}
+
+.termin-form .form-row {
+	margin-bottom: 14px;
+}
+
+.termin-form label {
+	display: block;
+	margin-bottom: 4px;
+	color: var(--color4);
+}
+
+.termin-form input,
+.termin-form textarea {
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	font: inherit;
+	color: var(--color5);
+	background: #111;
+	border: 1px solid #87ff8755; /* color3 */
+	border-radius: 3px;
+	padding: 6px 8px;
+	color-scheme: dark;
+}
+
+.termin-form textarea {
+	min-height: 140px;
+	resize: vertical;
+}
+
+.termin-form input:focus,
+.termin-form textarea:focus {
+	outline: none;
+	border-color: var(--color3);
+}
+
+.termin-form .form-row-pair {
+	display: flex;
+	gap: 12px;
+}
+
+.termin-form .form-row-pair > div {
+	flex: 1 1 0;
+	min-width: 0;
+}
+
+.termin-form .form-error {
+	display: block;
+	margin-top: 3px;
+	color: var(--color2);
+}
+
+.termin-form .form-trap {
+	position: absolute;
+	left: -10000px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
+.termin-form button {
+	font: inherit;
+	color: var(--color3);
+	background: transparent;
+	border: 1px solid var(--color3);
+	border-radius: 3px;
+	padding: 5px 14px;
+	cursor: pointer;
+}
+
+.termin-form button:hover:not(:disabled) {
+	color: var(--color4);
+	border-color: var(--color4);
+}
+
+.termin-form button:disabled {
+	opacity: 0.35;
+	cursor: default;
+}
+
+.termin-form .form-status {
+	margin-top: 12px;
+}
+
+.termin-form .form-status-ok {
+	color: var(--color3);
+}
+
+.termin-form .form-status-error {
+	color: var(--color2);
+}
+
+.termin-form .form-note {
+	margin-top: 18px;
+	color: var(--color4);
+	font-size: 12px;
+}
+
+.termin-form .form-note a {
+	border-bottom: 1px dotted;
+}
+
+@media (max-width: 650px) {
+	.termin-form .form-row-pair {
+		flex-direction: column;
+		gap: 14px;
+	}
+}

@@ -8,15 +8,20 @@ zu heute (nur fiktive Daten). Es wird nichts in _site geschrieben.
 Umgebungsvariablen:
   PORT      Port (Standard 8000)
   CALENDAR  leer = Beispiel-Feed, "empty" = leerer Feed, "error" = HTTP 500
+  TERMIN_UPSTREAM  Terminanfragen-Dienst (Standard 127.0.0.1:18090), siehe
+            `make serve-termin`; /termin-api/ und /termin-admin/ werden dorthin
+            weitergeleitet, /terminanfrage liefert die Formularseite
 """
 import datetime as dt
 import functools
+import http.client
 import http.server
 import os
 import sys
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "_site")
 FEED_PATH = "/schedule/calendar.ics"
+PROXY_PREFIXES = ("/termin-api/", "/termin-admin")
 
 VTIMEZONE = """BEGIN:VTIMEZONE
 TZID:Europe/Berlin
@@ -155,7 +160,48 @@ def empty_feed():
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
+    protocol_version = "HTTP/1.0"
+
+    def proxy(self):
+        """Leitet die Anfrage unverändert an den Terminanfragen-Dienst weiter."""
+        host, _, port = os.environ.get("TERMIN_UPSTREAM", "127.0.0.1:18090").partition(":")
+        length = int(self.headers.get("Content-Length") or 0)
+        body = self.rfile.read(length) if length else None
+        headers = {k: v for k, v in self.headers.items()
+                   if k.lower() not in ("host", "connection", "x-real-ip")}
+        headers["X-Real-IP"] = self.client_address[0]
+        try:
+            conn = http.client.HTTPConnection(host, int(port or 18090), timeout=30)
+            conn.request(self.command, self.path, body=body, headers=headers)
+            resp = conn.getresponse()
+            data = resp.read()
+        except OSError as err:
+            self.send_error(502, "Terminanfragen-Dienst nicht erreichbar (make serve-termin?): %s" % err)
+            return
+        self.send_response(resp.status)
+        for key, value in resp.getheaders():
+            if key.lower() not in ("connection", "transfer-encoding", "content-length", "server", "date"):
+                self.send_header(key, value)
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
+        conn.close()
+
+    def is_proxied(self):
+        return self.path.split("?", 1)[0].startswith(PROXY_PREFIXES)
+
+    def do_POST(self):
+        if self.is_proxied():
+            self.proxy()
+        else:
+            self.send_error(405)
+
     def do_GET(self):
+        if self.is_proxied():
+            self.proxy()
+            return
+        if self.path.split("?", 1)[0] == "/terminanfrage":
+            self.path = "/terminanfrage/index.html"
         if self.path.split("?", 1)[0] == FEED_PATH:
             mode = os.environ.get("CALENDAR", "").lower()
             if mode == "error":
