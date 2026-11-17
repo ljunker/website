@@ -3,3 +3,6 @@ _site
 .venv
 events.json
 drei-fragezeichen.json
+termin/.env
+termin/dev.sqlite3
+termin/__pycache__

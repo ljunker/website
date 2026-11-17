@@ -53,6 +53,34 @@ server {
             proxy_set_header X-Forwarded-Proto $scheme;
         }
 
+        # Terminanfragen: Formular-API und Dashboard (Python-Dienst auf 127.0.0.1:18090).
+        # Das Pfad-Praefix bleibt erhalten, der Dienst routet die vollen Pfade.
+        location ^~ /termin-api/ {
+            client_max_body_size 32k;
+            proxy_pass http://127.0.0.1:18090;
+            proxy_http_version 1.1;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header Connection "";
+        }
+
+        location = /termin-admin {
+            return 301 /termin-admin/;
+        }
+
+        location ^~ /termin-admin/ {
+            client_max_body_size 32k;
+            proxy_pass http://127.0.0.1:18090;
+            proxy_http_version 1.1;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header Connection "";
+        }
+
         # Kalender-Feed (iCloud) fuer /schedule: der Browser kann ihn wegen fehlender
         # CORS-Header nicht direkt laden, daher ueber diesen Proxy, immer ohne Cache.
         # add_header im location deaktiviert die Vererbung, daher Header erneut setzen.
@@ -115,6 +143,10 @@ server {
 
     location = /dn9lfj {
         rewrite ^ /dn9lfj/$kryptikk_index last;
+    }
+
+    location = /terminanfrage {
+        rewrite ^ /terminanfrage/index.html last;
     }
 
     location = / {
@@ -208,6 +240,45 @@ server {
         location ^~ /log/ {
             return 301 https://$server_name$request_uri;
         }
+
+    # Terminanfragen nie unverschluesselt, auch fuer curl: per 301 auf HTTPS, sobald die
+    # Anfrage per HTTP beim Cloudflare-Proxy ankam (X-Forwarded-Proto=http). Kommt sie
+    # bereits per HTTPS an (Cloudflare "flexible"), wird wie bei den uebrigen Pfaden
+    # ausgeliefert bzw. an den Dienst weitergereicht, sonst gaebe es eine Redirect-Schleife.
+    location ^~ /termin-api/ {
+        if ($http_x_forwarded_proto = 'http') {
+            return 301 https://$server_name$request_uri;
+        }
+        client_max_body_size 32k;
+        proxy_pass http://127.0.0.1:18090;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Connection "";
+    }
+
+    location ^~ /termin-admin {
+        if ($http_x_forwarded_proto = 'http') {
+            return 301 https://$server_name$request_uri;
+        }
+        client_max_body_size 32k;
+        proxy_pass http://127.0.0.1:18090;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Connection "";
+    }
+
+    location = /terminanfrage {
+        if ($http_x_forwarded_proto = 'http') {
+            return 301 https://$server_name$request_uri;
+        }
+        rewrite ^(.*) /terminanfrage/index.html last;
+    }
 
     location = /ping {
         default_type text/plain;

@@ -83,7 +83,7 @@ main() {
 	# wird dann übersprungen; nginx-Änderungen spielt ein Admin aus seinem Clone ein.
 	if [[ -t 0 ]]; then
 		interactive=1
-		STEPS=6
+		STEPS=7
 	fi
 
 	# ask for the sudo password up front, the prompt would be hidden later
@@ -98,8 +98,10 @@ main() {
 	run_step 'build' make clean build
 	if ((interactive)); then
 		run_step 'nginx config' make update-nginx
+		run_step 'termin service' make update-termin
 	else
 		echo '==> nginx config: übersprungen (kein Terminal; nginx-Änderungen manuell im Admin-Clone: make update-nginx)'
+		echo '==> termin service: übersprungen (kein Terminal; manuell im Admin-Clone: git pull --ff-only && make update-termin)'
 	fi
 	run_step 'deploy' make deploy
 

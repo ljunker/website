@@ -15,14 +15,17 @@ help:
 	@echo 'make check-deps    check to ensure needed dependencies are installed'
 	@echo 'make check         check tools syntax using shellcheck'
 	@echo 'make serve         serve ./_site locally with sample calendar (see README)'
+	@echo 'make serve-termin  run the appointment-request service locally (console mail)'
+	@echo 'make test          run the unit tests of the appointment-request service'
 	@echo 'make deploy        deploy the site (using rsync)'
 	@echo 'make update-nginx  copy nginx config if changed'
+	@echo 'make update-termin install/restart the appointment-request service (systemd)'
 	@echo 'make all           clean, build and deploy the site'
 	@echo 'make clean         remove any generated files'
 
 .PHONY: build
 build:
-	mkdir -p _site _site/static _site/schedule _site/drei-fragezeichen _site/sammlungen _site/one-piece _site/dn9lfj _site/impressum _site/schrittjagd-support _site/schrittjagd-datenschutz _site/schrittjagd-delete
+	mkdir -p _site _site/static _site/schedule _site/drei-fragezeichen _site/sammlungen _site/one-piece _site/dn9lfj _site/impressum _site/schrittjagd-support _site/schrittjagd-datenschutz _site/schrittjagd-delete _site/terminanfrage
 	# disable indexing for certain dirs
 	echo -n > _site/static/index.html
 	# copy static files
@@ -43,6 +46,7 @@ build:
 	./make/make-page static/schrittjagd-support.html > _site/schrittjagd-support/index.html
 	./make/make-page static/schrittjagd-datenschutz.html > _site/schrittjagd-datenschutz/index.html
 	./make/make-page static/schrittjagd-delete.html > _site/schrittjagd-delete/index.html
+	./make/make-page static/terminanfrage.html > _site/terminanfrage/index.html
 	# make /ping endpoint (nginx handles this for me, but just in case)
 	echo 'pong' > _site/ping
 	# create ASCII index page for curl users
@@ -77,6 +81,14 @@ venv:
 .PHONY: serve
 serve:
 	python3 dev/dev-server.py
+
+.PHONY: serve-termin
+serve-termin:
+	python3 termin/app.py --dev
+
+.PHONY: test
+test:
+	python3 -m unittest discover -s termin -b
 
 .PHONY: check-deps
 check-deps:
@@ -124,3 +136,26 @@ update-nginx:
 	else \
 		echo "nginx config unchanged"; \
 	fi
+
+.PHONY: update-termin
+update-termin:
+	@if [[ ! -e /etc/kryptikk-termin.env ]]; then \
+		echo "/etc/kryptikk-termin.env fehlt, Terminanfragen-Dienst wird uebersprungen (siehe README)"; \
+		exit 0; \
+	fi; \
+	if id kryptikk-termin >/dev/null 2>&1 && ! sudo -u kryptikk-termin test -r "$(CURDIR)/termin/app.py"; then \
+		echo "Fehler: Benutzer kryptikk-termin kann $(CURDIR)/termin/app.py nicht lesen (Home-Verzeichnis 0750?), siehe README"; \
+		exit 1; \
+	fi; \
+	unit=/etc/systemd/system/kryptikk-termin.service; \
+	want=$$(sed "s|@REPO@|$(CURDIR)|g" termin/kryptikk-termin.service); \
+	have=$$(sudo cat "$$unit" 2>/dev/null || true); \
+	if [[ "$$want" != "$$have" ]]; then \
+		echo "Updating $$unit"; \
+		printf '%s\n' "$$want" | sudo tee "$$unit" >/dev/null; \
+		sudo chmod 644 "$$unit"; \
+		sudo systemctl daemon-reload; \
+		sudo systemctl enable kryptikk-termin; \
+	fi; \
+	sudo systemctl restart kryptikk-termin; \
+	echo "kryptikk-termin restarted"

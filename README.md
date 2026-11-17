@@ -25,8 +25,11 @@ make venv          create ./.venv and install pinned requirements
 make check-deps    check to ensure needed dependencies are installed
 make check         check tools syntax using shellcheck
 make serve         serve ./_site locally with sample calendar (see README)
+make serve-termin  run the appointment-request service locally (console mail)
+make test          run the unit tests of the appointment-request service
 make deploy        deploy the site (using rsync)
 make update-nginx  copy nginx config if changed
+make update-termin install/restart the appointment-request service (systemd)
 make all           clean, build and deploy the site
 make clean         remove any generated files
 ```
@@ -49,6 +52,89 @@ PORT=8080 make serve          # anderer Port
 CALENDAR=empty make serve     # leerer Feed ("Keine Termine ...")
 CALENDAR=error make serve     # HTTP 500 (Fehlerkarte mit Abo-Link)
 ```
+
+Terminanfragen
+--------------
+
+Auf `/terminanfrage` kann man einen Calltermin anfragen. Der Dienst in
+`termin/` (nur Python-Standardbibliothek, SQLite) speichert die Anfrage und
+schickt eine Benachrichtigung per SMTP. Im passwortgeschützten Dashboard
+`/termin-admin/` lassen sich Anfragen annehmen, ablehnen oder mit Freitext
+beantworten; die Antwort geht per Mail an die anfragende Person. Es gibt keine
+automatische Eingangsbestätigung. Statusregel: Annehmen setzt `angenommen`,
+Ablehnen `abgelehnt`; eine Freitext-Antwort setzt `beantwortet`, aber nur bei
+noch neuen Anfragen (ein vorhandener Status bleibt).
+
+nginx leitet `/termin-api/` und `/termin-admin/` an `127.0.0.1:18090` weiter
+(siehe `kryptikk.de`), der Dienst lauscht nur dort.
+
+### Einrichtung auf dem Server
+
+1. Benutzer für den Dienst anlegen (ohne Schreibrechte im Checkout):
+
+   ```
+   sudo useradd --system --no-create-home --shell /usr/sbin/nologin kryptikk-termin
+   ```
+
+2. Passwort-Hash für das Dashboard erzeugen:
+
+   ```
+   python3 termin/hash-password
+   ```
+
+3. Env-Datei anlegen, Vorlage ist `termin/env.example` (echte Werte gehören
+   nie ins Repo). Rechte 600:
+
+   ```
+   sudo install -m 600 -o root -g root termin/env.example /etc/kryptikk-termin.env
+   sudo $EDITOR /etc/kryptikk-termin.env
+   ```
+
+   Dort `SMTP_*`, `MAIL_FROM`, `NOTIFY_TO`, `ADMIN_PASSWORD_HASH` (Ausgabe von
+   `hash-password`) und `SECRET_KEY` setzen. Als `SMTP_PASSWORD` ein
+   **App-Passwort** des Mail-Anbieters verwenden, nicht das Hauptpasswort.
+   Port 587 mit `SMTP_SECURITY=starttls` oder 465 mit `ssl`.
+
+4. Der Clone muss für den Dienstbenutzer lesbar sein (Ubuntu-Homes sind
+   standardmäßig 0750, dann ggf. `chmod o+x ~` bzw. ein Clone außerhalb des
+   Home). Prüfen mit:
+
+   ```
+   sudo -u kryptikk-termin test -r <ADMIN_CLONE>/termin/app.py && echo ok
+   ```
+
+   `make update-termin` bricht ab, wenn diese Prüfung fehlschlägt.
+
+5. systemd-Unit installieren und starten (im Admin-Clone, nicht im Checkout
+   des Deploy-Benutzers; die Unit startet den Code aus genau diesem Clone):
+
+   ```
+   make update-termin
+   ```
+
+6. nginx-Konfiguration einspielen: `make update-nginx`.
+
+Danach nach Änderungen am Dienst im Admin-Clone `git pull --ff-only && make
+update-termin`. Das interaktive `./upgrade` erledigt das mit; im
+unbeaufsichtigten Lauf (ohne Terminal, ohne sudo) wird der Dienst
+übersprungen und nur ein Hinweis ausgegeben; den Neustart erledigt dann der
+Admin manuell im Admin-Clone.
+Die Datenbank liegt unter `/var/lib/kryptikk-termin/`. Logs:
+`journalctl -u kryptikk-termin`.
+
+### Lokal testen
+
+```
+make build
+make serve-termin     # Dienst auf 127.0.0.1:18090, Mails nur auf der Konsole
+make serve            # in einem zweiten Terminal: http://localhost:8000/terminanfrage
+```
+
+`make serve-termin` nutzt `termin/dev.sqlite3`, kein Secure-Cookie und das
+Dashboard-Passwort `dev` (Dashboard: http://localhost:8000/termin-admin/). Der
+Dev-Server leitet `/termin-api/` und `/termin-admin/` an den Dienst weiter.
+Eigene Werte lassen sich in `termin/.env` ablegen (steht in `.gitignore`).
+Die Tests laufen mit `make test`.
 
 Upgrade
 -------

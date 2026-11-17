@@ -1,0 +1,35 @@
+# systemd-Unit für den Terminanfragen-Dienst.
+# @REPO@ wird von `make update-termin` durch den Pfad des Clones ersetzt.
+# Der Dienst läuft als eigener Benutzer ohne Schreibrechte im Clone:
+#   sudo useradd --system --no-create-home --shell /usr/sbin/nologin kryptikk-termin
+# Der Clone (@REPO@) muss für diesen Benutzer lesbar sein (Home 0750 beachten);
+# `make update-termin` prüft das.
+[Unit]
+Description=kryptikk.de Terminanfragen
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=kryptikk-termin
+Group=kryptikk-termin
+WorkingDirectory=@REPO@/termin
+EnvironmentFile=/etc/kryptikk-termin.env
+ExecStart=/usr/bin/python3 @REPO@/termin/app.py
+Restart=on-failure
+RestartSec=5
+
+# Datenbank unter /var/lib/kryptikk-termin (von systemd angelegt)
+StateDirectory=kryptikk-termin
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictSUIDSGID=yes
+LockPersonality=yes
+
+[Install]
+WantedBy=multi-user.target

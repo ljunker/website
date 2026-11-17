@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <title>terminanfrage | Lars Junker</title>
+    <!-- include:head -->
+    <meta name="description" content="Calltermin bei Lars Junker anfragen."/>
+</head>
+<body>
+<div id="container">
+    <header>
+        <!-- include:nav -->
+    </header>
+
+    <main>
+        <h1 class="title">terminanfrage</h1>
+        <p class="content">
+            <span class="highlight">Du möchtest mich für einen Calltermin anfragen? Schreib mir kurz,
+                wann, wo und wofür. Ich melde mich per Mail bei dir. Die bereits vergebenen Termine
+                stehen unter <a href="/schedule">calltermine</a>.</span>
+        </p>
+        <br>
+
+        <form id="termin-form" class="termin-form" method="post" action="/termin-api/anfrage" novalidate>
+            <div class="form-row">
+                <label for="f-name">Name *</label>
+                <input type="text" id="f-name" name="name" maxlength="100" required autocomplete="name">
+                <span class="form-error" data-for="name" role="alert"></span>
+            </div>
+            <div class="form-row">
+                <label for="f-email">E-Mail *</label>
+                <input type="email" id="f-email" name="email" maxlength="200" required autocomplete="email">
+                <span class="form-error" data-for="email" role="alert"></span>
+            </div>
+            <div class="form-row form-row-pair">
+                <div>
+                    <label for="f-datum">Wunschdatum *</label>
+                    <input type="date" id="f-datum" name="datum" required>
+                    <span class="form-error" data-for="datum" role="alert"></span>
+                </div>
+                <div>
+                    <label for="f-uhrzeit">Uhrzeit *</label>
+                    <input type="time" id="f-uhrzeit" name="uhrzeit" required>
+                    <span class="form-error" data-for="uhrzeit" role="alert"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <label for="f-club">Club / Veranstaltung</label>
+                <input type="text" id="f-club" name="club" maxlength="200">
+                <span class="form-error" data-for="club" role="alert"></span>
+            </div>
+            <div class="form-row">
+                <label for="f-ort">Ort</label>
+                <input type="text" id="f-ort" name="ort" maxlength="200" autocomplete="off">
+                <span class="form-error" data-for="ort" role="alert"></span>
+            </div>
+            <div class="form-row">
+                <label for="f-nachricht">Nachricht *</label>
+                <textarea id="f-nachricht" name="nachricht" rows="6" maxlength="4000" required></textarea>
+                <span class="form-error" data-for="nachricht" role="alert"></span>
+            </div>
+            <div class="form-trap" aria-hidden="true">
+                <label for="f-hp">Bitte leer lassen</label>
+                <input type="text" id="f-hp" name="hp_website" tabindex="-1" autocomplete="off">
+            </div>
+            <div class="form-actions">
+                <button type="submit" id="termin-submit">anfrage senden</button>
+            </div>
+            <p class="form-status" id="termin-status" role="status"></p>
+            <p class="form-note">Deine Angaben nutze ich nur, um deine Anfrage zu beantworten.
+                Sie werden bei mir gespeichert und nicht an Dritte weitergegeben. Dein
+                Name und deine E-Mail-Adresse gehen dafür per Mail an mich. Zum
+                Schutz vor Missbrauch speichere ich außerdem deine IP-Adresse.
+                Auf Wunsch lösche ich sie wieder, schreib mir dazu eine Mail an
+                <a href="mailto:caller@kryptikk.de">caller@kryptikk.de</a>.</p>
+        </form>
+    </main>
+
+    <!-- include:footer -->
+</div>
+<script>
+(function () {
+    var form = document.getElementById('termin-form');
+    var button = document.getElementById('termin-submit');
+    var status = document.getElementById('termin-status');
+    var FIELDS = ['name', 'email', 'datum', 'uhrzeit', 'club', 'ort', 'nachricht', 'hp_website'];
+
+    // Wunschdatum nicht in der Vergangenheit
+    var today = new Date();
+    document.getElementById('f-datum').min = today.getFullYear() + '-' +
+        ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+
+    function clearErrors() {
+        status.textContent = '';
+        status.className = 'form-status';
+        Array.prototype.forEach.call(form.querySelectorAll('.form-error'), function (s) { s.textContent = ''; });
+    }
+
+    function showErrors(fehler) {
+        var general = [];
+        Object.keys(fehler || {}).forEach(function (key) {
+            var target = form.querySelector('.form-error[data-for="' + key + '"]');
+            if (target) target.textContent = fehler[key]; else general.push(fehler[key]);
+        });
+        status.className = 'form-status form-status-error';
+        status.textContent = general.length ? general.join(' ') : 'Bitte die markierten Angaben prüfen.';
+    }
+
+    form.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        clearErrors();
+        var data = {};
+        FIELDS.forEach(function (name) { data[name] = form.elements[name].value; });
+        button.disabled = true;
+        fetch(form.action, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        }).then(function (r) {
+            return r.json().then(function (j) { return {ok: r.ok, body: j}; });
+        }).then(function (res) {
+            if (res.ok && res.body.ok) {
+                form.reset();
+                status.className = 'form-status form-status-ok';
+                status.textContent = 'Danke, deine Anfrage ist angekommen. Ich melde mich bei dir.';
+            } else {
+                showErrors(res.body.fehler);
+            }
+        }).catch(function () {
+            showErrors({allgemein: 'Senden fehlgeschlagen. Bitte später erneut versuchen oder per Mail melden.'});
+        }).then(function () {
+            button.disabled = false;
+        });
+    });
+})();
+</script>
+</body>
+</html>
