@@ -411,12 +411,6 @@ td {
 	padding: 1px 12px;
 }
 
-.schedule-table td {
-	padding-top: 13px;
-	padding-bottom: 13px;
-	vertical-align: top;
-}
-
 .schedule-nav {
 	display: flex;
 	align-items: flex-end;
@@ -462,15 +456,62 @@ td {
 	cursor: default;
 }
 
-.schedule-table td.status {
+.schedule-cards {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.schedule-card {
+	background-color: #131313;
+	padding: 10px 12px;
+	color: var(--color3);
+	overflow-wrap: anywhere;
+}
+
+.schedule-card:hover {
+	background-color: #222;
+}
+
+.schedule-card .card-head {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 2px 12px;
+	font-weight: bold;
+}
+
+.schedule-card .card-time {
+	color: var(--color4);
+}
+
+.schedule-card .card-title {
+	font-size: 13px;
+	font-weight: bold;
+	color: var(--color5);
+	margin-top: 6px;
+}
+
+.schedule-card .card-location {
+	margin-top: 4px;
+	color: var(--color4);
+}
+
+.schedule-card .card-title a,
+.schedule-card .card-location a {
+	display: inline-block;
+	padding: 3px 0;
+}
+
+.schedule-card.schedule-status {
 	text-align: center;
 }
 
-.schedule-table .location a,
-.schedule-table td.details a {
-	display: block;
-	margin: -13px 0;
-	padding: 13px 0;
+@media (max-width: 650px) {
+	.schedule-card {
+		padding: 10px;
+	}
 }
 
 td.cover {
