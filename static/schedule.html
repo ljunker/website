@@ -15,7 +15,7 @@
         <h1 class="title">calltermine</h1>
         <p class="content">
 				<span class="highlight">Hier stehen meine Calltermine,
-                    jeweils für einen Zeitraum von 8 Wochen. Mit den Buttons über der Tabelle
+                    jeweils für einen Zeitraum von 8 Wochen. Mit den Buttons über der Liste
                     kann man beliebig weit in die Zukunft blättern. Den Kalender kann man auch
                     <a href="webcal://p131-caldav.icloud.com/published/2/MTAzODAyMzk0NDkxMDM4MKx0EePtPDXePVZMEANU5wgvh8UiCQKBUo_2X7Xqg9Jh3NtXpIyVy5CqwdHizblJlRvhMBUjjWdRQ3aI_qnXqcw">abonnieren</a>.
                     Um einen neuen Termin mit mir abzusprechen, <a href="mailto:caller@kryptikk.de">schick mir einfach eine Mail.</a></span>
@@ -33,19 +33,7 @@
             <button type="button" id="nav-next">später &raquo;</button>
         </div>
 
-        <table class="shadow schedule-table">
-            <thead>
-            <tr>
-                <th>DATUM</th>
-                <th>ANFANG</th>
-                <th>ENDE</th>
-                <th>CLUB</th>
-                <th>ORT</th>
-            </tr>
-            </thead>
-            <tbody id="schedule-tbody">
-            </tbody>
-        </table>
+        <ol class="schedule-cards" id="schedule-list" role="list"></ol>
     </main>
 
     <!-- include:footer -->
@@ -58,7 +46,7 @@
     var WEEKS = 8;
     var MAX_OCCURRENCES = 20000;
 
-    var tbody = document.getElementById('schedule-tbody');
+    var list = document.getElementById('schedule-list');
     var prevBtn = document.getElementById('nav-prev');
     var nextBtn = document.getElementById('nav-next');
     var todayBtn = document.getElementById('nav-today');
@@ -93,28 +81,31 @@
         return icalTime.toJSDate().getTime();
     }
 
-    function tdWithText(txt, className) {
-        var td = document.createElement('td');
-        if (className) td.classList.add(className);
-        td.textContent = txt || '';
-        return td;
+    var WEEKDAYS = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+
+    // "YYYY-MM-DD" -> "Sa 21.11.2026"; Wochentag per UTC, damit keine Zeitzone ihn verschiebt
+    function prettyDate(iso) {
+        var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+        if (!m) return iso;
+        var wd = WEEKDAYS[new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])).getUTCDay()];
+        return wd + ' ' + m[3] + '.' + m[2] + '.' + m[1];
     }
 
-    function tdWithMapsLink(txt) {
-        var td = document.createElement('td');
-        td.classList.add('location');
+    function el(tag, className, txt) {
+        var e = document.createElement(tag);
+        if (className) e.className = className;
+        if (txt) e.textContent = txt;
+        return e;
+    }
 
-        if (!txt) return td;
-
+    function mapsLink(txt) {
         var a = document.createElement('a');
         a.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(txt);
         a.target = '_blank';
         a.rel = 'noopener noreferrer';
         a.textContent = txt;
         a.setAttribute('aria-label', 'Adresse in Google Maps öffnen: ' + txt);
-
-        td.appendChild(a);
-        return td;
+        return a;
     }
 
     function getUrl(ev) {
@@ -123,34 +114,49 @@
         return /^https?:\/\//i.test(raw) ? raw : '';
     }
 
-    function tdWithLink(txt, url, className) {
-        if (!url) return tdWithText(txt, className);
-        var td = document.createElement('td');
-        if (className) td.classList.add(className);
-
+    function titleLink(txt, url) {
         var a = document.createElement('a');
         a.href = url;
         a.target = '_blank';
         a.rel = 'noopener noreferrer';
         a.textContent = txt || '';
         a.setAttribute('aria-label', 'Homepage von ' + (txt || '') + ' öffnen (neuer Tab)');
-
-        td.appendChild(a);
-        return td;
+        return a;
     }
 
-    function statusRow(content) {
-        var tr = document.createElement('tr');
-        var td = document.createElement('td');
-        td.colSpan = 5;
-        td.classList.add('status');
+    function statusCard(content) {
+        var li = el('li', 'schedule-card schedule-status shadow');
         if (typeof content === 'string') {
-            td.textContent = content;
+            li.textContent = content;
         } else {
-            td.appendChild(content);
+            li.appendChild(content);
         }
-        tr.appendChild(td);
-        return tr;
+        return li;
+    }
+
+    function eventCard(evt) {
+        var li = el('li', 'schedule-card shadow');
+
+        var head = el('div', 'card-head');
+        var time = el('time', 'card-date', prettyDate(evt.date));
+        time.setAttribute('datetime', evt.date);
+        head.appendChild(time);
+        var range = evt.time + (evt.end_time && evt.end_time !== evt.time ? ' – ' + evt.end_time : '');
+        head.appendChild(el('span', 'card-time', range));
+        li.appendChild(head);
+
+        if (evt.details) {
+            var title = el('h2', 'card-title');
+            if (evt.url) title.appendChild(titleLink(evt.details, evt.url));
+            else title.textContent = evt.details;
+            li.appendChild(title);
+        }
+        if (evt.location) {
+            var loc = el('div', 'card-location');
+            loc.appendChild(mapsLink(evt.location));
+            li.appendChild(loc);
+        }
+        return li;
     }
 
     function parseFeed(text) {
@@ -239,7 +245,7 @@
         prevBtn.disabled = page === 0;
         todayBtn.disabled = page === 0;
         nextBtn.disabled = failed;
-        tbody.textContent = '';
+        list.textContent = '';
 
         if (failed) {
             var span = document.createElement('span');
@@ -249,28 +255,20 @@
             a.textContent = 'hier abonnieren';
             span.appendChild(a);
             span.appendChild(document.createTextNode('.'));
-            tbody.appendChild(statusRow(span));
+            list.appendChild(statusCard(span));
             return;
         }
         if (!items) {
-            tbody.appendChild(statusRow('Lade Termine…'));
+            list.appendChild(statusCard('Lade Termine…'));
             return;
         }
 
         var events = collect(windowStart, windowEnd);
         if (!events.length) {
-            tbody.appendChild(statusRow('Keine Termine in diesem Zeitraum'));
+            list.appendChild(statusCard('Keine Termine in diesem Zeitraum'));
             return;
         }
-        events.forEach(function (evt) {
-            var tr = document.createElement('tr');
-            tr.appendChild(tdWithText(evt.date, 'date'));
-            tr.appendChild(tdWithText(evt.time, 'start'));
-            tr.appendChild(tdWithText(evt.end_time, 'end'));
-            tr.appendChild(tdWithLink(evt.details, evt.url, 'details'));
-            tr.appendChild(tdWithMapsLink(evt.location));
-            tbody.appendChild(tr);
-        });
+        events.forEach(function (evt) { list.appendChild(eventCard(evt)); });
     }
 
     function go(page) {
