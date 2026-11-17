@@ -14,7 +14,7 @@ help:
 	@echo 'make venv          create ./.venv and install pinned requirements'
 	@echo 'make check-deps    check to ensure needed dependencies are installed'
 	@echo 'make check         check tools syntax using shellcheck'
-	@echo 'make serve         serve site locally out of ./_site'
+	@echo 'make serve         serve ./_site locally with sample calendar (see README)'
 	@echo 'make deploy        deploy the site (using rsync)'
 	@echo 'make update-nginx  copy nginx config if changed'
 	@echo 'make all           clean, build and deploy the site'
@@ -76,7 +76,7 @@ venv:
 
 .PHONY: serve
 serve:
-	python3 -mhttp.server -d _site
+	python3 dev/dev-server.py
 
 .PHONY: check-deps
 check-deps:
