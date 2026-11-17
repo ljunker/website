@@ -24,11 +24,30 @@ make build         default target, builds the site into ./_site
 make venv          create ./.venv and install pinned requirements
 make check-deps    check to ensure needed dependencies are installed
 make check         check tools syntax using shellcheck
-make serve         serve site locally out of ./_site
+make serve         serve ./_site locally with sample calendar (see README)
 make deploy        deploy the site (using rsync)
 make update-nginx  copy nginx config if changed
 make all           clean, build and deploy the site
 make clean         remove any generated files
+```
+
+Lokal testen (mit Beispielterminen)
+-----------------------------------
+
+```
+make build serve      # http://localhost:8000
+```
+
+`make serve` startet `dev/dev-server.py` (nur Python-Standardbibliothek). Er
+liefert `_site` aus und beantwortet `/schedule/calendar.ics` mit einem zur
+Laufzeit erzeugten Beispiel-Feed (Termine relativ zu heute, fiktive Daten;
+produktiv kommt der Feed per nginx von iCloud). Es wird nichts in `_site`
+geschrieben. Varianten:
+
+```
+PORT=8080 make serve          # anderer Port
+CALENDAR=empty make serve     # leerer Feed ("Keine Termine ...")
+CALENDAR=error make serve     # HTTP 500 (Fehlerkarte mit Abo-Link)
 ```
 
 Upgrade

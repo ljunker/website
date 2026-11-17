@@ -134,28 +134,71 @@
         return li;
     }
 
+    var MONTHS = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August',
+                  'September', 'Oktober', 'November', 'Dezember'];
+
+    // "YYYY-MM-DD" -> { wd: 'So', day: '22', mon: 'NOV', month: 'November 2026' }
+    function dateParts(iso) {
+        var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+        if (!m) return null;
+        var wd = WEEKDAYS[new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])).getUTCDay()];
+        var name = MONTHS[+m[2] - 1];
+        return { wd: wd, day: String(+m[3]), mon: name.slice(0, 3).toUpperCase(), month: name + ' ' + m[1] };
+    }
+
+    function timeRange(evt) {
+        if (evt.allDay) return 'ganztägig';
+        return evt.time + (evt.end_time && evt.end_time !== evt.time ? '\u2013' + evt.end_time : '');
+    }
+
     function eventCard(evt) {
         var li = el('li', 'schedule-card shadow');
+        var dp = dateParts(evt.date);
 
-        var head = el('div', 'card-head');
-        var time = el('time', 'card-date', prettyDate(evt.date));
+        var time = el('time', 'card-date');
         time.setAttribute('datetime', evt.date);
-        head.appendChild(time);
-        var range = evt.time + (evt.end_time && evt.end_time !== evt.time ? ' – ' + evt.end_time : '');
-        head.appendChild(el('span', 'card-time', range));
-        li.appendChild(head);
+        if (dp) {
+            var sr = el('span', 'sr-only', prettyDate(evt.date));
+            var vis = el('span', 'card-date-visual');
+            vis.setAttribute('aria-hidden', 'true');
+            vis.appendChild(el('span', 'card-wd', dp.wd));
+            vis.appendChild(el('span', 'card-day', dp.day));
+            vis.appendChild(el('span', 'card-mon', dp.mon));
+            time.appendChild(sr);
+            time.appendChild(vis);
+        } else {
+            time.textContent = evt.date;
+        }
+        li.appendChild(time);
 
+        var body = el('div', 'card-body');
         if (evt.details) {
             var title = el('h2', 'card-title');
             if (evt.url) title.appendChild(titleLink(evt.details, evt.url));
             else title.textContent = evt.details;
-            li.appendChild(title);
+            body.appendChild(title);
         }
+        var meta = el('div', 'card-time');
+        var mark = el('span', 'card-mark', '\u25f7 ');
+        mark.setAttribute('aria-hidden', 'true');
+        meta.appendChild(mark);
+        meta.appendChild(document.createTextNode(timeRange(evt)));
+        body.appendChild(meta);
         if (evt.location) {
             var loc = el('div', 'card-location');
+            var at = el('span', 'card-mark', '@ ');
+            at.setAttribute('aria-hidden', 'true');
+            loc.appendChild(at);
             loc.appendChild(mapsLink(evt.location));
-            li.appendChild(loc);
+            body.appendChild(loc);
         }
+        li.appendChild(body);
+        return li;
+    }
+
+    function monthItem(txt) {
+        var li = el('li', 'schedule-month', txt);
+        li.setAttribute('aria-hidden', 'true');
         return li;
     }
 
@@ -189,7 +232,7 @@
             var s = format(startDate);
             var e = endDate ? format(endDate) : s;
             out.push({
-                t: t, date: s.date, time: s.time, end_time: e.time,
+                t: t, date: s.date, time: s.time, end_time: e.time, allDay: !!startDate.isDate,
                 details: ev.summary || '',
                 url: getUrl(ev) || fallbackUrl || '',
                 location: (ev.location || '').replace(/\s*[\r\n]+\s*/g, ', ')
@@ -268,7 +311,15 @@
             list.appendChild(statusCard('Keine Termine in diesem Zeitraum'));
             return;
         }
-        events.forEach(function (evt) { list.appendChild(eventCard(evt)); });
+        var lastMonth = '';
+        events.forEach(function (evt) {
+            var dp = dateParts(evt.date);
+            if (dp && dp.month !== lastMonth) {
+                lastMonth = dp.month;
+                list.appendChild(monthItem(dp.month));
+            }
+            list.appendChild(eventCard(evt));
+        });
     }
 
     function go(page) {
