@@ -14,12 +14,12 @@ set -eo pipefail
 {
 
 # create the header
-./make-header -p 7 |
+./make/make-header -p 7 |
     ./tools/box -hp 4 -T plain
 
 echo
 
 # create the legend
-./make-legend -f
+./make/make-legend -f
 
 } | ./tools/lpad '  ' | ./tools/rtrim-ansi-aware

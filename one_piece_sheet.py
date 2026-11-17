@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Liest das One-Piece-Google-Sheet und gibt die Bände aus.
 
-Ohne Argument: "nummer<TAB>status" pro Zeile (für make-one-piece-index).
+Ohne Argument: "nummer<TAB>status" pro Zeile (für make/make-one-piece-index).
 Mit "--js VARNAME": "const VARNAME = {...};" (für static/one-piece.html).
 """
 import csv

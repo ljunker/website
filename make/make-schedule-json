@@ -25,9 +25,9 @@ read -d '' -r json <<-"EOF" || true
 }
 EOF
 
-# read data - fetch the list first so a failing ./make-list is noticed (errors
+# read data - fetch the list first so a failing ./make/make-list is noticed (errors
 # inside a process substitution `< <(...)` would be swallowed)
-list=$(./make-list)
+list=$(./make/make-list)
 objects=()
 while IFS=$'\t' read -r date time end_date end_time details location; do
 	# `<<<` of an empty list yields one empty line, skip it
