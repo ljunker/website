@@ -220,12 +220,23 @@ kommt unverändert in `DEPLOY_KNOWN_HOSTS`. Der Workflow nutzt
   (Makefile, `kryptikk.de`); mit sudo ausgeführt, würde das dem Deploy-Benutzer
   root verschaffen. Vor dem Einspielen empfiehlt sich ein kurzer Blick auf
   `git log` bzw. `git diff` für `kryptikk.de`. Die Website selbst
-  veröffentlicht der Workflow (beim nächsten Push auf `main` oder manuell per
-  `workflow_dispatch`), nicht der Admin-Clone.
-- Der Fallback von `make deploy` auf `sudo rsync` (Webroot nicht beschreibbar)
-  greift nur im klassischen Setup ohne separaten Deploy-Benutzer, wenn der
-  Ausführende des interaktiven `./upgrade` sudo hat, aber den Webroot nicht
-  besitzt; der Deploy-Benutzer braucht ihn nicht.
+  veröffentlicht normalerweise der Workflow (beim nächsten Push auf `main` oder
+  manuell per `workflow_dispatch`); ein Deploy aus dem Admin-Clone ist nur
+  die Ausnahme (siehe Hinweise).
+- Der Fallback von `make deploy` auf `sudo rsync` (Webroot nicht
+  beschreibbar) greift im klassischen Setup ohne separaten Deploy-Benutzer
+  und im Admin-Clone im Setup mit Deploy-Benutzer, wenn der Ausführende des
+  interaktiven `./upgrade` sudo hat, aber den Webroot nicht besitzt; der
+  Deploy-Benutzer braucht ihn nicht. Der Fallback behält Besitzer und Gruppe
+  des bestehenden Webroots bei (`rsync --chown` mit der zuvor ermittelten
+  numerischen uid:gid, benötigt rsync ≥ 3.1) und setzt feste Modi
+  (`--chmod=D755,F644`: Ordner 755, Dateien 644), damit die umask des Admins
+  nicht übernommen wird und nginx alles lesen kann; fehlt der Webroot,
+  bricht er mit einer Fehlermeldung ab. Gehört der Webroot bereits dem
+  falschen Benutzer (z. B. nach einem früheren `sudo rsync` ohne `--chown`;
+  erkennbar an „sudo: a terminal is required…“ im Workflow), repariert man
+  das mit `sudo chown -R <deploy-user>: /var/www/kryptikk.de/html` und
+  startet den Deploy-Workflow danach erneut.
 
 Hinweise:
 
@@ -236,10 +247,12 @@ Hinweise:
   bzw. `wheel`), sonst ist die Isolation hinfällig.
 - Der Admin führt `make` oder `./upgrade` niemals mit sudo in `<DEPLOY_PATH>`
   (oder in einem anderen Verzeichnis, das der Deploy-Benutzer beschreiben
-  kann) aus, sonst ist die Isolation ebenfalls hinfällig. Ebenso führt der
-  Admin im Admin-Clone weder `make deploy` noch `./upgrade` aus: `sudo rsync -a`
-  würde den Webroot dem Admin übereignen und die automatischen Deployments
-  brechen.
+  kann) aus, sonst ist die Isolation ebenfalls hinfällig.
+- Ein interaktives `make deploy` bzw. `./upgrade` im Admin-Clone ist
+  möglich (der Fallback behält Besitzer und Gruppe des Webroots), veröffentlicht
+  aber den `_site`-Stand des Admin-Clones, nicht den von `main`, bis der
+  nächste Workflow-Deploy ihn wieder überschreibt. Der Clone sollte daher
+  vorher auf dem gewünschten Stand sein (`git pull --ff-only`).
 - Empfehlungen: dedizierter Deploy-Benutzer; der Schlüssel liegt nur als
   Repository-Secret und auf keiner anderen Maschine; `restrict` in
   `authorized_keys`; den Branch `main` per Branch Protection schützen und für
