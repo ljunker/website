@@ -21,6 +21,7 @@ Usage
 ```
 $ make help
 make build         default target, builds the site into ./_site
+                   BASE_PATH=/preview/<slug> make build: Build mit Pfad-Praefix (Branch-Preview)
 make venv          create ./.venv and install pinned requirements
 make check-deps    check to ensure needed dependencies are installed
 make check         check tools syntax using shellcheck
@@ -245,6 +246,51 @@ Hinweise:
   den Deploy-Job optional ein GitHub-Environment mit Required Reviewers
   verwenden, denn jeder Push auf `main` wird als dieser Benutzer gebaut und
   veröffentlicht.
+
+Branch-Previews
+---------------
+
+Jeder Push auf einen Branch `feature/<stichwort>` (nur `a-z`, `0-9`, `-`) wird
+automatisch auf dem Server gebaut und unter
+`https://kryptikk.de/preview/<stichwort>/` bereitgestellt, z. B.
+`feature/dark-mode` unter `/preview/dark-mode/`. Mehrere Previews laufen
+parallel; `/preview/` listet alle. Beim Löschen des Branches verschwindet die
+Preview. Previews sind öffentlich erreichbar, aber `noindex`
+(`X-Robots-Tag`, `robots.txt`). Der Workflow `.github/workflows/preview.yml`
+ruft dafür auf dem Server `./preview deploy|remove <branch>` auf (gleiche
+Secrets wie `deploy.yml`, aber eigene `concurrency`-Gruppe pro Branch, damit
+wartende Produktions-Deploys nicht verdrängt werden; auf dem Server
+serialisiert ein Lock nur die Previews untereinander, `./upgrade` läuft
+unabhängig davon) und schreibt die URL
+in die Job-Zusammenfassung.
+
+`./preview` holt den Branch per `git fetch` nach `refs/previews/<slug>` (eigener
+Namensraum, kollidiert nicht mit `./upgrade`; Haupt-Checkout bleibt unberührt),
+legt einen Worktree unter `.previews/<slug>` an, baut mit
+`make clean build BASE_PATH=/preview/<slug>` und synchronisiert nach
+`$PREVIEW_ROOT/<slug>/` (Default `/var/www/kryptikk.de/previews`).
+
+`BASE_PATH` (nur leer oder `^/preview/[a-z0-9-]+$`) setzt ein Präfix vor alle
+root-relativen Links, Assets, CSS-`url()` und Pfade in den generierten JS-Dateien
+(`make/rebase-site`). Ohne `BASE_PATH` ist der Build unverändert. Bewusst
+root-relativ bleiben die Endpunkte, die es nur in Produktion gibt:
+`/termin-api/`, `/termin-admin/`, `/schedule/calendar.ics`, `/schrittjagd-api/`,
+`/log/`, `/ping`, `/ip`. Das Terminformular in einer Preview sendet daher an die
+Produktions-API.
+
+### Einmalige Einrichtung auf dem Server
+
+```
+sudo mkdir -p /var/www/kryptikk.de/previews
+sudo chown <deploy-user> /var/www/kryptikk.de/previews
+```
+
+Die nginx-Änderung (`location ^~ /preview/` in `kryptikk.de`) einmalig per
+interaktivem `./upgrade` bzw. `make update-nginx` im Admin-Clone einspielen
+(der unbeaufsichtigte CI-Lauf überspringt nginx). `preview` und die Workflow-
+Datei liegen erst nach dem Merge auf `main` auf dem Server bzw. im Default-
+Branch; `delete`-Events lösen nur Workflows des Default-Branches aus. Der Build
+braucht Netzwerk (Kalender, Sheets, Cover-Metadaten), wie `./upgrade`.
 
 Lizenz / Herkunft
 -----------------

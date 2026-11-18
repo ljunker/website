@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /termin-admin/
 Disallow: /termin-api/
+Disallow: /preview/

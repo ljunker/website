@@ -1,0 +1,196 @@
+#!/usr/bin/env bash
+#
+# Branch-Previews: baut einen feature/*-Branch und stellt ihn unter
+# https://kryptikk.de/preview/<slug>/ bereit (slug = Branch ohne "feature/").
+#
+# Usage: ./preview deploy <branch>
+#        ./preview remove <branch>
+#
+# Umgebung:
+#   PREVIEW_ROOT  Zielwurzel der Previews (Default /var/www/kryptikk.de/previews)
+#
+# Läuft ohne sudo; PREVIEW_ROOT muss für den Aufrufer beschreibbar sein
+# (einmalige Einrichtung siehe README, Abschnitt "Branch-Previews").
+#
+
+set -euo pipefail
+
+PREVIEW_ROOT=${PREVIEW_ROOT:-/var/www/kryptikk.de/previews}
+BRANCH_RE='^feature/[a-z0-9-]+$'
+SLUG_RE='^[a-z0-9-]+$'
+
+repo=
+lock_dir=
+
+die() {
+	echo "FEHLER: $*" >&2
+	exit 1
+}
+
+usage() {
+	echo "usage: $0 deploy|remove <branch>   (branch: feature/<stichwort>)" >&2
+	exit 2
+}
+
+# validate_branch <branch>: setzt slug, bricht bei ungültigem Namen ab
+validate_branch() {
+	local branch=$1
+	if [[ ! $branch =~ $BRANCH_RE ]]; then
+		die "ungültiger Branch '$branch' (erwartet ^feature/[a-z0-9-]+\$)"
+	fi
+	slug=${branch#feature/}
+	[[ $slug =~ $SLUG_RE ]] || die "ungültiger slug '$slug'"
+}
+
+# Nie mit leerer oder gefährlicher Wurzel arbeiten
+validate_root() {
+	[[ -n $PREVIEW_ROOT && $PREVIEW_ROOT == /* && $PREVIEW_ROOT != / ]] ||
+		die "PREVIEW_ROOT '$PREVIEW_ROOT' ist ungültig (absoluter Pfad, nicht /)"
+}
+
+# Paralleles Laufen verhindern: flock, sonst mkdir-Lock
+acquire_lock() {
+	mkdir -p "$repo/.previews"
+	if command -v flock >/dev/null 2>&1; then
+		exec 9>"$repo/.previews/.lock"
+		flock 9
+	else
+		lock_dir=$repo/.previews/.lock.d
+		until mkdir "$lock_dir" 2>/dev/null; do
+			sleep 1
+		done
+		trap 'rmdir "$lock_dir" 2>/dev/null || true' EXIT
+	fi
+}
+
+html_escape() {
+	local s=$1
+	s=${s//&/&amp;}
+	s=${s//</&lt;}
+	s=${s//>/&gt;}
+	s=${s//\"/&quot;}
+	printf '%s' "$s"
+}
+
+# Übersichtsseite PREVIEW_ROOT/index.html neu erzeugen
+write_index() {
+	[[ -d $PREVIEW_ROOT && -w $PREVIEW_ROOT ]] || return 0
+	local tmp name
+	tmp=$(mktemp "$PREVIEW_ROOT/.index.XXXXXX")
+	{
+		echo '<!DOCTYPE html>'
+		echo '<html lang="de"><head><meta charset="utf-8">'
+		echo '<meta name="robots" content="noindex, nofollow">'
+		echo '<title>Branch-Previews</title></head><body>'
+		echo '<h1>Branch-Previews</h1>'
+		echo '<ul>'
+		for dir in "$PREVIEW_ROOT"/*/; do
+			[[ -d $dir ]] || continue
+			name=$(basename "$dir")
+			[[ $name =~ $SLUG_RE ]] || continue
+			name=$(html_escape "$name")
+			echo "<li><a href=\"/preview/$name/\">$name</a></li>"
+		done
+		echo '</ul>'
+		echo '</body></html>'
+	} >"$tmp"
+	chmod 644 "$tmp"
+	mv -f "$tmp" "$PREVIEW_ROOT/index.html"
+}
+
+cmd_deploy() {
+	local branch=$1 slug wt base
+	validate_branch "$branch"
+	validate_root
+	[[ -d $PREVIEW_ROOT && -w $PREVIEW_ROOT ]] ||
+		die "$PREVIEW_ROOT existiert nicht oder ist nicht beschreibbar (Einrichtung: README, Abschnitt Branch-Previews)"
+
+	wt=$repo/.previews/$slug
+	base=/preview/$slug
+
+	echo "==> fetch $branch"
+	# Schreibt in den eigenen Namensraum refs/previews/<slug> (nicht in
+	# refs/remotes/origin/*, das ein paralleles git pull in ./upgrade sperrt),
+	# nicht HEAD/Working-Tree. Fetch per URL statt per Remote-Name, sonst
+	# aktualisiert git opportunistisch trotzdem refs/remotes/origin/<branch>.
+	# Kein FETCH_HEAD (sonst überschreibt es das eines parallelen git pull in
+	# ./upgrade) und kein Auto-GC, das parallel zu ./upgrade laufen könnte.
+	git -c gc.auto=0 fetch --quiet --no-write-fetch-head "$(git remote get-url origin)" "+refs/heads/$branch:refs/previews/$slug"
+
+	echo "==> worktree $wt"
+	git worktree prune
+	if [[ -e $wt/.git ]]; then
+		git -C "$wt" checkout --quiet --detach --force "refs/previews/$slug"
+		git -C "$wt" clean -fdq
+	else
+		rm -rf "${wt:?}"
+		git worktree add --quiet --detach --force "$wt" "refs/previews/$slug"
+	fi
+
+	echo "==> venv"
+	make -C "$wt" venv
+
+	echo "==> build (BASE_PATH=$base)"
+	make -C "$wt" clean build "BASE_PATH=$base"
+	# Branches, die vor der BASE_PATH-Unterstützung abgezweigt wurden, kennen
+	# das Präfix noch nicht: dann hier mit dem Skript aus dem Haupt-Checkout.
+	if ! grep -q 'BASE_PATH' "$wt/Makefile"; then
+		echo "==> Branch kennt BASE_PATH nicht, rebase-site aus dem Haupt-Checkout"
+		"$repo/make/rebase-site" "$base" "$wt/_site"
+	fi
+
+	echo "==> rsync nach $PREVIEW_ROOT/$slug"
+	mkdir -p "$PREVIEW_ROOT/$slug"
+	rsync -a --delete "$wt/_site/" "$PREVIEW_ROOT/$slug/"
+
+	write_index
+	echo "==> fertig: https://kryptikk.de/preview/$slug/"
+}
+
+cmd_remove() {
+	local branch=$1 slug wt
+	validate_branch "$branch"
+	validate_root
+
+	if [[ -d $PREVIEW_ROOT/$slug ]]; then
+		[[ -w $PREVIEW_ROOT ]] || die "$PREVIEW_ROOT ist nicht beschreibbar"
+		rm -rf "${PREVIEW_ROOT:?}/${slug:?}"
+		echo "==> $PREVIEW_ROOT/$slug gelöscht"
+	else
+		echo "==> $PREVIEW_ROOT/$slug existiert nicht"
+	fi
+
+	wt=$repo/.previews/$slug
+	if [[ -e $wt ]]; then
+		git worktree remove --force "$wt" 2>/dev/null || rm -rf "${wt:?}"
+		echo "==> worktree $wt entfernt"
+	fi
+	git worktree prune
+	git update-ref -d "refs/previews/$slug" 2>/dev/null || true
+
+	write_index
+	echo "==> Preview $slug entfernt"
+}
+
+# Wrapped in a function so bash parses the whole script before running it.
+# Otherwise a `git pull` that changes this very file could break the run.
+main() {
+	[[ $# -eq 2 ]] || usage
+	repo=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+	cd "$repo"
+
+	local action=$1 slug
+	[[ $action == deploy || $action == remove ]] || usage
+
+	# Branch vor dem Lock validieren, damit Fehler sofort kommen
+	validate_branch "$2"
+	acquire_lock
+
+	case $action in
+	deploy) cmd_deploy "$2" ;;
+	remove) cmd_remove "$2" ;;
+	esac
+}
+
+main "$@"
+exit
