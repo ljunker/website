@@ -8,9 +8,14 @@
 SHELL := bash
 .SHELLFLAGS := -eu -o pipefail -c
 
+# Pfad-Praefix fuer Branch-Previews, z. B. BASE_PATH=/preview/dark-mode.
+# Leer (Default) = normaler Produktions-Build ohne Praefix.
+BASE_PATH ?=
+
 .PHONY: help
 help:
 	@echo 'make build         default target, builds the site into ./_site'
+	@echo '                   BASE_PATH=/preview/<slug> make build: Build mit Pfad-Praefix (Branch-Preview)'
 	@echo 'make venv          create ./.venv and install pinned requirements'
 	@echo 'make check-deps    check to ensure needed dependencies are installed'
 	@echo 'make check         check tools syntax using shellcheck'
@@ -66,6 +71,8 @@ build:
 	./make/make-one-piece-index > _site/one-piece/index.txt
 	.venv/bin/python3 ./one_piece_sheet.py --js ONEPIECE > _site/static/one-piece.js
 	./make/make-dn9lfj-index > _site/dn9lfj/index.txt
+	# Branch-Preview: root-relative Verweise unter BASE_PATH umschreiben
+	@if [[ -n "$(BASE_PATH)" ]]; then ./make/rebase-site "$(BASE_PATH)" _site; fi
 
 .PHONY: all
 all:
@@ -96,7 +103,7 @@ check-deps:
 
 .PHONY: check
 check:
-	shellcheck -x check-* make/make-* upgrade tools/*
+	shellcheck -x check-* make/make-* upgrade preview tools/*
 
 .PHONY: clean
 clean:

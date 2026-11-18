@@ -1,0 +1,87 @@
+#!/usr/bin/env python3
+"""Haengt ein Pfad-Praefix an alle root-relativen Seiten- und Asset-Verweise
+in einer gebauten Site an (fuer Branch-Previews unter /preview/<slug>/).
+
+Aufruf: make/rebase-site <BASE_PATH> [SITE_DIR]
+
+BASE_PATH muss ^/preview/[a-z0-9-]+$ entsprechen. SITE_DIR ist standardmaessig
+_site. Bearbeitet werden *.html, *.css und *.js (ohne vendorte *.min.js):
+
+  href="/x"  src="/x"  action="/x"   ->  href="<BASE>/x" ...
+  url(/x)  url("/x")                  ->  url(<BASE>/x)
+  "/x"  '/x'  `/x` in JS/Inline-JS    ->  "<BASE>/x" ...
+
+Ausnahmen bleiben root-relativ, weil es diese Endpunkte nur in Produktion
+(nginx-Proxy) gibt: /termin-api/, /termin-admin, /schedule/calendar.ics,
+/schrittjagd-api/, /log, /ping, /ip. Protokoll-relative URLs (//host) und
+absolute URLs bleiben unberuehrt.
+"""
+import os
+import re
+import sys
+
+BASE_RE = re.compile(r"^/preview/[a-z0-9-]+$")
+
+# Pfade (ohne fuehrenden Slash), die nicht umgeschrieben werden.
+KEEP_RE = re.compile(
+    r"(?:termin-api|termin-admin|schrittjagd-api|log)(?:[/?#]|$)"
+    r"|schedule/calendar\.ics(?:[?#]|$)"
+    r"|(?:ping|ip)(?:[?#]|$)"
+)
+
+# Attribute: href="/x", src='/x', action="/x"
+ATTR_RE = re.compile(r"""(?P<pre>\b(?:href|src|action)\s*=\s*(?P<q>["']))/(?!/)(?P<rest>[^"']*)""")
+# CSS: url(/x), url("/x"), url('/x')
+URL_RE = re.compile(r"""(?P<pre>\burl\(\s*(?P<q>["']?))/(?!/)(?P<rest>[^"')\s]*)""")
+# JS-Stringliterale, die mit /<Buchstabe/Ziffer> beginnen
+JS_RE = re.compile(r"""(?P<pre>(?P<q>["'`]))/(?=[A-Za-z0-9])(?P<rest>[^"'`\s]*)""")
+
+
+def rewrite(text, base, with_js):
+    def sub(m):
+        rest = m.group("rest")
+        # Ausnahme-Endpunkte und bereits umgeschriebene Pfade (Mehrfachtreffer
+        # durch ueberlappende Regeln) nicht anfassen.
+        if KEEP_RE.match(rest) or rest == base[1:] or rest.startswith(base[1:] + "/"):
+            return m.group(0)
+        return m.group("pre") + base + "/" + m.group("rest")
+
+    text = ATTR_RE.sub(sub, text)
+    text = URL_RE.sub(sub, text)
+    if with_js:
+        text = JS_RE.sub(sub, text)
+    return text
+
+
+def main():
+    if len(sys.argv) not in (2, 3):
+        print("usage: %s <BASE_PATH> [SITE_DIR]" % sys.argv[0], file=sys.stderr)
+        return 2
+    base = sys.argv[1]
+    site = sys.argv[2] if len(sys.argv) == 3 else "_site"
+    if not BASE_RE.match(base):
+        print("%s: ungueltiger BASE_PATH '%s' (erwartet ^/preview/[a-z0-9-]+$)" % (sys.argv[0], base), file=sys.stderr)
+        return 2
+    if not os.path.isdir(site):
+        print("%s: %s existiert nicht" % (sys.argv[0], site), file=sys.stderr)
+        return 1
+
+    changed = 0
+    for root, _dirs, files in os.walk(site):
+        for name in files:
+            if name.endswith(".min.js") or not name.endswith((".html", ".css", ".js")):
+                continue
+            path = os.path.join(root, name)
+            with open(path, encoding="utf-8", newline="") as f:
+                old = f.read()
+            new = rewrite(old, base, with_js=not name.endswith(".css"))
+            if new != old:
+                with open(path, "w", encoding="utf-8", newline="") as f:
+                    f.write(new)
+                changed += 1
+    print("rebase-site: %d Dateien auf %s umgeschrieben" % (changed, base))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

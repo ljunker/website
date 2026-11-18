@@ -1,3 +1,10 @@
+# Branch-Previews: 404-Seite je Preview. Der Slug kommt aus dem URI (nicht per
+# if im location, das try_files bricht); ausserhalb einer Preview die globale 404.
+map $uri $preview_404 {
+    ~^/preview/(?<preview_slug>[a-z0-9-]+)/ /preview/$preview_slug/404.html;
+    default /404.html;
+}
+
 # Welche Index-Datei ausgeliefert wird: curl bekommt die Textversion (index.txt),
 # alle anderen die HTML-Version. Wird im HTTPS-Block fuer die curl-Weiche genutzt.
 map $http_user_agent $kryptikk_index {
@@ -161,6 +168,28 @@ server {
     location = /help {
         default_type text/plain;
         charset utf-8;
+    }
+
+    # Branch-Previews: ./preview (siehe README) legt jeden feature/*-Branch unter
+    # /var/www/kryptikk.de/previews/<slug>/ ab, ausgeliefert als /preview/<slug>/.
+    # ^~ schlaegt alle Regex-Locations. 404 innerhalb einer Preview liefert deren
+    # eigene 404.html (error_page mit $preview_404, per map am Dateianfang aus dem
+    # URI bestimmt), sonst die globale /404.html. Previews sind oeffentlich, aber noindex; add_header im
+    # location deaktiviert die Vererbung, daher Security-Header erneut setzen.
+    location = /preview {
+        return 301 /preview/;
+    }
+
+    location ^~ /preview/ {
+        alias /var/www/kryptikk.de/previews/;
+        error_page 404 $preview_404;
+        add_header X-Robots-Tag "noindex, nofollow" always;
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+        add_header X-Frame-Options "DENY";
+        add_header X-Content-Type-Options nosniff;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+        expires -1;
+        try_files $uri $uri/index.html $uri/ =404;
     }
 
     # Cache-Header. /static/drei.js und /static/one-piece.js werden bei jedem Build
@@ -401,6 +430,31 @@ server {
         }
         default_type text/plain;
         charset utf-8;
+    }
+
+    # Branch-Previews: ./preview (siehe README) legt jeden feature/*-Branch unter
+    # /var/www/kryptikk.de/previews/<slug>/ ab, ausgeliefert als /preview/<slug>/.
+    # ^~ schlaegt alle Regex-Locations. 404 innerhalb einer Preview liefert deren
+    # eigene 404.html (error_page mit $preview_404, per map am Dateianfang aus dem
+    # URI bestimmt), sonst die globale /404.html. Previews sind oeffentlich, aber noindex; add_header im
+    # location deaktiviert die Vererbung, daher Security-Header erneut setzen.
+    location = /preview {
+        return 301 /preview/;
+    }
+
+    location ^~ /preview/ {
+        if ($opts = "AB") {
+            return 301 https://$server_name$request_uri;
+        }
+        alias /var/www/kryptikk.de/previews/;
+        error_page 404 $preview_404;
+        add_header X-Robots-Tag "noindex, nofollow" always;
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+        add_header X-Frame-Options "DENY";
+        add_header X-Content-Type-Options nosniff;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+        expires -1;
+        try_files $uri $uri/index.html $uri/ =404;
     }
 
     # Cache-Header, siehe HTTPS-Block

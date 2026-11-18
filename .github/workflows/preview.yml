@@ -1,0 +1,90 @@
+name: Preview
+
+# Push auf feature/* baut den Branch auf dem Server unter /preview/<slug>/,
+# Löschen des Branches entfernt die Preview wieder. Hinweis: `delete`-Events
+# lösen nur Workflows aus, die auf dem Default-Branch liegen.
+on:
+  push:
+    branches: ['feature/**']
+  delete:
+
+# Kein Checkout nötig: der Server holt den Stand selbst per git fetch.
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  preview:
+    name: Preview auf dem Server bereitstellen oder entfernen
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    # Beim Löschen kommt zusätzlich ein push-Event mit deleted == true: ignorieren.
+    # Bei delete nur Branches (keine Tags) mit Präfix feature/
+    if: >-
+      (github.event_name == 'push' && !github.event.deleted) ||
+      (github.event_name == 'delete' && github.event.ref_type == 'branch' && startsWith(github.event.ref, 'feature/'))
+    # Eigene Gruppe pro Branch (nicht die des Produktions-Deploys: GitHub hält pro
+    # Gruppe nur einen wartenden Run und würde sonst Produktions-Deploys verwerfen).
+    # Die Gruppe steht am Job, nicht am Workflow: übersprungene Jobs (push mit
+    # deleted == true) belegen sie so nicht und verdrängen keinen wartenden
+    # delete-Run. Gleiche Branches laufen nacheinander, nie abbrechen.
+    # Das Lock des Servers (.previews/.lock) serialisiert nur Previews
+    # untereinander; ./upgrade nimmt es nicht und läuft unabhängig. Der Fetch in
+    # ./preview schreibt nur nach refs/previews/<slug> und nutzt
+    # --no-write-fetch-head und gc.auto=0, um Produktion nicht zu stören.
+    concurrency:
+      group: preview-${{ github.event_name == 'delete' && github.event.ref || github.ref_name }}
+      cancel-in-progress: false
+    env:
+      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+      DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+      DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+      DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+      DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+      DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+      # Branch-Name nie direkt in run: interpolieren, nur über env
+      PREVIEW_BRANCH: ${{ github.event_name == 'delete' && github.event.ref || github.ref_name }}
+      PREVIEW_ACTION: ${{ github.event_name == 'delete' && 'remove' || 'deploy' }}
+    steps:
+      - name: Branch-Name prüfen
+        # hbt-readability: ignore[inline-logic] Repo ohne Checkout, drei Zeilen Validierung
+        run: |
+          if [[ ! $PREVIEW_BRANCH =~ ^feature/[a-z0-9-]+$ ]]; then
+            echo "Kein Preview-Branch (erwartet feature/<a-z0-9->): $PREVIEW_BRANCH" >&2
+            exit 1
+          fi
+
+      - name: SSH-Schlüssel und known_hosts anlegen
+        run: |
+          umask 077
+          printf '%s\n' "$DEPLOY_SSH_KEY" > "$RUNNER_TEMP/deploy_key"
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$RUNNER_TEMP/known_hosts"
+
+      - name: ./preview auf dem Server ausführen
+        run: |
+          remote_cmd="cd $(printf '%q' "$DEPLOY_PATH") && ./preview $(printf '%q' "$PREVIEW_ACTION") $(printf '%q' "$PREVIEW_BRANCH")"
+          ssh \
+            -i "$RUNNER_TEMP/deploy_key" \
+            -p "${DEPLOY_PORT:-22}" \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile="$RUNNER_TEMP/known_hosts" \
+            "$DEPLOY_USER@$DEPLOY_HOST" \
+            "$remote_cmd"
+
+      - name: Preview-URL in die Zusammenfassung schreiben
+        # hbt-readability: ignore[inline-logic] Repo ohne Checkout, zwei Zeilen Ausgabe
+        run: |
+          slug=${PREVIEW_BRANCH#feature/}
+          if [[ $PREVIEW_ACTION == deploy ]]; then
+            echo "Preview: https://kryptikk.de/preview/$slug/" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Preview \`$slug\` entfernt." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Schlüssel entfernen
+        if: always()
+        run: rm -f "$RUNNER_TEMP/deploy_key" "$RUNNER_TEMP/known_hosts"
