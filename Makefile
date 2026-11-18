@@ -12,6 +12,12 @@ SHELL := bash
 # Leer (Default) = normaler Produktions-Build ohne Praefix.
 BASE_PATH ?=
 
+# Webroot von nginx. Der sudo-Fallback in `deploy` behaelt dessen Besitzer
+# (rsync --chown, braucht rsync >= 3.1; stat -c ist GNU/Linux). --chmod setzt
+# feste Modi (Ordner 755, Dateien 644), damit die umask des Admins (-a enthaelt
+# -p) nicht uebernommen wird und nginx alles lesen kann.
+WEBROOT := /var/www/kryptikk.de/html
+
 .PHONY: help
 help:
 	@echo 'make build         default target, builds the site into ./_site'
@@ -112,10 +118,14 @@ clean:
 
 .PHONY: deploy
 deploy:
-	@if [[ -w /var/www/kryptikk.de/html ]]; then \
-		rsync -avh --delete ./_site/ /var/www/kryptikk.de/html; \
+	@if [[ -w "$(WEBROOT)" ]]; then \
+		rsync -avh --delete ./_site/ "$(WEBROOT)"; \
 	else \
-		sudo rsync -avh --delete ./_site/ /var/www/kryptikk.de/html; \
+		owner="$$(sudo stat -c '%u:%g' "$(WEBROOT)")" || { \
+			echo "Fehler: Besitzer von $(WEBROOT) nicht ermittelbar (Webroot fehlt?)" >&2; exit 1; }; \
+		[[ "$$owner" =~ ^[0-9]+:[0-9]+$$ ]] || { \
+			echo "Fehler: unerwarteter Besitzer '$$owner' von $(WEBROOT)" >&2; exit 1; }; \
+		sudo rsync -avh --delete --chown="$$owner" --chmod=D755,F644 ./_site/ "$(WEBROOT)"; \
 	fi
 
 .PHONY: update-nginx
